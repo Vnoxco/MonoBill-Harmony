@@ -1,0 +1,60 @@
+<script schema type="application/json">
+    {
+        "name": "Main Coming Soon Section",
+        "allowed_templates": [
+            "coming_soon.json"
+        ]
+    }
+</script>
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError %}
+
+    <div class="container">
+        <h1 class="h2 text-center pt-4">{{ globals.store.name }}</h1>
+        <h3 class="h2 text-center mt-5 pt-5"><b>{{ __('titles.coming_soon') }}</b></h3>
+        <div class="row">
+            <div class="offset-md-4 col-md-4">
+                {% if input('mb_notification') %}
+                    <div class="alert alert-{{ input('mb_notification').type }}" role="alert">
+                        <i class="fa fa-exclamation-circle"></i> {{ input('mb_notification').message | raw }}
+                    </div>
+                {% else %}
+                    <p class="text-center mt-5">{{ __('info.coming_soon_info_line_1') }}
+                        <br>{{ __('info.coming_soon_info_line_2') }}</p>
+                {% endif %}
+                <form action="{{ url('/newsletter') }}" method="post">
+                    {{ csrf_input | raw }}
+                    <input type="hidden" name="audience" value="coming_soon">
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.email_address') }}</span>
+                        <input type="text" name="email_address"
+                               placeholder="{{ __('forms.email_address') }}"
+                               class="form-control"
+                               value="{{ old('email_address') }}">
+                    </label>
+                    {{ formError('email_address', true) }}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-outline-dark">{{ __('buttons.sign_me_up') }}</button>
+                    </div>
+                </form>
+                <p class="mt-4 text-center">{{ __('info.let_others_know_about_us') }}</p>
+                <div class="text-center">
+                    <a href="https://www.facebook.com/sharer.php?u={{ url('/') }}" class="me-2" target="_blank">
+                        <i class="bi bi-facebook" style="color: #3A5794; font-size: 2rem;"></i>
+                    </a>
+                    <a href="https://twitter.com/share?text=&url={{ url('/') }}" target="_blank">
+                        <i class="bi bi-twitter" style="color: #009DEC; font-size: 2rem;"></i>
+                    </a>
+                </div>
+                {% if globals.store.password or 'theme_editor=1' in url() %}
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-transparent btn-sm btn-block mt-5"
+                           href="{{ url('/password') }}">{{ __('buttons.password_access') }} <i
+                                    class="bi bi-arrow-right"></i></a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

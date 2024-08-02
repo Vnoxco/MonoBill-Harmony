@@ -1,0 +1,13 @@
+<script schema type="application/json">
+    {
+        "name": "Product sku",
+        "icon": "barcode",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+{% if product.default_variant.sku or product.sku %}
+    <p class="m-0 mt-1">
+        {{ __('forms.sku') }}: <span  id="mb_product_sku">{% if product.default_variant.sku %}{{ product.default_variant.sku }}{% else %}{{ product.sku }}{% endif %}</span>
+    </p>
+{% endif %}

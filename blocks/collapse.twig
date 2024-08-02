@@ -1,0 +1,33 @@
+<script schema type="application/json">
+    {
+        "name": "Collapsible content",
+        "icon": "chevron-down",
+        "settings": {
+            "title": {
+                "label": "Label",
+                "type": "text",
+                "default": "Change this using the customizer"
+            },
+            "open_default": {
+                "label": "Show the content of this collapse by default",
+                "type": "toggle",
+                "default": false
+            }
+        }
+    }
+</script>
+
+<div class="accordion" id="accordion_block_{{ schema.uuid }}">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading_block_{{ schema.uuid }}">
+            <button class="accordion-button mb__collapse_button {% if schema.settings.open_default.value == false %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_block_{{ schema.uuid }}" {% if schema.settings.open_default.value == true %}aria-expanded="true"{% endif %} aria-controls="collapse_block_{{ schema.uuid }}">
+                {{ __('custom.' ~ schema.settings.title.value) }}
+            </button>
+        </h2>
+        <div id="collapse_block_{{ schema.uuid }}" class="accordion-collapse collapse {% if schema.settings.open_default.value == true %}show{% endif %}" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body p-0">
+                <blocks></blocks>
+            </div>
+        </div>
+    </div>
+</div>

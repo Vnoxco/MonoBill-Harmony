@@ -1,0 +1,56 @@
+<script schema type="application/json">
+    {
+        "name": "Latest products",
+        "icon": "arrows-alt-h",
+        "description": "Showcase your best selling products.",
+        "settings": {
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Products"
+            },
+            "products": {
+                "hidden_in_customizer": true,
+                "type": "latest_products"
+            }
+        },
+        "on_update_javascript": "initSlick();"
+    }
+</script>
+
+{% block content %}
+    {% from "macros/product_card.twig" import productCard %}
+    <div class="container">
+        <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~schema.settings.title.value) }}</h2>
+        {% if schema.settings.products.products | length > 0 %}
+            <div class="items items_{{ schema.index }} no-print">
+                {% for product in schema.settings.products.products %}
+                    {{ productCard(product) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">{{ __('info.latest_products_default_text') }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let initSlick = function () {
+            $('.items.items_{{ schema.index }}').slick({
+                infinite: true,
+                variableWidth: true,
+                centerMode: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: true,
+                dots: true,
+                prevArrow: "<button type='button' class='slick-prev pull-left'><i class='bi bi-chevron-left'></i></button>",
+                nextArrow: "<button type='button' class='slick-next pull-right'><i class='bi bi-chevron-right'></i></button>"
+            });
+        }
+        $(document).ready(function () {
+            initSlick();
+        });
+    </script>
+{% endblock %}

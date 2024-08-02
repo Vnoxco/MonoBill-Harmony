@@ -1,0 +1,27 @@
+<script schema type="application/json">
+    {
+        "name": "Order Cancel Section",
+        "allowed_templates": [
+            "account.order.cancel.json"
+        ]
+    }
+</script>
+
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError, allErrors %}
+
+    <div class="container mt-5">
+        <h3>{{ __('titles.cancel_order', {order_number: order.order_number}) }}</h3>
+        <hr>
+        <form method="post" action="">
+            {{ csrf_input | raw }}
+            <h4>{{ __('info.let_us_know_why_order_cancel') }} <small>{{ __('info.optional') }}</small></h4>
+            <textarea class="form-control mt-3" style="max-width: 600px" name="cancellation_reason" rows="4"></textarea>
+            {{ formError('cancellation_reason', true) }}
+            <button class="btn btn-dark mt-3" type="submit">{{ __('buttons.cancel_order') }}</button>
+            <a href="{{ url('/account/orders/' ~ order.id) }}"
+               class="btn btn-link mt-3 ml-2">{{ __('buttons.return_to_order') }}</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,89 @@
+<script schema type="application/json">
+    {
+        "name": "Main Order Return Section",
+        "allowed_templates": ["account.order.return.json"]
+    }
+</script>
+
+{% block content %}
+
+{% from "macros/form_error.twig" import formError, allErrors %}
+
+<small class="container mt-5">
+    <h3>{{ __('titles.order_return', {order_number: order.order_number}) }}</h3>
+    <hr>
+    {{ allErrors() }}
+    <form method="post" action="">
+    {{ csrf_input | raw }}
+    <h4>{{ __('titles.which_items_to_return') }}</h4>
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th scope="col" width="40%">{{ __('titles.product') }}</th>
+          <th scope="col" width="20%">{{ __('titles.price') }}</th>
+          <th scope="col" width="30%">{{ __('titles.qty_to_return') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.order_items %}
+        <tr>
+          <td class="align-middle">
+                {% if item.product or item.variant %}
+                    <a class="text-dark" href="{{ url(item.product.link.uri) }}{% if item.variant %}?variant={{ item.variant.id }} {% endif %}" title="View this product" target="_blank">{{ item.product.name }}</a>
+                {% else %}
+                    {{ item.custom_item_name }}
+                {% endif %}
+                <small class="d-block item-config">
+                    {% if item.variant %}
+                        {% for variantOptionValue in item.variant.variant_option_values %}
+                            {{ variantOptionValue.product_variant_option.name }}:
+                            <span class="mr-2">
+                                {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
+                                <span class="swatch" style="background-color:{{ variantOptionValue.value }}">
+                                </span>
+                                {% else %}
+                                    {{ variantOptionValue.value }}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    {% endif %}
+                </small>
+          </td>
+          <td class="align-middle">{{ item.unit_price_formatted }}</td>
+          <td class="align-middle">
+              {% if item.remaining_amount_to_return > 0 %}
+                  <input name="return_items[{{item.id}}]" type="number" class="form-control" style="max-width:120px" min="0" max="{{item.remaining_amount_to_return}}" value="{{ old('items.' ~ item.id) ?  old('items.' ~ item.id) : 0 }}">
+                  {{ formError('return_items.' ~ item.id, true) }}
+              {% else %}
+                 {{ item.delivered_amount }} / {{ item.delivered_amount }}
+              {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr>
+    <h4>{{ __('info.order_why_returning') }}</h4>
+    <select class="form-control mt-3 mb__select" style="max-width: 600px" name="return_reason">
+        <option value="" disabled {% if old('return_reason') is empty %}selected{% endif %}>{{ __('placeholders.select_reason') }}</option>
+        {% for reason in globals.store.return_reasons | split('\n') %}
+        <option value="{{ reason }}" {% if old('return_reason') == reason %}selected{% endif %}>{{ reason }}</option>
+        {% endfor %}
+    </select>
+    {{ formError('return_reason') }}
+    <h4 class="mt-3">{{ __('info.order_return_action') }}</h4>
+    <select class="form-control mt-3 mb__select" style="max-width: 600px" name="return_action">
+        <option value="" disabled {% if old('return_action') is empty %}selected{% endif %}>{{ __('placeholders.select_action') }}</option>
+        {% for action in globals.store.return_actions | split('\n') %}
+        <option value="{{ action }}" {% if old('return_action') == action %}selected{% endif %}>{{ action }}</option>
+        {% endfor %}
+    </select>
+    {{ formError('return_action') }}
+    <h4 class="mt-3">{{ __('info.order_return_additional_info') }}</h4>
+    <textarea class="form-control mt-3" style="max-width: 600px" name="comments" rows="4"></textarea>
+    {{ formError('comments') }}
+    <button class="btn btn-dark mt-3" type="submit">{{ __('buttons.submit_return_request') }}</button>
+    <a href="{{ url('/account/orders/' ~ order.id) }}" class="btn btn-default mt-3 ml-2">{{ __('buttons.cancel') }}</a>
+    </form>
+</div>
+{% endblock %}

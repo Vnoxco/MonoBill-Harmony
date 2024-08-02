@@ -1,0 +1,34 @@
+<script schema type="application/json">
+    {
+        "name": "Product dimensions",
+        "icon": "ruler",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+<div class="mb-3">
+    <div>
+        {{ __('forms.shipping_weight') }}:
+        <span id="shipping_weight">
+            {% if product.default_variant %}
+                {{ product.default_variant.shipping_weight }}{{ __('forms.shipping_weight_uom_' ~ product.default_variant.shipping_weight_uom) }}
+            {% else %}
+                {{ product.shipping_weight }}{{ __('forms.shipping_weight_uom_' ~ product.shipping_weight_uom ) }}
+            {% endif %}
+        </span>
+    </div>
+    <div>
+        {{ __('forms.shipping_dimensions') }}:
+        <span id="shipping_dimensions">
+            {% if product.default_variant %}
+                {{ product.default_variant.shipping_length }}{{ __('forms.shipping_dimensions_uom_' ~ product.default_variant.shipping_dimensions_uom ) }}
+                x {{ product.default_variant.shipping_width }}{{ __('forms.shipping_dimensions_uom_' ~ product.default_variant.shipping_dimensions_uom ) }}
+                x  {{ product.default_variant.shipping_height }}{{ __('forms.shipping_dimensions_uom_' ~ product.default_variant.shipping_dimensions_uom ) }}
+            {% else %}
+                {{ product.shipping_length }}{{ __('forms.shipping_dimensions_uom_' ~ product.shipping_dimensions_uom ) }}
+                x {{ product.shipping_width }}{{ __('forms.shipping_dimensions_uom_' ~ product.shipping_dimensions_uom ) }}
+                x  {{ product.shipping_height }}{{ __('forms.shipping_dimensions_uom_' ~ product.shipping_dimensions_uom ) }}
+            {% endif %}
+        </span>
+    </div>
+</div>

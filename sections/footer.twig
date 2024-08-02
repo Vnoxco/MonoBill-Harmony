@@ -1,0 +1,155 @@
+<script schema type="application/json">
+    {
+        "name": "Footer",
+        "settings": {
+            "logo_size": {
+                "label": "Logo size",
+                "type": "range",
+                "steps": 1,
+                "max": 15,
+                "min": 1,
+                "append": "x",
+                "default": "10"
+            },
+            "menu_1_title": {
+                "label": "Menu 1 title",
+                "type": "text",
+                "default": "Features"
+            },
+            "menu_1": {
+                "label": "Menu 1",
+                "type": "menu",
+                "default": ""
+            },
+            "menu_2_title": {
+                "label": "Menu 2 title",
+                "type": "text",
+                "default": "Company"
+            },
+            "menu_2": {
+                "label": "Menu 2",
+                "type": "menu",
+                "default": ""
+            },
+            "menu_3_title": {
+                "label": "Menu 3 title",
+                "type": "text",
+                "default": "Resources"
+            },
+            "menu_3": {
+                "label": "Menu 3",
+                "type": "menu",
+                "default": ""
+            },
+            "menu_4_title": {
+                "label": "Menu 4 title",
+                "type": "text",
+                "default": "Support"
+            },
+            "menu_4": {
+                "label": "Menu 4",
+                "type": "menu",
+                "default": ""
+            }
+        }
+    }
+</script>
+
+{% block styles %}
+    <style>
+        .hr-faded {
+            opacity: 0.2;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="mt-auto">
+        <footer class="mt-5 py-5 border-top no-print mb__footer">
+            <div class="container">
+                <div class="row mt-5 justify-content-between">
+                    <div class="col-6 col-md-3">
+                        {% if schema.settings.menu_1.menu %}
+                            <h5>{{ __('custom.' ~ 'custom.' ~ schema.settings.menu_1_title.value) }}</h5>
+                            <ul class="list-unstyled text-small">
+                                {% for menuItem in schema.settings.menu_1.menu.items %}
+                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 col-md-3">
+                        {% if schema.settings.menu_2.menu %}
+                            <h5>{{ __('custom.' ~ schema.settings.menu_2_title.value) }}</h5>
+                            <ul class="list-unstyled text-small">
+                                {% for menuItem in schema.settings.menu_2.menu.items %}
+                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 col-md-3">
+                        {% if schema.settings.menu_3.menu %}
+                            <h5>{{ __('custom.' ~ schema.settings.menu_3_title.value) }}</h5>
+                            <ul class="list-unstyled text-small">
+                                {% for menuItem in schema.settings.menu_3.menu.items %}
+                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 col-md-3">
+                        {% if schema.settings.menu_4.menu %}
+                            <h5>{{ __('custom.' ~ schema.settings.menu_4_title.value) }}</h5>
+                            <ul class="list-unstyled text-small">
+                                {% for menuItem in schema.settings.menu_4.menu.items %}
+                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <hr class="hr-faded">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <small class="d-block mb-3">&copy; {{ 'now' | date('Y') }} <a
+                                    class="link-secondary text-decoration-none"
+                                    href="/">{{ globals.store.name }}</a>. {{ __('All Rights Reserved') }}</small>
+                        <div>
+                            <div class="d-block d-sm-inline-block mt-3">
+                                <label class="d-block mb-2">{{ __('forms.currency') }}</label>
+                                <select id="mb__currency_select"
+                                        class="mb__select bg-transparent rounded-start rounded-end">
+                                    {% for currency in globals.store.currencies %}
+                                        <option value="{{ currency.code }}"
+                                                {% if globals.user_currency.code == currency.code %}selected="selected"{% endif %}>{{ currency.code }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="d-block d-sm-inline-block ms-lg-3 mt-3">
+                                <label class="d-block mb-2">{{ __('forms.language') }}</label>
+                                <select id="mb__language_select"
+                                        class="mb__select bg-transparent rounded-start rounded-end">
+                                    {% for key, language in globals.languages %}
+                                        <option value="{{ key }}"
+                                                {% if locale == key %}selected="selected"{% endif %}>{{ __('custom.' ~ language) }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button class="btn btn-link text-white"
+                                    data-mb-toggle-drawer="#region-select">{{ __('buttons.select_your_region') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+{% endblock %}

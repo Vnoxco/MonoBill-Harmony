@@ -1,0 +1,16 @@
+<script schema type="application/json">
+    {
+        "name": "Text Editor",
+        "icon": "align-left",
+        "description": "A WYSIWYG editor allowing you to add any type of content.",
+        "settings": {
+            "content": {
+                "label": "Content",
+                "type": "wysiwyg",
+                "default": "Use this text block to describe your brand or product. You can insert text and media."
+            }
+        }
+    }
+</script>
+
+<div>{{ schema.settings.content.value | raw }}</div>

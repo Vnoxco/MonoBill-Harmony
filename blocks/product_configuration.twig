@@ -1,0 +1,37 @@
+<script schema type="application/json">
+    {
+        "name": "Product configuration",
+        "icon": "cog",
+        "allowed_sections": [
+            "product.twig"
+        ]
+    }
+</script>
+
+<form id="configure_product_form" method="post" action="{{ url('/cart') }}">
+    {{ csrf_input | raw }}
+
+    <input name="id" value="{{ product.id }}" type="hidden">
+
+    {{ configuration(product) }}
+
+    <div class="mt-3 fw-bold {% if (product.variants_count and product.default_variant != null) or (product.default_variant == null and product.available) %}d-none{% endif %}"
+         id="mb_unavailable_container">
+        {{ __('forms.unavailable') }}
+    </div>
+
+    <div class="mt-4 fw-bold {% if (product.variants_count and product.default_variant != null and product.default_variant.available != false) or (product.default_variant == null and product.available) %}d-none{% endif %}"
+         id="mb_out_of_stock_container">
+        {{ __('forms.out_of_stock') }}
+    </div>
+
+    <div class="d-grid gap-2 mt-4 mb-3 {% if (product.default_variant and product.default_variant.available == false ) or (product.default_variant == null and product.available == false) %}d-none{% endif %}"
+         id="mb_add_to_cart">
+        <button name="action" value="add_to_cart" type="submit" class="btn btn-outline-dark">
+            {{ __('buttons.add_to_cart') }}
+        </button>
+        <button name="action" value="buy_it_now" type="submit" class="btn btn-dark" id="mb_buy_now">
+            {{ __('buttons.buy_it_now') }}
+            </a>
+    </div>
+</form>

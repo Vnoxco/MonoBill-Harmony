@@ -1,0 +1,224 @@
+<script schema type="application/json">
+    {
+        "name": "Main Estimate Section",
+        "allowed_templates": ["estimate.json"]
+    }
+</script>
+
+{% block viewport %}
+<meta name="viewport" content="width=500; user-scalable=0;" />
+{% endblock %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+ 
+<link href="http://fonts.googleapis.com/css?family=Maven+Pro:400,700%7CRaleway:300,400,700%7CPlayfair+Display:700" rel="stylesheet">
+
+<style type="text/css">
+    html, body {
+        min-width: 500px;
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+    p {
+        margin: 0px;
+    }
+    a {
+        color: #000 !important;
+    }
+    .estimate-badge {
+        font-size: 18px;
+        padding: 1rem;
+    }
+    @media print { 
+        a:link {
+            border-bottom: none !important;
+            text-decoration: none !important;
+        }
+        a[href]:after {
+            content: none !important;
+        }
+        .table td.bg-dark, .table th.bg-dark { 
+            background-color: rgb(33,37,41) !important; 
+        }
+        .card {
+            border: none;
+        }
+        .card-body {
+            padding: 0;
+        }
+        .estimate-badge {
+            border: none !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1 col-xl-9 offset-xl-1">
+            <div class="card mt-5">
+                <div class="card-body p-60">
+                    <div class="row">
+                        <div class="col-6">
+                            {% if globals.store.logo %}
+                                <p><img src="{{ globals.store.logo.public_path }}" class="img-fluid" style="max-width: 150px; width: 100%" alt=""/></p>
+                            {% else %}
+                                <p class="text-primary" style="font-size: 24px;">{{ globals.store.name }}</p>
+                            {% endif %}
+                            <p style="margin-top: 30px !important;">{{ globals.store.address }}</p>
+                            <p>{{ globals.store.city }} {{ globals.store.state_name }} {{ globals.store.postal_code }}</p>
+                            <p>{{ globals.store.country_name }}</p>
+                            <p><a href="tel:{{ globals.store.phone_number }}">{{ globals.store.phone_number }}</a></p>
+                            <p><a href="mailto:{{ globals.store.email }}">{{ globals.store.email }}</a></p>
+                            {% if globals.store.company_tax_id is not null %}
+                                <p>{{ __('forms.tax_id') }}: {{ globals.store.company_tax_id }}</p>
+                            {% endif %} 
+                            <p><a href="{{ url('/') }}">{{ url('/') }}</a></p>
+                        </div>
+                        <div class="col-6 text-right">
+                            <p class="text-primary" style="font-size: 24px; font-weight: bold; text-transform: uppercase;">{{ __('titles.estimate') }}</p>
+                            <p style="font-size: 24px;" class="mb-2">#{{ estimate.estimate_number }}</p>
+                            <p><span class="text-primary">{{ __('titles.created')  }}</span> {{ estimate.created_at_formatted }}</p>
+                            {% if estimate.expiration_date %}<p><span class="text-primary">{{ __('titles.expires')  }}</span> {{ estimate.expiration_date_formatted }}</p>{% endif %}
+                            <p class="text-right">
+                                {% if estimate.customer_accepted_at != null %}
+                                    <span class="estimate-badge badge badge-success float-right mt-4">{{ __('info.accepted')}}</span>
+                                {% elseif estimate.expiration_date != null and date() > date(estimate.expiration_date) %}
+                                    <span class="estimate-badge badge badge-dark float-right mt-4">{{ __('info.expired')}}</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% if estimate.customer_id %}
+                        <div class="row bg-dark no-gutters mt-4">
+                            <div class="col-6">
+                                <div class="p-1 text-white font-weight-bold">{{ __('titles.billing_address') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-1 text-white font-weight-bold">{{ __('titles.shipping_address') }}</div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters">
+                            <div class="col-6">
+                                <div class="p-1">
+                                    <p>{{ estimate.billing_first_name }} {{ estimate.billing_last_name }}</p>
+                                    {% if estimate.billing_company %}<p>{{ estimate.billing_company }}</p>{% endif %}
+                                    <p>{{ estimate.billing_address }}</p>
+                                    <p>{{ estimate.billing_city }} {{ estimate.billing_state }} {{ estimate.billing_postal_code }}</p>
+                                    <p>{{ estimate.billing_country_name }}</p>
+                                    <p><a href="tel:{{ estimate.billing_phone_number }}">{{ estimate.billing_phone_number }}</a></p>
+                                    <p><a href="mailto:{% if estimate.customer %}{{ estimate.customer.email }}{% endif %}">{% if estimate.customer %}{{ estimate.customer.email_address }}{% endif %}</a></p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-1">
+                                    <p>{{ estimate.shipping_first_name }} {{ estimate.shipping_last_name }}</p>
+                                    {% if estimate.shipping_company %}<p>{{ estimate.shipping_company }}</p>{% endif %}
+                                    <p>{{ estimate.shipping_address }}</p>
+                                    <p>{{ estimate.shipping_city }} {{ estimate.shipping_state }} {{ estimate.shipping_postal_code }}</p>
+                                    <p>{{ estimate.shipping_country_name }}</p>
+                                    <p><a href="tel:{{ estimate.shipping_phone_number }}">{{ estimate.shipping_phone_number }}</a></p>
+                                    <p><a href="mailto:{% if estimate.customer %}{{ estimate.customer.email }}{% endif %}">{% if estimate.customer %}{{ estimate.customer.email_address }}{% endif %}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div style="overflow:auto; width:100%;position:relative;">
+                                <table class="table table-sm m-t-22">
+                                    <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th class="bg-dark">{{ __('titles.description') }}</th>
+                                            <th class="bg-dark" width="10%">{{ __('titles.qty')  }}</th>
+                                            <th class="bg-dark text-right" width="15%"><nobr>{{ __('titles.unit_price') }}</nobr></th>
+                                            <th class="bg-dark text-right" width="20%">{{ __('titles.total')  }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in estimate.order_items %}
+                                            <tr>
+                                                <td class="align-middle">
+                                                    {% if item.product or item.variant %}
+                                                        <a class="text-dark" href="{{ url(item.product.link.uri) }}{% if item.variant %}?variant={{ item.variant.id }} {% endif %}" title="View this product" target="_blank">{{ item.product.name }}</a>
+                                                    {% else %}
+                                                        {{ item.item_name }}
+                                                    {% endif %}
+                                                    <div class="d-block item-config">
+                                                        {% if item.variant %}
+                                                            {% for variantOptionValue in item.variant.variant_option_values %}
+                                                                {{ variantOptionValue.product_variant_option.name }}:
+                                                                <span class="me-2">
+                                                                    {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
+                                                                    <span class="swatch" style="background-color:{{ variantOptionValue.value }}">
+                                                                    </span>
+                                                                    {% else %}
+                                                                        {{ variantOptionValue.value }}
+                                                                    {% endif %}
+                                                                </span>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                                <td class="text-center align-middle">{{ item.quantity }}</td>
+                                                <td class="text-right align-middle">
+                                                    {#{% if item.original_unit_price %}<small style="position: absolute; top: -2px;"><s>{{ item.original_unit_price_formatted }}</s></small>{% endif %}#}
+                                                    {{ item.unit_price_formatted }}
+                                                </td>
+                                                <td class="text-right align-middle">{{ item.total_formatted }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr class="border-0">
+                                           <td colspan="3" class="border-0 text-right">{{ __('titles.subtotal') }}</td>
+                                           <td class="border-0 text-right">{{ estimate.subtotal_formatted }}</td>
+                                        </tr>
+                                        {% if estimate.shipping_total > 0 %}
+                                            <tr class="border-0">
+                                               <td colspan="3" class="border-0 text-right">{{ __('titles.shipping') }}</td>
+                                               <td class="border-0 text-right">{{ estimate.shipping_total_formatted }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if estimate.pickup_option.charge %}
+                                            <tr class="border-0">
+                                               <td colspan="3" class="border-0 text-right">{{ __('info.pickup_fee') }}</td>
+                                               <td class="border-0 text-right">{{ estimate.pickup_option.charge_formatted }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% for tax in estimate.taxes %}
+                                            <tr class="border-0">
+                                               <td colspan="3" class="border-0 text-right">{{ tax.name }}</td>
+                                               <td class="border-0 text-right">{{ tax.order_tax_total_formatted }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr class="border-0">
+                                            <td colspan="3" class="border-0 text-right font-weight-bold">{{ __('info.total') }}:</td>
+                                            <td class="border-0 text-right font-weight-bold"><nobr>{{ estimate.total_formatted_long }}</nobr></td>
+                                        </tr>
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% if estimate.notes %}
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <div class="bg-dark p-2 text-white font-weight-bold">{{ __('titles.notes') }}</div>
+                                <div class="p-2">
+                                    {{ nl2br(estimate.notes) | raw }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="text-center d-print-none">
+                        {% if estimate.customer_accepted_at == null and (estimate.expiration_date is null or date() < date(estimate.expiration_date)) %}<a href="{{ url() ~ '/accept' }}" class="btn btn-primary mt-4 mb-4 btn-lg text-white">{{ __('buttons.accept_estimate') }}</a><br>{% endif %}
+                        <a href="{% if auth().check() %}{{url('/account')}}{% else %}{{ url('/') }}{% endif %}"><i class="bi bi-arrow-left"></i> {{ __('buttons.back_to_client_area') }}</a> - <a target="_blank" href="{{url('/estimates/'~ estimate.id ~ '/' ~ estimate.password ~ '/pdf')}}"><i class="bi bi-file-pdf"></i> {{ __('buttons.download_pdf') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

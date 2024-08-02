@@ -1,0 +1,40 @@
+<script schema type="application/json">
+    {
+        "name": "Product share",
+        "icon": "share",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+<div class="social mt-3">
+        
+    <input type="hidden" value="{{ url(product.link.uri) }}" id="product_link">
+    <a href="#!" class="btn btn-round btn btn-outline-secondary" data-copy-text="product_link"><i
+            class="bi bi-link"></i></a>
+
+    <a href="#!" class="btn btn-round btn btn-outline-secondary" onclick="
+        window.open(
+        'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('{{ url(product.link.uri) }}'),
+        'facebook-share-dialog',
+        'width=626,height=436');
+        return false;"><i class="bi bi-facebook"></i></a>
+
+    <a href="#!" class="btn btn-round btn btn-outline-secondary" onclick="
+        window.open(
+        'http://twitter.com/share?url='+encodeURIComponent('{{url(product.link.uri) }}') + '&hashtags={{ product.tags.implode(',') }}',
+        'twitter-share-dialog',
+        'width=626,height=436');
+        return false;"><i class="bi bi-twitter"></i></a>
+
+    <a class="btn btn-round btn btn-outline-secondary"
+       href="https://pinterest.com/pin/create/button?media={{ product.primaryImage ? product.primaryImage.public_path  : ''}}&url={{ url()}}"
+       target="_blank"><i class="bi bi-pinterest"></i></a>
+
+    <a class="btn btn-round btn btn-outline-secondary"
+       href="https://api.whatsapp.com/send?text={{ url(product.link.uri) }}" target="_blank"><i
+            class="bi bi-whatsapp"></i></a>
+
+    <a href="mailto:?&subject={{ __('share_email.product_subject', {'product_name': product.name}) }}&body={{ __('share_email.product_body', {'product_url': url(product.link.uri)}) }}"
+       class="btn btn-round btn btn-outline-secondary"><i class="bi bi-envelope"></i></a>
+
+</div>

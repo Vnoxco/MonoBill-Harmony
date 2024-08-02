@@ -1,0 +1,33 @@
+<script schema type="application/json">
+    {
+        "name": "Spacing",
+        "icon": "stream",
+        "settings": {
+            "divider": {
+              "type": "toggle",
+              "label": "Show divider",
+              "default": true
+            },
+            "top_gap": {
+                "label": "How large should the top gap be?",
+                "type": "range",
+                "steps": 1,
+                "max": 20,
+                "min": 0,
+                "append": "rem",
+                "default": "3"
+            },
+            "bottom_gap": {
+                "label": "How large should the bottom gap be?",
+                "type": "range",
+                "steps": 1,
+                "max": 20,
+                "min": 0,
+                "append": "rem",
+                "default": "3"
+            }
+        }
+    }
+</script>
+
+<div {% if schema.settings.divider.value == true %}class="hr-spacing"{% endif %} style="margin-top:{{ schema.settings.top_gap.value}}rem; margin-bottom:{{ schema.settings.bottom_gap.value}}rem;"></div>

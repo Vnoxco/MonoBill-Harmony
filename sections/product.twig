@@ -1,0 +1,339 @@
+<script schema type="application/json">
+    {
+        "name": "Product Section",
+        "allowed_templates": ["product.json"],
+        "settings": {
+            "line_through_unavailable_variant_options": {
+                "label": "Show line through unavailable or out of stock options",
+                "type": "toggle",
+                "default": true
+            }
+        }
+    }
+</script>
+
+{% block scripts_head %}
+<script type="application/json" id="product_variants">
+    {{ product | json_encode | raw }}
+</script>
+<script>
+    window.productData = JSON.parse(document.getElementById('product_variants').textContent);
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    
+    function getSelectedOptionValue(id) {
+        let testElem = document.querySelector('[name="options[' + id + ']"]');
+        let isCheckbox = false;
+        
+        if(typeof testElem !== 'undefined') {
+            switch(testElem.type) {
+                case 'checkbox':
+                case 'radio':
+                    isCheckbox = true;
+                        break;
+            }
+        }
+        if(isCheckbox) {
+            return document.querySelector('[name="options[' + id + ']"]:checked').value;
+        } else {
+           return document.querySelector('[name="options[' + id + ']"]').value;
+        }
+    }
+    
+    function getVariantByOptions(selectedOptions) {
+        let selectedVariant = null;
+        variantLoop: for (let i = 0; i < productData.variants.length; i++) {
+            let matchedCount = 0;
+            for(let optionValuesIndex = 0; optionValuesIndex < productData.variants[i].variant_option_values.length; optionValuesIndex++) {
+                let optionValue = productData.variants[i].variant_option_values[optionValuesIndex];
+                if(typeof selectedOptions[optionValue.product_variant_option_id] !== 'undefined' && selectedOptions[optionValue.product_variant_option_id] == optionValue.value) {
+                    matchedCount++;
+                } else {
+                    continue variantLoop;
+                }
+            }
+            if(matchedCount == Object.keys(selectedOptions).length) {
+                selectedVariant = productData.variants[i];
+                break;
+            }
+        }
+        return selectedVariant;
+    }
+    
+    function getSelectedOptions() {
+        let selectedOptions = {};
+
+        for (let i = 0; i < productData.variant_options.length; i++) {
+            selectedOptions[productData.variant_options[i].id] = getSelectedOptionValue(productData.variant_options[i].id);
+        }
+        
+        return selectedOptions;
+    }
+    
+    function loadVariantBasedOnOptions() {
+        //Get variant based on selected options and load to dom...
+        let selectedVariant = getVariantByOptions(getSelectedOptions());
+        
+        
+        const url = new URL(window.location.href);
+        
+        
+        if(!selectedVariant) {
+                
+            document.getElementById('mb_quantity_container').classList.add('d-none');
+            document.getElementById('mb_add_to_cart').classList.add('d-none');
+            document.getElementById('mb_product_price').classList.add('d-none');
+            document.getElementById('mb_out_of_stock_container').classList.add('d-none');
+            document.getElementById('mb_unavailable_container').classList.remove('d-none');
+            url.searchParams.delete('variant');
+            
+        } else {
+            
+            document.getElementById('mb_quantity_container').classList.remove('d-none');
+            document.getElementById('mb_add_to_cart').classList.remove('d-none');
+            document.getElementById('mb_product_price').classList.remove('d-none');
+            document.getElementById('mb_out_of_stock_container').classList.add('d-none');
+            document.getElementById('mb_unavailable_container').classList.add('d-none');
+            
+            let priceString = '';
+            
+            if (productData.track_inventory) {
+                if(selectedVariant.available) {
+                    document.getElementById('mb_product_quantity').setAttribute('max', selectedVariant.quantity_available);
+                } else {
+                    document.getElementById('mb_product_quantity').removeAttribute('max');
+                }
+            }
+            
+            
+            if(selectedVariant.image) {
+                //Slide to the picture associated with this variant.
+                $('#product_carousel').carousel($('#product_carousel #file_id_' + selectedVariant.image.id).index());
+            }
+            
+            console.log(selectedVariant);
+            
+            if (productData.track_inventory && !selectedVariant.available) {
+                document.getElementById('mb_quantity_container').classList.add('d-none');
+                document.getElementById('mb_add_to_cart').classList.add('d-none');
+                document.getElementById('mb_unavailable_container').classList.add('d-none');
+                document.getElementById('mb_out_of_stock_container').classList.remove('d-none');
+            }
+            
+            url.searchParams.set('variant', selectedVariant.id);
+            priceString += selectedVariant.price_converted_formatted_long;
+            
+            if(selectedVariant.compare_price > 0) {
+                priceString += ' <del>' + selectedVariant.compare_price_converted_formatted + '</del> ';
+            }
+            
+            if(selectedVariant.setup_fee > 0) {
+                priceString += '<br>+ ' + selectedVariant.setup_fee_converted_formatted + ' Setup fee';
+            }
+            
+            document.getElementById('mb_product_sku').innerText = selectedVariant.sku;
+            
+            
+            document.getElementById('mb_product_price').innerHTML = priceString;
+            
+        }
+        
+        window.history.replaceState(null, null, url);
+    }
+    
+    function removeOutOfStockClass() {
+        let elems = document.querySelectorAll(".mb__out-of-stock");
+    
+        for (let i = 0; i < elems.length; i++) {
+            elems[i].classList.remove('mb__out-of-stock');
+        }
+    }
+
+    function checkOptionAvailability() {
+        removeOutOfStockClass();   
+        let selectedOptions = getSelectedOptions();
+        
+        // let unavailableOptions = []; 
+        
+        for (let i = 0; i < productData.variant_options.length; i++) {
+            let variantOptionValues = productData.variant_options[i].option_values;
+            
+            for (let voi = 0; voi < variantOptionValues.length; voi++) {
+                let variantOptionValue = variantOptionValues[voi];
+                
+                if(variantOptionValue.value != getSelectedOptionValue(productData.variant_options[i].id)) {
+                    continue;
+                }
+                
+                let optionValueCombination = [];
+                
+                for (let i2 = 0; i2 < productData.variant_options.length; i2++) {
+                    if(productData.variant_options[i2].id == productData.variant_options[i].id) {
+                        continue;
+                    }
+                    
+                    let otherVariantOptionValues = productData.variant_options[i2].option_values;
+                    for (let voi2 = 0; voi2 < otherVariantOptionValues.length; voi2++) {
+                        if(typeof optionValueCombination[voi2] === 'undefined') {
+                            optionValueCombination[voi2] = {};
+                            optionValueCombination[voi2][productData.variant_options[i].id] = variantOptionValue.value;
+                        }
+                        optionValueCombination[voi2][productData.variant_options[i2].id] = otherVariantOptionValues[voi2].value;
+                    }
+              
+                    for(let i3 = 0; i3 < optionValueCombination.length; i3++) {
+                        let variant = getVariantByOptions(optionValueCombination[i3]);
+                        if(!variant || (productData.track_inventory && variant.quantity_available <= 0)) {
+                            //variant was not found by this combination... add out of stock class to the element.
+                            for (let optionId in optionValueCombination[i3]) {
+                                if(optionId !== productData.variant_options[i].id) {
+                                    //Disable option values with this id and value
+                                    let elem = document.querySelector('[name="options[' + optionId + ']"]');
+                                    let isCheckbox = false;
+                                    let isSelect = false;
+                                    
+                                    if(typeof elem !== 'undefined') {
+                                        switch(elem.type) {
+                                            case 'checkbox':
+                                            case 'radio':
+                                                isCheckbox = true;
+                                                break;
+                                        }
+                                        if(elem.tagName === 'SELECT') {
+                                            isSelect = true;
+                                        }
+                                    }
+                                    
+                                    if(isCheckbox) {
+                                        let input = document.querySelector('[name="options[' + optionId + ']"][value="' + optionValueCombination[i3][optionId]  +'"]');
+                                        let label = document.querySelector('[for="' + input.id + '"]');
+                                        
+                                        if(input) {
+                                            input.classList.add('mb__out-of-stock');
+                                        }
+                                        
+                                        if(label) {
+                                            label.classList.add('mb__out-of-stock');
+                                        }
+                                    }
+                                    
+                                    if(isSelect) {
+                                        let selectOption = elem.querySelector('option[value="' + optionValueCombination[i3][optionId] +'"]');
+                                        selectOption.classList.add('mb__out-of-stock');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        let selectedVariant = getVariantByOptions(selectedOptions);
+        if(selectedVariant && (productData.track_inventory && selectedVariant.quantity_available >= 1)) {
+            for (let i = 0; i < selectedVariant.variant_option_values.length; i++) {
+                let elem = document.querySelector('[name="options[' + selectedVariant.variant_option_values[i].product_variant_option_id + ']"][value="' + selectedVariant.variant_option_values[i].value + '"]');
+                if(!elem) {
+                    elem = document.querySelector('[name="options[' + selectedVariant.variant_option_values[i].product_variant_option_id + ']"]');
+                }
+                
+                let isCheckbox = false;
+                let isSelect = false;
+                
+                if(elem) {
+                    switch(elem.type) {
+                        case 'checkbox':
+                        case 'radio':
+                            isCheckbox = true;
+                            break;
+                    }
+                    if(elem.tagName === 'SELECT') {
+                        isSelect = true;
+                    }
+                }
+                if(isCheckbox) {
+                    if(elem.checked) {
+                        
+                        elem.classList.remove('mb__out-of-stock');
+                        let label = document.querySelector('[for="' + elem.id + '"]');
+                        if(label) {
+                            label.classList.remove('mb__out-of-stock');
+                        }
+                    }
+                }
+                if(isSelect) {
+                    let selectOption = elem.querySelector('option[value="' +selectedVariant.variant_option_values[i].value +'"]');
+                    selectOption.classList.remove('mb__out-of-stock');
+                }
+            }
+        }
+    }
+    
+    let optionInputs = document.querySelectorAll("[name^=options]");
+    
+    for (let i = 0; i < optionInputs.length; i++) {
+        optionInputs[i].addEventListener("change", function() {
+            loadVariantBasedOnOptions();
+            checkOptionAvailability();
+        });
+    }
+    
+    checkOptionAvailability();
+</script>
+{% endblock %}
+
+{% block content %}
+ 
+    {% from "macros/product_pricing.twig" import pricing %}
+    {% from "macros/product_configuration.twig" import configuration %}
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6 col-lg-8">
+                <div class="row sticky-top pt-md-3">
+                    <div class="col-md-9">
+                        <div id="product_carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000000">
+                            <div class="carousel-inner text-center">
+                                {% if product.images | length > 0 %}
+                                    {% for image in product.images %}
+                                        <div
+                                            class="carousel-item {% if (loop.index0 == 0 and product.default_variant.image == null) or (loop.index0 == 0 and product.default_variant is null) or (product.default_variant and product.default_variant.gallery_file_id == image.id) %}active{% endif %}"
+                                            id="file_id_{{ image.id }}">
+                                            <div class="border-0 img-fluid bg-white img-lightbox mb__zoom" data-toggle="lightbox"
+                                                 data-src="{{ image.public_path }}" data-file-name="" onmousemove="mb__zoom(event)" style="background-image: url({{ image.public_path }})">
+                                                <img src="{{ image.public_path }}" class="img-fluid"> 
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="carousel-item active">
+                                        <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+                                             style="width:400px; height:400px; background-image: url('https://assets.gomonobill.com/img/placeholder-img.jpg');"></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 order-md-first carousel-controls mt-4">
+                        {% if product.images | length > 0 %}
+                            {% for image in product.images %}
+                                <div data-bs-target="#product_carousel" data-bs-slide-to="{{ loop.index0 }}"
+                                     class="gallery-file d-md-block border-1 img-fluid bg-white {% if (loop.index0 == 0 and product.default_variant.image == null) or (loop.index0 == 0 and product.default_variant == null) or (product.default_variant and product.default_variant.gallery_file_id == image.id) %}selected{% endif %}"
+                                     style="width:80px; height:80px; background-image: url('{{ image.public_path }}');"></div>
+                           {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="p-3">
+                    <div id="alerts"></div>
+                    <blocks></blocks>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

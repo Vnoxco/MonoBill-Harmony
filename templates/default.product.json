@@ -1,0 +1,13 @@
+{
+    "settings": {
+        "page_title": {
+            "label": "Page title",
+            "type": "text",
+            "default": "Product"
+        },
+        "layout": {
+            "label": "Layout",
+            "type": "layout"
+        }
+    }
+}

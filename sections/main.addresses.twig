@@ -1,0 +1,94 @@
+<script schema type="application/json">
+    {
+        "name": "Main Account Addresses Section",
+        "allowed_templates": [
+            "account.addresses.json"
+        ]
+    }
+</script>
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="text-center">
+            <h3>{{ __('titles.my_addresses') }}</h3>
+        </div>
+        <div class="text-center mt-3">
+            {% if auth().user.addresses | length %}
+                <div class="row justify-content-center">
+                    {% for address in auth().user.addresses %}
+                        <div class="col-md-6 col-lg-3 text-start">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <b>{{ address.first_name }} {{ address.last_name }}</b><br>
+                                    {{ address.address }}<br>
+                                    {% if address.address_2 %}{{ address.address_2 }}<br>{% endif %}
+                                    {{ address.city }}, {{ address.state_name }} {{ address.postal_code }}<br>
+                                    {{ address.country_name }}<br>
+                                    {% if address.phone_number %}{{ address.phone_number }}<br>{% endif %}
+                                    {% if address.company %}{{ address.company }}<br>{% endif %}
+                                    {% if address.address_2 is empty %}<br>{% endif %}
+                                    {% if address.company is empty %}<br>{% endif %}
+                                    {% if address.phone_number is empty %}<br>{% endif %}
+                                </div>
+                                <div class="card-footer">
+                                    <a href="{{ url('/account/addresses/' ~ address.uuid) }}"
+                                       class="mr-1 btn btn-link text-dark text-decoration-none p-0">{{ __('buttons.edit') }}</a>
+                                    {% if address.is_default == false %}|
+                                        <button class="ms-1 me-1 btn btn-link text-dark text-decoration-none p-0"
+                                                data-bs-toggle="modal" data-bs-target="#removeAddressModal"
+                                                data-remove-address="{{ address.uuid }}">{{ __('buttons.remove') }}</button>|
+                                        <form class="d-inline" method="post"
+                                              action="{{ url('/account/addresses/' ~ address.uuid ~ '/make-default') }}">{{ csrf_input | raw }}
+                                            <input type="hidden" name="_method" value="put">
+                                            <button type="submit" href="#!"
+                                                    class="btn btn-link p-0 text-dark text-decoration-none"
+                                                    data-confirm-form="set-default-address-form"
+                                                    data-question='{{ __('questions.set_default_address') }}'
+                                                    data-id="{{ address.id }}">{{ __('buttons.make_default') }}</button>
+                                        </form>
+                                    {% else %}
+                                    {% endif %}
+                                    &nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>{{ __('info.no_addresses') }}</p>
+            {% endif %}
+        </div>
+        <div class="text-center">
+            <a href="{{ url('/account') }}" class="btn btn-outline-dark mt-3 mb-2">
+                <i class="bi bi-arrow-left"></i> {{ __('buttons.my_account') }}
+            </a>
+            <a href="{{ url('/account/addresses/add') }}"
+               class="btn btn-dark mt-3 mb-2 ms-3 {% if auth().user.addresses | length >= 4 %}disabled{% endif %}"
+               {% if auth().user.addresses | length >= 4 %}disabled{% endif %}>
+                {{ __('buttons.add_address') }}
+            </a>
+        </div>
+    </div>
+    <div class="modal fade" id="removeAddressModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="" method="post" id="mb__remove_address_form">
+                {{ csrf_input | raw }}
+                <input type="hidden" name="_method" value="DELETE">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ __('titles.confirm_removal') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ __('questions.remove_address') }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link text-dark text-decoration-none"
+                                data-bs-dismiss="modal">{{ __('buttons.cancel') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('buttons.confirm') }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{
+    "settings": {
+        "page_title": {
+            "label": "Page title",
+            "type": "text",
+            "default": "Sales Order"
+        },
+        "layout": {
+            "type": "layout",
+            "default": "blank.twig"
+        }
+    }
+}

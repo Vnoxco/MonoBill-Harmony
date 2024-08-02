@@ -1,0 +1,41 @@
+<script schema type="application/json">
+    {
+        "name": "Button",
+        "icon": "hand-point-up",
+        "settings": {
+            "link": {
+                "type": "toggle",
+                "label": "Button link",
+                "default": false
+            },
+            "label": {
+              "type": "text",
+              "label": "Label"
+            },
+            "url": {
+              "type": "text",
+              "label": "URL"
+            },
+            "type": {
+                "label": "Type",
+                "type": "option",
+                "options": {
+                    "primary": "Primary",
+                    "secondary": "Secondary",
+                    "success": "Success",
+                    "warning": "Warning",
+                    "danger": "Danger",
+                    "outline-dark": "Outline dark",
+                    "dark": "Dark"
+                },
+                "default": "primary"
+            }
+        }
+    }
+</script>
+
+{% if schema.settings.link.value %}
+    <a href="{{ url(schema.settings.url.value) }}" class="btn btn-{{ schema.settings.type.value }} btn-lg">{{ __('custom.' ~ schema.settings.label.value) }}</a>
+{% else %}
+    <button type="button" class="btn btn-{{ schema.settings.type.value }} btn-lg">{{ __('custom.' ~ schema.settings.label.value) }}</button>
+{% endif %}

@@ -1,0 +1,67 @@
+<script schema type="application/json">
+    {
+        "name": "Gift Card Show Section",
+        "allowed_templates": ["gift_card_show.json"],
+        "settings": {}
+    }
+</script>
+
+{% block content %}
+<div class="container">
+    <div style="margin-top:0; margin-bottom:3rem;"></div>
+    <h2 style="text-align: center; text-transform:uppercase;">{{ __('titles.manage_a_gift_card') }}</h2>
+    <div class="row mt-4">
+        <div class="col-lg-6 offset-lg-3">
+            <svg id="gift_card_svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 971 586">
+              <defs>
+                <style>
+                  svg {
+                        width:  auto;
+                        height: auto;
+                  }
+                  .cls-1 {
+                    font-size: 35px;
+                    font-weight: bold;
+                  }
+            
+                  .cls-1, .cls-3 {
+                    font-family: Arial;
+                  }
+                  
+                  .cls-3 {
+                    font-size: 31.51px;
+                    font-weight: bold;
+                  }
+            
+                  .cls-4 {
+                    letter-spacing: 0em;
+                  }
+            
+                  .cls-5 {
+                    fill: #fff;
+                    filter: url(#drop-shadow-1);
+                  }
+                </style>
+                <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+                  <feOffset dx="0" dy="0"/>
+                  <feGaussianBlur result="blur" stdDeviation="11.34"/>
+                  <feFlood flood-color="#000" flood-opacity=".25"/>
+                  <feComposite in2="blur" operator="in"/>
+                  <feComposite in="SourceGraphic" in2=""/>
+                </filter>
+              </defs>
+              <path class="cls-5" d="M42.79,34.52H921.3c8.19,0,14.84,6.65,14.84,14.84v493.89c0,4.57-3.71,8.28-8.28,8.28H42.79c-4.57,0-8.28-3.71-8.28-8.28V42.79c0-4.57,3.71-8.28,8.28-8.28Z"/>
+              <image width="8000" height="7803" transform="translate(33.02 33.02) scale(.04)" xlink:href="https://assets.gomonobill.com/monobill/red_bow.png"/>
+              <g transform="translate(50%, 50%)">
+              <image xlink:href="{{ globals.store.logo.public_path }}" x="50%" y="50%" height="248" width="284" transform="translate(-142,-124)">{{ globals.store.name }}</image>
+              </g>
+              <text class="cls-1" transform="translate(913.75 92.74)"><tspan x="0" y="0" direction="rtl" id="gift_card_value">{{ money_format(gift_card.value, true) }}</tspan></text>
+              <text class="cls-3" transform="translate(740.75 527.67)"><tspan x="0" y="0">GIFT CARD</tspan></text>
+            </svg>
+            <div class="p-4">
+                <h4 class="mb-3">{{ __('info.balance') }}: {{ money_format(gift_card.balance, true) }}</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

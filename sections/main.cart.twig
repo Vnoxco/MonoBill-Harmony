@@ -1,0 +1,171 @@
+<script schema type="application/json">
+    {
+        "name": "Main Cart Section",
+        "allowed_templates": [
+            "cart.json"
+        ],
+        "settings": {
+        }
+    }
+</script>
+
+{% block content %}
+    <div id="mb_cart_container" class="container">
+        {% if globals.cart.cart_items | length > 0 %}
+            <div class="row mt-5">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="mb-0 card-body">
+                            <h3 class="mb-0">{{ __('titles.shopping_cart') }}</h3>
+                        </div>
+                        <hr class="mt-0 mb-0">
+                        {% for key, item in globals.cart.cart_items %}
+                            <div class="cart-item text-center text-sm-start" data-cart-item-id="{{ item.id }}">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-2 text-center">
+                                        <div class="d-inline-block" style="max-width: 150px;">
+                                            {% if item.gift_card_value %}
+                                                <i class="bi bi-gift gift-card-icon"></i>
+                                            {% else %}
+                                                <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+                                                     style="width:80px; height:80px; background-image: url('{% if item.variant and item.variant.image %}{{ item.variant.image.public_path }}{% else %}{% if item.product.primaryImage %}{{ item.product.primaryImage.public_path }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}{% endif %}');"></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        {% if item.gift_card_value %}
+                                            {{ __('titles.gift_card') }}
+                                            {% if item.gift_card_recipients | length > 0 %}
+                                                <p class="small">{{ __('forms.recipients') }}
+                                                    : {{ item.gift_card_recipients | join(', ') }}</p>
+                                            {% endif %}
+                                            {% if item.gift_card_message %}
+                                                <p class="small">{{ __('forms.message') }}
+                                                    : {{ item.gift_card_message }}</p>
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="{{ url(item.product.link.uri) }}{% if item.variant %}?variant={{ item.variant.id }} {% endif %}">{{ item.product.name }}</a>
+                                            <div class="item-config">
+                                                {% if item.variant %}
+                                                    {% for variantOptionValue in item.variant.variant_option_values %}
+                                                        <b>{{ variantOptionValue.product_variant_option.name }}:</b>
+                                                        {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
+                                                            <span class="swatch"
+                                                                  style="background-color:{{ variantOptionValue.value }}">
+                                                                </span>
+                                                        {% else %}
+                                                            {{ variantOptionValue.value }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            {% if auth().check() and get_store_plan_feature('save_item_for_later') %}
+                                                <a data-cart-item-save="{{ item.id }}" class="mt-2 mb-2 d-inline-block"
+                                                   style="font-size: 14px;"
+                                                   href="#!">{{ __('buttons.save_for_later') }}</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        {% if item.gift_card_value != null %}
+                                            <div>{{ item.quantity }}</div>
+                                        {% endif %}
+                                        {% if item.gift_card_value == null and (item.product.track_inventory == false or item.max_quantity_selection > 0) %}
+                                            <div class="mb__quantity_spinner">
+                                                <button type="button" class="mb__quantity_spinner_minus"
+                                                        id="mb__quantity_spinner_minus"><i class="bi bi-dash-lg"></i>
+                                                </button>
+                                                <input type="number"
+                                                       data-current-quantity="{{ item.quantity }}"
+                                                       data-cart-item-quantity-input="{{ item.id }}"
+                                                       value="{{ item.quantity }}" min="0"
+                                                       max="{{ (item.product.track_inventory) ? item.max_quantity_selection : '' }}">
+                                                <button type="button" class="mb__quantity_spinner_plus"
+                                                        id="mb__quantity_spinner_plus"><i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-sm-2 text-sm-right">
+                                        <p class="price">
+                                            {% if item.compare_price %}
+                                                <s class="discount d-block"
+                                                   data-cart-item-price-compare="{{ item.id }}">{{ item.compare_price_converted_formatted_long }}</s>
+                                            {% endif %}
+                                            <span data-cart-item-discount-price="{{ item.id }}">{{ item.price_converted_formatted_long }}</span>
+                                        </p>
+                                        {% if item.setup_fee > 0 %}
+                                            <p class="setup-fee">+ <span
+                                                        data-cart-item-setup="{{ item.id }}">{{ item.setup_fee_converted_formatted_long }}</span> {{ __('info.setup_fee') }}
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-sm-1 text-center">
+                                        {# <a href="{{ url('/cart/remove-item/' ~ item.id ) }}" class="tooltip-hover-toggle" data-toggle="tooltip" data-original-title="Remove"><span class="fa cross fa-times"></span></a> #}
+                                        <a href="#" class="tooltip-hover-toggle d-none d-sm-inline-block"
+                                           data-toggle="tooltip" data-original-title="Remove"
+                                           data-cart-item-remove="{{ item.id }}"><span class="bi bi-x-lg"></span></a>
+                                        <a href="#" class="d-sm-none"
+                                           data-cart-item-remove="{{ item.id }}">{{ __('buttons.remove') }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if item.quantity_unavailable > 0 and item.max_quantity_selection > 0 %}
+                                <div class="alert alert-warning alert-dismissible fade show ml-5 mr-4">
+                                    {{ __('info.item_stocks_down', {max_quantity: item.max_quantity_selection}) }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                                            data-update-item-quantity="{{ item.id }}">
+                                        <span aria-hidden="true"><i class="fa fa-times"
+                                                                    style="font-size: 18px;"></i></span>
+                                    </button>
+                                </div>
+                            {% endif %}
+                            {% if item.max_quantity_selection == 0 %}
+                                <div class="alert alert-warning ml-5 mr-4">
+                                    {{ __('info.item_unavailable') }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <hr class="mt-0 mb-0">
+                        <div class="mt-0 card-body">
+                            <div class="text-right">
+                                {{ __('info.subtotal') }} (<span
+                                        class="mb_cart_quantity">{{ globals.cart.quantity }}</span> {{ __('info.items') }}):
+                                <b><span class="mb_cart_subtotal_formatted text-nowrap">{{ globals.cart.subtotal_converted_formatted_long }}</span></b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 mt-4 mt-lg-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="d-none d-lg-block">{{ __('info.subtotal') }} (<span
+                                        class="mb_cart_quantity">{{ globals.cart.quantity }}</span> {{ __('info.items') }}): <b><span
+                                            class="mb_cart_subtotal_formatted text-nowrap">{{ globals.cart.subtotal_converted_formatted_long }}</span></b></span>
+                            <div class="d-grid gap-2">
+                                <a href="{{ url('/cart/checkout') }}"
+                                   class="btn btn-dark btn-block mt-3 {% if globals.cart.quantity == 0 or globals.store.allow_checkout == false %} disabled {% endif %}">{{ __('buttons.checkout') }} {% if globals.store.allow_checkout == false %}{{ __('buttons.disabled') | lower }}{% endif %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row mt-2">
+                <div class="col-lg-9">
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h4>{{ __('placeholders.no_items_in_cart') }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        window.mb_cart_section_index = {{ schema.index }};
+    </script>
+{% endblock %}

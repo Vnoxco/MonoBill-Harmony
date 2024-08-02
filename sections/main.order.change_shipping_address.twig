@@ -1,0 +1,43 @@
+<script schema type="application/json">
+    {
+        "name": "Main change shipping address section",
+        "allowed_templates": ["account.order.change_shipping_address.json"]
+    }
+</script>
+
+{% block content %}
+
+{% from "macros/form_error.twig" import formError, allErrors %}
+
+<div class="container mt-5">
+    <h3>{{ __('titles.change_shipping_address', {'order': order.order_number}) }}</h3>
+    <hr>
+    <form method="post" action="">
+    {{ csrf_input | raw }}
+    <ul class="list-group mt-3 mb-3">
+        {% for address in auth().user.addresses %}
+        {{ order.customer_shipping_address_id }}
+            <li class="list-group-item p-0">
+                <label class="d-flex align-items-center p-2 ps-4 pe-4  m-0 cursor-pointer">
+                    <input name="shipping_address" type="radio" class="me-4" value="{{ address.id }}" {% if compareOrderShippingAddress(order, address) %}checked="checked"{% endif %}>
+                    <span class="flex-grow-1">
+                                    <b>{{ address.first_name }}
+                                        {{ address.last_name }}</b><br>
+                                    {{ address.address }}
+                                    {% if address.address_2 %}{{ address.address_2}},{% endif %}
+                                    {{ address.city }},
+                                    {{ address.state_name }}
+                                    {{ address.postal_code }}
+                                    {{ address.country_name }}<br>
+                                    {% if address.company %}{{ address.company }}<br>{% endif %}
+                                </span>
+                    <span class="border-left ps-3"><a href="{{ url('/account/addresses/' ~ address.id) }}">{{ __('buttons.edit') }}</a></span>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+    <button class="btn btn-dark mt-3" type="submit">{{ __('buttons.change_address') }}</button>
+    <a href="{{ url('/account/orders/' ~ order.id) }}" class="btn btn-link mt-3 ms-2">{{ __('buttons.return_to_order') }}</a>
+    </form>
+</div>
+{% endblock %}

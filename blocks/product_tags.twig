@@ -1,0 +1,13 @@
+<script schema type="application/json">
+    {
+        "name": "Product tags",
+        "icon": "hashtag",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+{% if product.tags | length > 0 %}
+    <p class="m-0 mt-1">{{ __('info.tags') }}: {% for tag in product.tags %}<a
+            href="#!">#{{ ucfirst(tag) }}</a> {% endfor %}
+    </p>
+{% endif %}

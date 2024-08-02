@@ -1,0 +1,13 @@
+<script schema type="application/json">
+    {
+        "name": "Main 404 Not Found Section",
+        "allowed_templates": ["404.json"]
+    }
+</script>
+
+{% block content %}
+    <div class="text-center" style="padding-top: 10rem; padding-bottom: 10rem;">
+        <h2>404 - {{ __('titles.not_found') }}</h2>
+        <p>{% if message %}{{ message }}{% else %}{{ __('info.404_page') }}{% endif %}</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,78 @@
+<script schema type="application/json">
+    {
+        "name": "Blog post slider",
+        "icon": "arrows-alt-h",
+        "description": "Showcase your latest blog posts.",
+        "settings": {
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Blog"
+            },
+            "amount": {
+                "label": "How many blog posts to show?",
+                "type": "range",
+                "steps": 1,
+                "prepend": "Show ",
+                "append": " blog post(s).",
+                "max": 100,
+                "min": 1,
+                "default": 10
+            },
+            "tags": {
+                "value": ""
+            },
+            "blog_posts": {
+                "hidden_in_customizer": true,
+                "type": "blog_posts"
+            }
+        },
+        "on_update_javascript": "initBlogSlick();"
+    }
+</script>
+
+{% block content %}
+    <div class="container">
+        {% if schema.settings.blog_posts.blog_posts | length > 0 or 'theme_editor=1' in url() %}
+            <h2 class="text-center mt-5 mb-5">{{ __(schema.settings.title.value) }}</h2>
+        {% endif %}
+        {% if schema.settings.blog_posts.blog_posts | length > 0 %}
+            <div class="items items_{{schema.index}} no-print">
+                {% for post in schema.settings.blog_posts.blog_posts %}
+                    <a href="{{ url(post.uri) }}" class="d-block">
+                       <div class="slider-card left-align">
+                            <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+                                 style="width:300px; height:300px; background-image: url('{%if post.thumbnail_path %}{{ cdn(post.thumbnail_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
+                            </div>
+                            <div class="name">{{ __('custom.' ~ post.title) }}</div>
+                            <div class="date">{{ post.published_at_formatted }}</div>
+                       </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% elseif 'theme_editor=1' in url() %}
+            <p class="text-center">{{ __('info.blog_posts_default_text') }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let initBlogSlick = function() {
+            $('.items.items_{{schema.index}}').slick({
+                infinite: true,
+                variableWidth: true,
+                centerMode: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: true,
+                dots: true,
+                prevArrow: "<button type='button' class='slick-prev pull-left'><i class='bi bi-chevron-left'></i></button>",
+                nextArrow: "<button type='button' class='slick-next pull-right'><i class='bi bi-chevron-right'></i></button>"
+            });
+        }
+        $(document).ready(function () {
+            initBlogSlick();
+        });
+    </script>
+{% endblock %}

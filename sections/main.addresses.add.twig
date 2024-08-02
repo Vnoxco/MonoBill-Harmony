@@ -1,0 +1,141 @@
+<script schema type="application/json">
+    {
+        "name": "Main Add Address Section",
+        "allowed_templates": [
+            "account.addresses.add.json"
+        ]
+    }
+</script>
+
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError %}
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6">
+                <div class="text-center">
+                    <h3>{{ __('titles.add_address') }}</h3>
+                </div>
+                <form method="post" action="{{ url('/account/addresses/add') }}" class="mt-4">
+                    {{ csrf_input | raw }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="floating-input">
+                                <span class="floating-label">{{ __('forms.first_name') }}</span>
+                                <input type="text" name="first_name"
+                                       placeholder="{{ __('forms.first_name') }}"
+                                       class="form-control"
+                                       value="{{ old('first_name') }}">
+                            </label>
+                            {{ formError('first_name', true) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="floating-input">
+                                <span class="floating-label">{{ __('forms.last_name') }}</span>
+                                <input type="text" name="last_name"
+                                       placeholder="{{ __('forms.last_name') }}"
+                                       class="form-control"
+                                       value="{{ old('last_name') }}">
+                            </label>
+                            {{ formError('last_name', true) }}
+                        </div>
+                    </div>
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.address') }}</span>
+                        <input type="text" name="address"
+                               placeholder="{{ __('forms.address') }}"
+                               class="form-control"
+                               value="{{ old('address') }}">
+                    </label>
+                    {{ formError('address', true) }}
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.apartment_suite') }}</span>
+                        <input type="text" name="address_2"
+                               placeholder="{{ __('forms.apartment_suite') }}"
+                               class="form-control"
+                               value="{{ old('address_2') }}">
+                    </label>
+                    {{ formError('address_2', true) }}
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.city') }}</span>
+                        <input type="text" name="city"
+                               placeholder="{{ __('forms.city') }}"
+                               class="form-control"
+                               value="{{ old('city') }}">
+                    </label>
+                    {{ formError('city', true) }}
+                    <div class="row">
+                        <div class="col-lg-6" id="country_container">
+                            <label class="floating-input filled">
+                                <span class="floating-label">{{ __('forms.country') }}</span>
+                                <select
+                                        class="form-control country-select" name="country" id="country">
+                                    <option value="" selected
+                                            disabled>{{ __('placeholders.select_country') }}</option>
+                                    {% for key, country in globals.countries %}
+                                        <option value="{{ key }}"
+                                                {% if old('country') == key %}selected{% endif %}>{{ country.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            {{ formError('country', true) }}
+                        </div>
+                        <div class="col-lg-4 d-none" id="state_container">
+                            <label class="floating-input filled">
+                                <span class="floating-label">{{ __('forms.state') }}</span>
+                                <select class="form-control" name="state" id="state">
+                                    <option value="" selected
+                                            disabled>{{ __('placeholders.select_state') }}</option>
+                                    {% for key, state in globals.us_states %}
+                                        <option value="{{ key }}"
+                                                {% if old('state') == key %}selected{% endif %}>{{ state }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            {{ formError('state', true) }}
+                        </div>
+                        <div class="col-lg-6" id="postal_container">
+                            <label class="floating-input">
+                                <span class="floating-label">{{ __('forms.postal_code') }}</span>
+                                <input type="text" name="postal_code"
+                                       placeholder="{{ __('forms.postal_code') }}"
+                                       class="form-control"
+                                       value="{{ old('postal_code') }}">
+                            </label>
+                            {{ formError('postal_code', true) }}
+                        </div>
+                    </div>
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.phone_number') }}</span>
+                        <input type="text" name="phone_number"
+                               placeholder="{{ __('forms.phone_number') }}"
+                               class="form-control"
+                               value="{{ old('phone_number') }}">
+                    </label>
+                    {{ formError('phone_number', true) }}
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.company') }} {{ __('placeholders.optional') }}</span>
+                        <input type="text" name="company"
+                               placeholder="{{ __('forms.company') }} {{ __('placeholders.optional') }}"
+                               class="form-control"
+                               value="{{ old('company') }}">
+                    </label>
+                    {{ formError('company', true) }}
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-dark btn-block">{{ __('buttons.add_address') }}</button>
+                        <a href="{{ url('/account/addresses') }}"
+                           class="btn btn-transparent btn-block"><u>{{ __('buttons.cancel') }}</u></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.us_states = {{ globals.us_states | json_encode | raw }};
+        window.gb_regions = {{ globals.gb_regions | json_encode | raw }};
+        window.arab_emirates = {{ globals.arab_emirates | json_encode | raw }};
+        window.canada_provinces = {{ globals.canada_provinces | json_encode | raw }};
+        window.no_postal_code_countries = {{ globals.no_postal_code_countries | json_encode | raw }};
+    </script>
+{% endblock %}

@@ -1,0 +1,103 @@
+<script schema type="application/json">
+    {
+        "name": "Cart Saved Items Section",
+        "allowed_templates": ["cart.json"],
+        "settings": {
+        }
+    }
+</script>
+
+{% block content %}
+    {% from "macros/saved_cart_item_card.twig" import savedCartItemCard %}
+    {% if auth().check() and get_store_plan_feature('save_item_for_later') %}
+        <div id="mb_saved_items_container" class="container">
+            {% if saved_items | length > 0 %}
+                <div class="row mt-2">
+                    <div class="col-lg-9">
+                        <div class="card mt-4">
+                            <div class="mb-0 card-body">
+                                <h4 class="mb-0">{{ __('titles.your_saved_items') }}</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for item in saved_items %}
+                                        <div class="col-6 col-xl-4">
+                                            {{ savedCartItemCard(item) }}
+                                        </div>
+                                    {% endfor %}  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(function(){
+    
+    function reloadSections() {
+        $('#mb_saved_items_container').addClass('container-loading');
+        reloadSection({{ schema.index }}, function(response) {
+            response = $(response);
+            let savedItemsContainer = response.find('#mb_saved_items_container').prevObject[0].outerHTML;
+            $('#mb_saved_items_container').replaceWith(savedItemsContainer);
+        });
+        
+        $('#mb_cart_container').addClass('container-loading');
+        reloadSection(window.mb_cart_section_index, function(response) {
+            response = $(response);
+            let cartContainer = response.find('#mb_cart_container').prevObject[0].outerHTML;
+            $('#mb_cart_container').replaceWith(cartContainer);
+        });
+    }
+    
+    $('body').on('click', '[data-cart-item-save]', function(e) {
+       e.preventDefault();
+       let savebtn = $(this);
+       let cartItemId = savebtn.data('cart-item-save');
+       savebtn.parents('.cart-item').addClass('disabled');
+       MONO.put('/cart/save-item/' + cartItemId + '?cuuid=' + window.cart_uuid, {
+           _token: window.csrf_token
+       }, function(data) {
+            reloadSections();
+            $('.mb_cart_quantity').text(data.content.cart_quantity);
+       }, function() {
+            savebtn.parents('.cart-item').removeClass('disabled');
+        });
+    });
+    
+    $('body').on('click', '[data-move-to-cart]', function(e) {
+       e.preventDefault();
+       let btn = $(this);
+       let savedItemId = btn.data('move-to-cart');
+       btn.addClass('disabled');
+       MONO.put('/cart/move-to-cart/' + savedItemId + '?cuuid=' + window.cart_uuid, {
+           _token: window.csrf_token
+       }, function(data) {
+            reloadSections();
+            $('.mb_cart_quantity').text(data.content.cart_quantity);
+       }, function() {
+            btn.removeClass('disabled');
+        });
+    });
+    
+    $('body').on('click', '[data-delete-saved-item]', function(e) {
+       e.preventDefault();
+       let btn = $(this);
+       let savedItemId = btn.data('delete-saved-item');
+       btn.addClass('disabled');
+       MONO.delete('/cart/delete-saved-item/' + savedItemId, {
+           _token: window.csrf_token
+       }, function(data) {
+            reloadSections();
+       }, function() {
+            btn.removeClass('disabled');
+        });
+    });
+});
+</script>
+{% endblock %}

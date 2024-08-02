@@ -1,0 +1,24 @@
+<script schema type="application/json">
+    {
+        "name": "Text editor with title",
+        "icon": "align-left",
+        "description": "A WYSIWYG editor allowing you to add any type of content.",
+        "settings": {
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Showcase your brand"
+            },
+            "content": {
+                "label": "Content",
+                "type": "wysiwyg",
+                "default": "Use this text block to describe your brand or product. You can insert text and media."
+            }
+        }
+    }
+</script>
+
+<div class="pt-5 pb-5">
+    <h2>{{ schema.settings.title.value }}</h2>
+    {{ schema.settings.content.value | raw }}
+</div>

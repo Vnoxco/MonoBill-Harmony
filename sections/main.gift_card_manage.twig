@@ -1,0 +1,31 @@
+<script schema type="application/json">
+    {
+        "name": "Gift Card Manage Section",
+        "allowed_templates": [
+            "gift_card_manage.json"
+        ],
+        "settings": {}
+    }
+</script>
+
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError %}
+
+    <div class="container">
+        <div style="margin-top: 0; margin-bottom: 3rem;"></div>
+        <h2 style="text-align: center; text-transform: uppercase;">{{ __('titles.manage_a_gift_card') }}</h2>
+        <div class="row mt-4">
+            <div class="col-lg-4 offset-lg-4">
+                <p class="text-center">{{ __('info.enter_your_gift_card_code') }}</p>
+                <form method="post" action="{{ url() }}">
+                    {{ csrf_input | raw }}
+                    <input class="form-control text-center mb-1" name="code" placeholder="XXXX XXXX XXXX XXXX"
+                           autofocus="">
+                    {{ formError('code') }}
+                    <button type="submit" class="btn btn-dark form-control mt-2">{{ __('buttons.lookup') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

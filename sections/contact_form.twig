@@ -1,0 +1,77 @@
+<script schema type="application/json">
+    {
+        "name": "Contact form"
+    }
+</script>
+
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError %}
+
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8 col-lg-8 col-xl-6">
+                <div class="mb-4">
+                    <h3>{{ __('custom.' ~ page.title) }}</h3>
+                </div>
+                {{ renderTwig(page.content, _context) }}
+                <form method="post" action="{{ url('/contact-us') }}">
+                    {{ csrf_input | raw }}
+                    {% if input('redirect') %}
+                        <input type="hidden" name="redirect" value={{ input('redirect') }}>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label class="floating-input">
+                                <span class="floating-label">{{ __('forms.name') }}</span>
+                                <input type="text" name="name"
+                                       placeholder="{{ __('forms.name') }}"
+                                       class="form-control"
+                                       value="{{ old('name') }}">
+                            </label>
+                            {{ formError('name', true) }}
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="floating-input">
+                                <span class="floating-label">{{ __('forms.email') }}</span>
+                                <input type="email" name="email_address"
+                                       placeholder="{{ __('forms.email') }}"
+                                       class="form-control"
+                                       value="{{ old('email_address') }}">
+                            </label>
+                            {{ formError('email_address', true) }}
+                        </div>
+                    </div>
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.phone_number') }}</span>
+                        <input type="text" name="phone_number"
+                               placeholder="{{ __('forms.phone_number') }}"
+                               class="form-control"
+                               value="{{ old('phone_number') }}">
+                    </label>
+                    {{ formError('phone_number', true) }}
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.comment') }}</span>
+                        <textarea name="comment"
+                                  placeholder="{{ __('forms.comment') }}"
+                                  class="form-control"
+                                  style="min-height: 200px">{{ old('comment') }}</textarea>
+                    </label>
+                    {{ formError('comment', true) }}
+
+                    {{ captcha_img() }}
+                    <input type="text" name="captcha"
+                           placeholder="{{ __('forms.captcha') }}"
+                           class="form-control mt-2 mb-1"
+                           value="">
+                    {{ formError('captcha') }}
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-dark btn-block mt-3">{{ __('buttons.send') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

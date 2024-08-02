@@ -1,0 +1,18 @@
+<script schema type="application/json">
+    {
+        "name": "Category title",
+        "allowed_templates": ["category.json"],
+        "icon": "heading"
+    }
+</script>
+
+{% block content %}
+<div class="container">
+    <div class="text-center pt-5 pb-5">
+        <h2 class="text-uppercase">{{ __('custom.' ~  category.name) }}</h2>
+        {% if category.description %}
+            <p class="me-auto pt-4" style="max-width: 400px">{{ __('custom.' ~  category.description) }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

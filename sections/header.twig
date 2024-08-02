@@ -1,0 +1,157 @@
+<script schema type="application/json">
+    {
+        "name": "Header",
+        "settings": {
+            "image_logo": {
+                "label": "Show image logo",
+                "type": "toggle",
+                "default": 1
+            },
+            "logo_size": {
+                "label": "Logo size",
+                "type": "range",
+                "steps": 1,
+                "max": 10,
+                "min": 1,
+                "append": "x",
+                "default": "5"
+            },
+            "menu": {
+                "label": "Menu",
+                "type": "menu",
+                "default": ""
+            }
+        }
+    }
+</script>
+
+{% block content %}
+    <header class="nav-type-1">
+        <nav class="navbar navbar-expand-lg bg-white">
+            <div class="container flex-nowrap">
+                <div style="width: 86px" class="d-lg-none">
+                    <button class="navbar-toggler d-print-none" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <a class="navbar-brand text-uppercase"
+                   style="font-size: {{ schema.settings.logo_size.value / 1.5 }}rem;" href="{{ url('/') }}">
+                    {% if schema.settings.image_logo.value == 1 and globals.store.logo %}
+                        <img src="{{ globals.store.logo.public_path }}" class="img-fluid"
+                             style="max-width: {{ schema.settings.logo_size.value * 70 }}px;">
+                    {% else %}
+                        {{ globals.store.name }}
+                    {% endif %}
+                </a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        {% if schema.settings.menu.menu %}
+                            {% for menuItem in schema.settings.menu.menu.items %}
+                                <li class="nav-item {% if menuItem.children | length > 0 %}dropdown{% endif %}">
+                                    <a href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}"
+                                       class="nav-link {% if menuItem.children | length > 0 %}dropdown-toggle{% endif %}"
+                                       {% if menuItem.children | length > 0 %}data-bs-toggle="dropdown"
+                                       aria-expanded="false"{% endif %}>{{ __('custom.' ~ menuItem.name) }}</a>
+                                    {% if menuItem.children | length > 0 %}
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            {% for child in menuItem.children %}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="{% if child.type == 'link' %}{{ url(child.url) }}{% elseif child.type == 'page' %}{{ url(child.page.uri) }}{% elseif child.type == 'category' %}{{ url(child.product_category.uri) }}{% elseif child.type == 'product' %}{{ url(child.product.uri) }}{% endif %}"
+                                                       class="nav-link">{{ __('custom.' ~ child.name) }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="nav-item d-lg-none">
+                            <a class="nav-link" href="{{ url('/account') }}">{{ __('buttons.account') }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="navbar-nav flex-row">
+                    <li class="nav-item d-print-none">
+                        <a class="nav-link active" aria-current="page" href="#" id="mb__search_btn"><i
+                                    class="bi bi-search"></i></a>
+                    </li>
+                    <li class="nav-item d-print-none d-none d-lg-inline-block">
+                        <a class="nav-link active position-relative" aria-current="page"
+                           href="{% if auth().check() %}{{ url('account') }}{% else %}{{ url('account/login') }}{% endif %}">
+                            <i class="bi bi-person" style="font-size: 1.6rem; line-height: 1.2;"></i>
+                            <span class="mb__status-indicator mb__status_{% if auth().check() %}online{% else %}offline{% endif %}"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item d-print-none">
+                        <a class="nav-link active position-relative" aria-current="page" href="{{ url('cart') }}">
+                            <i class="bi bi-cart"></i>
+                            {% if globals.cart.quantity > 0 %}<span
+                                    class="mb__cart-quantity mb_cart_quantity">{{ globals.cart.quantity }}</span>{% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    {% if template_name != 'search.json' %}
+        <div class="search-container w-100 top-0 auto-hide" id="mb__search_container">
+            <div class="container">
+                <div class="position-relative">
+                    <div class="search-box mb-2 w-100 pt-3 pb-2">
+                        <form method="get" action="{{ url('/search') }}" class="flex-grow-1">
+                            {{ mb_dev_fields | raw }}
+                            <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-transparent">
+                                <i class="mb__search-icon bi bi-search"></i>
+                                <svg class="mb__search-spinner" style="display: none; width: 20px; height: 20px;"
+                                     viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none"
+                                                                 stroke-width="5"></circle></svg>
+                            </span>
+                                <input id="mb__search_input" type="search" name="q" value=""
+                                       class="form-control search-group-input"
+                                       placeholder="{{ __('placeholders.search') }}" required>
+                            </div>
+                        </form>
+                        <div class="ms-3">
+                            <button id="mb__search_dismiss_btn" class="btn btn-outline-dark"><i class="bi bi-x-lg"
+                                                                                                style="font-size: 1.35rem;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mb__search_autocomplete"></div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if notification %}
+        <div class="row justify-content-center mt-4">
+            <div class="col-sm-8 col-md-6 col-xl-4">
+                <div class="alert alert-{{ notification.type }}" role="alert">
+                    <i class="fa fa-exclamation-circle"></i> {{ notification.message | raw }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="drawer" id="region-select">
+        <div class="drawer-body scroll right">
+            <div class="d-flex">
+                <h2 class="flex-grow-1">{{ __('titles.currency_and_region') }}</h2>
+                <button class="btn close-btn"><i class="fa fa-times"></i></button>
+            </div>
+            <ul class="regions mt-5">
+                {% for code, country in globals.store.enabled_countries %}
+                    <li>
+                        <a href="?x_user_currency={{ country.currency_code }}&x_user_language={{ country.language }}&x_user_country={{ code }}"><span
+                                    class="fi fi-{{ code | lower }}"></span> {{ __('custom.' ~ country.name) }} <span
+                                    class="currency">{{ country.currency_code }} {{ country.currency_symbol }}</span></a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

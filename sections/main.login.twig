@@ -1,0 +1,59 @@
+<script schema type="application/json">
+    {
+        "name": "Main Login Section",
+        "allowed_templates": [
+            "account.login.json"
+        ]
+    }
+</script>
+
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError %}
+
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-sm-8 col-md-6 col-xl-4">
+                <div class="text-center">
+                    <h3>{{ __('titles.customer_login') }}</h3>
+                </div>
+                {% if input('register') == 'success' %}
+                    <div class="alert alert-success" role="alert">
+                        {{ __('notifications.registration_success') }}
+                    </div>
+                {% endif %}
+                <p class="mt-4 mb-3">
+                    {{ __('info.not_a_member') }} <a
+                            href="{{ url('/account/register') }}"><u>{{ __('buttons.register') }}</u></a>
+                </p>
+                <form method="post" action="{{ url('/account/login') }}">
+                    {{ csrf_input | raw }}
+                    {% if input('redirect') %}
+                        <input type="hidden" name="redirect" value={{ input('redirect') }}>
+                    {% endif %}
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.email') }}</span>
+                        <input type="text" name="email_address"
+                               placeholder="{{ __('forms.email') }}"
+                               class="form-control"
+                               value="{{ old('email_address') }}">
+                    </label>
+                    {{ formError('email_address', true) }}
+                    <label class="floating-input">
+                        <span class="floating-label">{{ __('forms.password') }}</span>
+                        <input type="password" name="password"
+                               placeholder="{{ __('forms.password') }}"
+                               class="form-control"
+                               value="{{ old('password') }}">
+                    </label>
+                    {{ formError('password', true) }}
+                    <div class="d-grid gap-2">
+                        <a href="{{ url('/account/login/password-reset') }}"
+                           class="mt-3"><u>{{ __('buttons.forgot_your_password') }}</u></a>
+                        <button type="submit" class="btn btn-dark btn-block mt-3">{{ __('buttons.login') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

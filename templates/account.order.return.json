@@ -1,0 +1,14 @@
+{
+    "settings": {
+        "page_title": {
+            "label": "Page title",
+            "type": "text",
+            "default": "Order Return Request"
+        },
+        "layout": {
+            "label": "Layout",
+            "type": "layout",
+            "default": "base.twig"
+        }
+    }
+}

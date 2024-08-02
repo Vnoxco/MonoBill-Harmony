@@ -1,0 +1,18 @@
+{% macro pricing(product) %}
+    <div class="mb__price" id="mb_product_price">
+        {% if product.default_variant %}
+            {{  product.default_variant.price_converted_formatted_long }}
+            {% if product.default_variant.compare_price > 0 %} 
+                <del>{{ product.default_variant.compare_price_converted_formatted }}</del>
+            {% endif %}
+            {% if  product.default_variant.setup_fee > 0 %}
+                <br>+ {{ product.default_variant.setup_fee_converted_formatted }} {{ __('info.setup_fee') | lower }}
+            {% endif %}
+        {% else %} 
+            {{ product.price_converted_formatted_long }}
+            {% if product.compare_price > 0 %} 
+                <del>{{ product.compare_price_converted_formatted }}</del>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endmacro %}

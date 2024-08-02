@@ -1,0 +1,13 @@
+<script schema type="application/json">
+    {
+        "name": "Product description",
+        "icon": "align-left",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+{% if product.description is not empty %}
+    <div class="pt-3 pb-2">
+        {{ product.description | raw }}
+    </div>
+{% endif %}

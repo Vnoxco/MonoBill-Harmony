@@ -1,0 +1,21 @@
+<script schema type="application/json">
+    {
+        "name": "Button group",
+        "icon": "th-list",
+        "settings": {
+            "classes": {
+                "label": "CSS Classes",
+                "type": "text"
+            },
+            "gap": {
+                "label": "Gap",
+                "type":  "range",
+                "default": 2
+            }
+        }
+    }
+</script>
+
+<div class="d-grid gap-{{ schema.settings.gap.value }} {{ schema.settings.classes.value }}">
+    <blocks></blocks>
+</div>

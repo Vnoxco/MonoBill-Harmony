@@ -1,0 +1,62 @@
+<script schema type="application/json">
+    {
+        "name": "Category slider",
+        "icon": "arrows-alt-h",
+        "description": "Showcase your best selling categories.",
+        "settings": {
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Categories"
+            },
+            "categories": {
+                "label": "Categories",
+                "type": "categories"
+            }
+        },
+        "on_update_javascript": "initCategorySlick();"
+    }
+</script>
+
+{% block content %}
+    <div class="container">
+        <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~ schema.settings.title.value) }}</h2>
+        {% if schema.settings.categories.categories | length > 0 %}
+            <div class="items items_{{schema.index}} no-print">
+                {% for category in schema.settings.categories.categories %}
+                    <a href="{{ url(category.uri) }}" class="d-block">
+                       <div class="slider-card">
+                            <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+                                 style="width:300px; height:300px; background-image: url('{%if category.thumbnail_path %}{{ cdn(category.thumbnail_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
+                            </div>
+                            <div class="name">{{ __('custom.' ~ category.name) }}</div>
+                       </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">{{ __('info.category_slider_default_text') }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let initCategorySlick = function() {
+            $('.items.items_{{schema.index}}').slick({
+                infinite: true,
+                variableWidth: true,
+                centerMode: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: true,
+                dots: true,
+                prevArrow: "<button type='button' class='slick-prev pull-left'><i class='bi bi-chevron-left'></i></button>",
+                nextArrow: "<button type='button' class='slick-next pull-right'><i class='bi bi-chevron-right'></i></button>"
+            });
+        }
+        $(document).ready(function () {
+            initCategorySlick();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,52 @@
+<script schema type="application/json">
+    {
+        "name": "Call to action",
+        "icon": "image",
+        "description": "A card with a background image and action button.",
+        "settings": {
+            "image": {
+                "label": "Image",
+                "type": "image"
+            },
+            "url": {
+                "label": "url",
+                "type": "text",
+                "default": "/"
+            },
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Showcase your brand"
+            },
+            "caption": {
+                "label": "Caption",
+                "type": "text",
+                "default": "Describe this call to action."
+            },
+            "button_text": {
+                "label": "Button text",
+                "type": "text",
+                "default": "View Collection"
+            }
+        }
+    }
+</script>
+
+<a href="{{ url(schema.settings.url.value) }}" style="text-decoration: none; outline: none; border: none; display: block;">
+    <div class="call-to-action-card card border-0 mt-5"
+    style="background-image: url('{% if schema.settings.image.image %}{{ schema.settings.image.image.public_path }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+            <div>
+                <h4 class="call-to-action-title">{{ __('custom.' ~ schema.settings.title.value) }}</h4>
+                {% if schema.settings.caption.value is not empty %}
+                    <p class="call-to-action-caption">{{ __('custom.' ~ schema.settings.caption.value) }}</p>
+                {% endif %}
+            </div>
+            {% if schema.settings.button_text.value is not empty %}
+                <div class="text-center">
+                    <button class="btn btn-outline-light">{{ __('custom.' ~ schema.settings.button_text.value) }}</button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</a>

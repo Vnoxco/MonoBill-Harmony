@@ -1,0 +1,22 @@
+{% macro formError(key, margins) %}
+    {% if errors(key) %}
+        <small class="d-block text-danger"{% if margins == true %} style="margin-top: -.5rem; margin-bottom: 1rem;"{% endif %}><i class="bi bi-info-circle-fill"></i> {{ errors(key)[0] }}</small>
+    {% endif %}
+{% endmacro %}
+
+{% macro formErrorPersist(error, id, margins) %}
+    <small id="{{ id }}" class="d-none text-danger"{% if margins == true %} style="margin-top: -.5rem; margin-bottom: 1rem;"{% endif %}><i class="bi bi-info-circle-fill"></i> {{ error }}</small>
+{% endmacro %}
+
+{% macro allErrors() %}
+    {% if errors() | length > 0 %}
+    <div class="alert alert-danger">
+        <i class="fa fa-exclamation-circle"></i> {{ __('info.some_input_invalid') }}
+        <div>
+            {% for error in errors() %}
+            <div>{{ error[0] }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endmacro %}

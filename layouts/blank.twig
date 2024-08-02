@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="{{ globals.user_country.language | lower }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    {% block viewport %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock %}
+    <title>{{ page_title }} - {{ globals.store.name }}</title>
+    {% block scripts_head %}{% endblock %}
+    {% block styles %}
+        <style>
+            @media print {
+                .table td, .table th {
+                    background-color: #fff !important;
+                }
+            }
+        </style>
+    {% endblock %}
+</head>
+<body class="d-flex flex-column h-100">
+{% block content %}{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

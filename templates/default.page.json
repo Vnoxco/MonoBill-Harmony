@@ -1,0 +1,9 @@
+{
+    "settings": {
+        "layout": {
+            "label": "Layout",
+            "type": "layout",
+            "default": "base.twig"
+        }
+    }
+}

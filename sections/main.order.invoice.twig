@@ -1,0 +1,271 @@
+<script schema type="application/json">
+    {
+        "name": "Main Order Invoice Section",
+        "allowed_templates": [
+            "account.order.invoice.json"
+        ]
+    }
+</script>
+
+{% block viewport %}
+    <meta name="viewport" content="width=500; user-scalable=0;"/>
+{% endblock %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <link href="http://fonts.googleapis.com/css?family=Maven+Pro:400,700%7CRaleway:300,400,700%7CPlayfair+Display:700"
+          rel="stylesheet">
+
+    <style type="text/css">
+        html, body {
+            min-width: 500px;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        a {
+            color: #000 !important;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        .order-badge {
+            font-size: 15px;
+            padding: .6rem;
+        }
+
+        @media print {
+            .table td.bg-dark, .table th.bg-dark {
+                background-color: rgb(33, 37, 41) !important;
+            }
+
+            .card {
+                border: none;
+            }
+
+            .card-body {
+                padding: 0;
+            }
+
+            .order-badge {
+                border: none !important;
+            }
+
+            a:link {
+                border-bottom: none !important;
+                text-decoration: none !important;
+            }
+
+            a[href]:after {
+                content: none !important;
+            }
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1 col-xl-9 offset-xl-1">
+                <div class="card mt-5">
+                    <div class="card-body p-60">
+                        <div class="row">
+                            <div class="col-6">
+                                {% if globals.store.logo %}
+                                    <p><img src="{{ globals.store.logo.public_path }}" class="img-fluid"
+                                            style="max-width: 250px; width: 100%" alt=""/></p>
+                                {% else %}
+                                    <p class="text-primary" style="font-size: 24px;">{{ globals.store.name }}</p>
+                                {% endif %}
+                                <p style="margin-top: 30px !important;">{{ globals.store.address }}</p>
+                                <p>{{ globals.store.city }} {{ globals.store.state_name }} {{ globals.store.postal_code }}</p>
+                                <p>{{ globals.store.country_name }}</p>
+                                <p><a href="tel:{{ globals.store.phone_number }}">{{ globals.store.phone_number }}</a>
+                                </p>
+                                <p><a href="mailto:{{ globals.store.email }}">{{ globals.store.email }}</a></p>
+                                {% if globals.store.company_tax_id is not null %}
+                                    <p>{{ __('forms.tax_id') }}: {{ globals.store.company_tax_id }}</p>
+                                {% endif %}
+                                <p><a href="{{ url('/') }}">{{ url('/') }}</a></p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p class="text-primary"
+                                   style="font-size: 24px; font-weight: bold;">{{ __('INVOICE') }}</p>
+                                <p class="text-right" style="margin-top: 30px !important;"><span
+                                            class="text-primary">{{ __('titles.order') }}</span>
+                                    #{{ order.order_number }}</p>
+                                <p class="text-right"><span
+                                            class="text-primary">{{ __('titles.date') }}</span> {{ order.created_at_formatted }}
+                                </p>
+                                <p class="text-right">
+                                    <span class="order-badge badge badge-{% if order.payment_status == 'paid' or order.payment_status == 'partially_paid' %}success{% elseif order.payment_status == 'unpaid' %}warning{% elseif order.payment_status == 'refunded' %}dark{% endif %} mt-4">{{ __('forms.' ~ order.payment_status) }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row bg-dark no-gutters mt-4">
+                            <div class="col-6">
+                                <div class="p-1 text-white font-weight-bold">{{ __('titles.billing_address') }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-1 text-white font-weight-bold">{{ __('titles.shipping_address') }}</div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters">
+                            <div class="col-6">
+                                <div class="p-1">
+                                    <p>{{ order.billing_first_name }} {{ order.billing_last_name }}</p>
+                                    {% if order.billing_company %}<p>{{ order.billing_company }}</p>{% endif %}
+                                    <p>{{ order.billing_address }}</p>
+                                    <p>{{ order.billing_city }} {{ order.billing_state }} {{ order.billing_postal_code }}</p>
+                                    <p>{{ order.billing_country_name }}</p>
+                                    <p>
+                                        <a href="tel:{{ order.billing_phone_number }}">{{ order.billing_phone_number }}</a>
+                                    </p>
+                                    <p>
+                                        <a href="mailto:{% if order.customer %}{{ order.customer.email }}{% endif %}">{% if order.customer %}{{ order.customer.email_address }}{% endif %}</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-1">
+                                    <p>{{ order.shipping_first_name }} {{ order.shipping_last_name }}</p>
+                                    {% if order.shipping_company %}<p>{{ order.shipping_company }}</p>{% endif %}
+                                    <p>{{ order.shipping_address }}</p>
+                                    <p>{{ order.shipping_city }} {{ order.shipping_state }} {{ order.shipping_postal_code }}</p>
+                                    <p>{{ order.shipping_country_name }}</p>
+                                    <p>
+                                        <a href="tel:{{ order.shipping_phone_number }}">{{ order.shipping_phone_number }}</a>
+                                    </p>
+                                    <p>
+                                        <a href="mailto:{% if order.customer %}{{ order.customer.email }}{% endif %}">{% if order.customer %}{{ order.customer.email_address }}{% endif %}</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div style="overflow:auto; width:100%;position:relative;">
+                                    <table class="table table-sm m-t-22">
+                                        <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th class="bg-dark">{{ __('Description') }}</th>
+                                            <th class="bg-dark text-center" width="10%">{{ __('titles.qty') }}</th>
+                                            <th class="bg-dark text-right"
+                                                width="15%">{{ __('titles.unit_price') }}</th>
+                                            <th class="bg-dark text-right" width="20%">{{ __('titles.total') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for key, item in order.order_items %}
+                                            <tr>
+                                                <td class="align-middle">
+                                                    {% if item.product or item.variant %}
+                                                        <a class="text-dark"
+                                                           href="{{ url(item.product.link.uri) }}{% if item.variant %}?variant={{ item.variant.id }} {% endif %}"
+                                                           title="View this product"
+                                                           target="_blank">{{ item.product.name }}</a>
+                                                    {% else %}
+                                                        {{ item.custom_item_name }}
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-center align-middle">{{ item.quantity }}</td>
+                                                <td class="text-right align-middle">
+                                                    {{ item.unit_price_formatted }}
+                                                </td>
+                                                <td class="text-right align-middle">{{ item.unit_price_total_formatted }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr class="border-0">
+                                            <td colspan="3" class="border-0 text-right">{{ __('info.subtotal') }}</td>
+                                            <td class="border-0 text-right">{{ order.subtotal_formatted }}</td>
+                                        </tr>
+                                        {% if order.checkout_session.shipping_total %}
+                                            <tr class="border-0">
+                                                <td colspan="3"
+                                                    class="border-0 text-right">{{ __('info.shipping') }}</td>
+                                                <td class="border-0">{{ order.checkout_session.shipping_total_formatted }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if order.pickup_fee %}
+                                            <tr class="border-0">
+                                                <td colspan="3"
+                                                    class="border-0 text-right">{{ __('info.pickup_fee') }}</td>
+                                                <td class="border-0">{{ order.pickup_fee_formatted }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% for discount in order.discounts %}
+                                            <tr>
+                                                <td colspan="3" class="border-0 text-right"><small class="text-muted"><i
+                                                                class="fa fa-tags"></i></small> {{ discount.pivot.code }}
+                                                </td>
+                                                <td class="border-0 text-right">
+                                                    -{{ money_format(discount.pivot.discount_value, true) }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% for tax in order.taxes %}
+                                            <tr class="border-0">
+                                                <td colspan="3" class="border-0 text-right">{{ tax.name }}</td>
+                                                <td class=" border-0 text-right">{{ tax.order_tax_total_formatted }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr class="border-0">
+                                            <td colspan="3"
+                                                class="border-0 text-right font-weight-bold">{{ __('titles.total') }}:
+                                            </td>
+                                            <td class="border-0 text-right font-weight-bold">{{ order.total_formatted_long }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    {% if order.notes %}
+                                        <div class="mb-4 mt-4">
+                                            <div class="bg-dark p-2 text-white font-weight-bold">{{ __('titles.notes') }}</div>
+                                            <div class="p-2">
+                                                {{ nl2br(order.notes) | raw }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if order.transactions | length %}
+                                        <h6 class="mt-3">{{ __('titles.transactions') }}</h6>
+                                        {% for transaction in order.all_transactions %}
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-grow-1">
+                                                            {{ (transaction.payment_gateway_name) ? transaction.payment_gateway_name : transaction.payment_gateway }}
+                                                            <br>
+                                                            {% if transaction.total_paid > 0 %}
+                                                                {{ __('info.paid') }}: {{ transaction.total_paid_converted_formatted }}
+                                                                <br>
+                                                            {% endif %}
+                                                            {% if transaction.total_refunded %}
+                                                                {{ __('info.refunded') }}: {{ transaction.total_refunded_converted_formatted }}
+                                                            {% endif %}
+                                                        </div>
+                                                        <div>
+                                                            {{ transaction.created_at_time_formatted }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center no-print mt-3">
+                            <a href="{{ url('/account/orders/' ~ order.id) }}"><i
+                                        class="bi bi-arrow-left"></i> {{ __('buttons.back_to_order') }}</a> - <a
+                                    target="_blank" href="{{ url('/account/orders/'~ order.id ~ '/invoice/pdf') }}"><i
+                                        class="bi bi-file-pdf"></i> {{ __('buttons.download_pdf') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

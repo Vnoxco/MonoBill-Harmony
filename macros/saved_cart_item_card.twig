@@ -1,0 +1,59 @@
+{% macro savedCartItemCard(item) %}
+    {% set image_url = cdn('https://assets.gomonobill.com/img/placeholder-img.jpg') %}
+    {% if item.variant %}
+        {% set product = item.variant %}
+        {% if product.image %}
+            {% set image_url = cdn(product.product.image.path) %}
+        {% elseif product.product.primaryImage %}
+            {% set image_url = cdn(product.product.primaryImage.path) %}
+        {% endif %}
+        {% set name = product.product.name %}
+    {% else %}
+        {% set product = item.product %}
+        {% if product.product.primaryImage %}
+            {% set image_url = cdn(product.product.primaryImage.path) %}
+        {% endif %}
+        {% set name = product.name %}
+    {% endif %}
+    <div class="product-card ms-auto me-auto" style="border: 1px solid #E0E0E0; padding: 1rem; border-radius: .3rem;">
+        {% if product.available == false %}
+            <div class="out-of-stock">{{ __('forms.currently_unavailable') }}</div>
+        {% endif %}
+        {% if (product.price > 0 and product.compare_price > product.price and product.default_variant_id == null) or (product.default_variant_price > 0 and product.default_variant_compare_price > product.default_variant_price) %}
+            <div class="product-sale"><i class="fa fa-tag"></i> {{ __('forms.sale') }}</div>
+        {% endif %}
+
+        <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+             style="cursor: auto; width:200px; height:200px; background-image: url('{{ image_url }}');background-size: contain;">
+            {# <button class="btn btn-light quick-view" data-quick-view="{{ product.id }}">{{ __('buttons.quick_view') }}</button> #}
+        </div>
+        <div class="text-start">
+            <div class="name mt-2">{{ name }}</div>
+            {% if product.default_variant_id %}
+            {% if product.default_variant_price <= 0 %}
+                <span class="d-block">{{ __('forms.free') }}</span>
+            {% else %}
+                <span>{{ product.default_variant_price_converted_formatted_long }}
+                    {% if product.default_variant_compare_price > 0 %}
+                        <del>{{ product.default_variant_compare_price_converted_formatted }}</del>
+                    {% endif %}
+                    </span>
+            {% endif %}
+        {% else %}
+            {% if product.price <= 0 %}
+                <span class="d-block">{{ __('forms.free') }}</span>
+            {% else %}
+                <span>{{ product.price_converted_formatted_long }}
+                    {% if product.compare_price > 0 %}
+                        <del>{{ product.compare_price_converted_formatted }}</del>
+                    {% endif %}
+                    </span>
+            {% endif %}
+            {% endif %}<br>
+            <button data-move-to-cart="{{ item.id }}"
+                    class="btn btn-outline-dark mt-2 mb-2">{{ __('buttons.move_to_cart') }}</button>
+            <a data-delete-saved-item="{{ item.id }}" class="mt-2 d-block text-dark text-start"
+               href="#!">{{ __('buttons.delete') }}</a>
+        </div>
+    </div>
+{% endmacro %}

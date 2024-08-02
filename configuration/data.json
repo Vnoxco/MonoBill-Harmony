@@ -1,0 +1,886 @@
+{
+  "settings": {
+    "index": "home.json",
+    "range": "63",
+    "toggle": 0,
+    "color_scheme": "#262626"
+  },
+  "header": {
+    "settings": {
+      "logo_size": "2",
+      "image_logo": 1
+    }
+  },
+  "footer": {
+    "settings": {
+      "logo_size": "2"
+    }
+  },
+  "templates\/home.json": {
+    "sections": [
+      {
+        "id": "image_slider.twig",
+        "settings": {
+          "id": "homeSlider",
+          "slides": [],
+          "slide_interval": "5",
+          "show_slide_indicators": 1,
+          "show_slide_arrows": 0,
+          "fade_effect": 1,
+          "pause_on_hover": 0,
+          "full_width": 0
+        }
+      },
+      {
+        "id": "category_showcase.twig",
+        "settings": {
+          "categories": [],
+          "categories_per_row": "2",
+          "title": ""
+        }
+      },
+      {
+        "id": "spacing.twig",
+        "settings": {
+          "gap": "5",
+          "top_gap": "3",
+          "bottom_gap": "0",
+          "divider": true
+        }
+      },
+      {
+        "id": "product_slider.twig",
+        "settings": {
+          "title": "POPULAR ITEMS",
+          "products": []
+        }
+      },
+      {
+        "id": "spacing.twig",
+        "settings": {
+          "top_gap": "0",
+          "bottom_gap": "3",
+          "divider": 0
+        }
+      },
+      {
+        "id": "section.twig",
+        "blocks": [
+          {
+            "id": "row.twig",
+            "settings": {
+              "classes": null
+            },
+            "blocks": [
+              {
+                "id": "column.twig",
+                "settings": {
+                  "col_span_xl": "50",
+                  "col_span_lg": "50",
+                  "col_span_md": "100",
+                  "col_span_sm": "12",
+                  "col_span": "100",
+                  "classes": null
+                },
+                "blocks": [
+                  {
+                    "id": "call_to_action.twig",
+                    "settings": {
+                      "title": "Seasonal Sale",
+                      "caption": "Up to 25% off",
+                      "image": 42,
+                      "url": "\/category\/sale",
+                      "button_text": "Shop Now"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "column.twig",
+                "settings": {
+                  "col_span_xl": "50",
+                  "col_span_lg": "50",
+                  "col_span_md": "100",
+                  "col_span_sm": "12",
+                  "col_span": "100",
+                  "classes": null
+                },
+                "blocks": [
+                  {
+                    "id": "text_with_title.twig",
+                    "settings": {
+                      "title": "We are fashion",
+                      "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin aliquam mollis libero hendrerit auctor. Donec elementum in purus vel efficitur. Pellentesque pharetra quam commodo tincidunt consectetur.<\/p>",
+                      "title_2": "Testing"
+                    }
+                  },
+                  {
+                    "id": "text_with_title.twig",
+                    "settings": {
+                      "title": "Fashion made simple",
+                      "content": "<p>Maecenas ullamcorper dui ut lectus tristique accumsan. Etiam accumsan, ante ac luctus condimentum, sem lorem molestie velit, a viverra velit ipsum ut arcu.<\/p>",
+                      "title_2": "Testing"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "spacing.twig",
+        "settings": {
+          "divider": 1,
+          "top_gap": "3",
+          "bottom_gap": "4"
+        }
+      },
+      {
+        "id": "category_slider.twig",
+        "settings": {
+          "title": "CATEGORIES",
+          "categories": []
+        }
+      },
+      {
+        "id": "spacing.twig",
+        "settings": {
+          "divider": true,
+          "top_gap": "3",
+          "bottom_gap": "4"
+        }
+      },
+      {
+        "id": "blog_post_slider.twig",
+        "settings": {
+          "title": "FROM OUR BLOG",
+          "amount": "10",
+          "tags": "",
+          "blog_posts": ""
+        }
+      }
+    ],
+    "settings": {
+      "page_title": "Home",
+      "header": 1,
+      "footer": 1,
+      "layout": "base.twig"
+    }
+  },
+  "templates\/default.category.json": {
+    "sections": [
+      {
+        "id": "category_title.twig"
+      },
+      {
+        "id": "product_listing.twig",
+        "settings": {
+          "auto_open": 1,
+          "show_highest_price": 1
+        }
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Product Category",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/new.category.json": {
+    "sections": [
+      {
+        "id": "category_title.twig"
+      },
+      {
+        "id": "product_listing.twig",
+        "settings": {
+          "auto_open": 1,
+          "show_highest_price": 1
+        }
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Product Category",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/default.product.json": {
+    "sections": [
+      {
+        "id": "product.twig",
+        "blocks": [
+          {
+            "id": "product_name.twig",
+            "settings": []
+          },
+          {
+            "id": "product_price.twig",
+            "settings": []
+          },
+          {
+            "id": "product_configuration.twig",
+            "settings": []
+          },
+          {
+            "id": "product_description.twig",
+            "settings": []
+          },
+          {
+            "id": "collapse.twig",
+            "settings": {
+              "open_default": 0,
+              "title": "Shipping & returns"
+            },
+            "blocks": [
+              {
+                "id": "text.twig",
+                "settings": {
+                  "content": "<p>Free shipping globally on all orders.<\/p>\n<p>We accept returns on a case by case basis.<\/p>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "collapse.twig",
+            "settings": {
+              "title": "Dimensions",
+              "open_default": 0
+            },
+            "blocks": [
+              {
+                "id": "product_dimensions.twig",
+                "settings": []
+              }
+            ]
+          },
+          {
+            "id": "product_share.twig",
+            "settings": []
+          },
+          {
+            "id": "product_categories.twig",
+            "settings": []
+          },
+          {
+            "id": "product_sku.twig",
+            "settings": []
+          },
+          {
+            "id": "product_tags.twig",
+            "settings": []
+          }
+        ],
+        "settings": {
+          "line_through_unavailable_variant_options": 1
+        }
+      },
+      {
+        "id": "spacing.twig",
+        "settings": {
+          "divider": true,
+          "top_gap": "3",
+          "bottom_gap": "3"
+        }
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Product",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/size_chart.product.json": {
+    "sections": [
+      {
+        "id": "product.twig",
+        "blocks": [
+          {
+            "id": "product_name.twig",
+            "settings": []
+          },
+          {
+            "id": "product_price.twig",
+            "settings": []
+          },
+          {
+            "id": "product_configuration.twig",
+            "settings": []
+          },
+          {
+            "id": "product_description.twig",
+            "settings": []
+          },
+          {
+            "id": "collapse.twig",
+            "settings": {
+              "open_default": 0,
+              "title": "Shipping & returns"
+            },
+            "blocks": [
+              {
+                "id": "text.twig",
+                "settings": {
+                  "content": "<p>Free shipping globally on all orders.<\/p>\n<p>We accept returns on a case by case bases.<\/p>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "collapse.twig",
+            "settings": {
+              "title": "Dimensions",
+              "open_default": false
+            },
+            "blocks": [
+              {
+                "id": "product_dimensions.twig",
+                "settings": []
+              }
+            ]
+          },
+          {
+            "id": "collapse.twig",
+            "settings": {
+              "title": "Size",
+              "open_default": false
+            },
+            "blocks": [
+              {
+                "id": "text.twig",
+                "settings": {
+                  "content": "<p>Runs a little small. Order a size smaller.<\/p>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "product_share.twig",
+            "settings": []
+          },
+          {
+            "id": "product_categories.twig",
+            "settings": []
+          },
+          {
+            "id": "product_sku.twig",
+            "settings": []
+          },
+          {
+            "id": "product_tags.twig",
+            "settings": []
+          }
+        ],
+        "settings": {
+          "line_through_unavailable_variant_options": 1
+        }
+      },
+      {
+        "id": "spacing.twig",
+        "settings": {
+          "divider": true,
+          "top_gap": "4",
+          "bottom_gap": "0"
+        }
+      },
+      {
+        "id": "related_products.twig",
+        "settings": {
+          "title": "Related Products",
+          "related_products": ""
+        }
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Product",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/account.addresses.add.json": {
+    "sections": [
+      {
+        "id": "main.addresses.add.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.addresses.json": {
+    "sections": [
+      {
+        "id": "main.addresses.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.change_password.json": {
+    "sections": [
+      {
+        "id": "main.change_password.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.execute_password_reset.json": {
+    "sections": [
+      {
+        "id": "main.execute_password_reset.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.json": {
+    "sections": [
+      {
+        "id": "main.account.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.login.json": {
+    "sections": [
+      {
+        "id": "main.login.twig"
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Customer Login",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/account.order.cancel.json": {
+    "sections": [
+      {
+        "id": "main.order.cancel.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.order.change_shipping_address.json": {
+    "sections": [
+      {
+        "id": "main.order.change_shipping_address.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.order.invoice.json": {
+    "sections": [
+      {
+        "id": "main.order.invoice.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/invoice.json": {
+    "sections": [
+      {
+        "id": "main.invoice.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/gift_card_purchase.json": {
+    "sections": [
+      {
+        "id": "main.gift_card_purchase.twig",
+        "settings": {},
+        "blocks": [
+          {
+            "id": "text.twig",
+            "settings": {
+              "content": "<h2>Setup your gift card<\/h2>"
+            }
+          },
+          {
+            "id": "gift_card_configuration.twig",
+            "settings": []
+          }
+        ]
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/pdf.invoice.json": {
+    "sections": [
+      {
+        "id": "pdf.invoice.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/account.order.json": {
+    "sections": [
+      {
+        "id": "main.order.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.order.return_cancel.json": {
+    "sections": [
+      {
+        "id": "main.order.return_cancel.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.order.return.json": {
+    "sections": [
+      {
+        "id": "main.order.return.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.password_reset.json": {
+    "sections": [
+      {
+        "id": "main.password_reset.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/account.register.json": {
+    "sections": [
+      {
+        "id": "main.register.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/cart.json": {
+    "sections": [
+      {
+        "id": "main.cart.twig",
+        "settings": {}
+      },
+      {
+        "id": "saved_items.cart.twig",
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Cart",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/coming_soon.json": {
+    "sections": [
+      {
+        "id": "main.coming_soon.twig"
+      }
+    ],
+    "settings": {
+      "header": 0,
+      "footer": 0,
+      "page_title": "Coming Soon",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/default.page.json": {
+    "sections": [
+      {
+        "id": "main.page.twig",
+        "settings": {},
+        "blocks": []
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1"
+    }
+  },
+  "templates\/estimate.json": {
+    "sections": [
+      {
+        "id": "main.estimate.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/page_password.json": {
+    "sections": [
+      {
+        "id": "main.page_password.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/password.json": {
+    "sections": [
+      {
+        "id": "main.password.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/pdf.sales_order.json": {
+    "sections": [
+      {
+        "id": "pdf.sales_order.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/pdf.estimate.json": {
+    "sections": [
+      {
+        "id": "pdf.estimate.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/pdf.order.invoice.json": {
+    "sections": [
+      {
+        "id": "pdf.order.invoice.twig",
+        "settings": {}
+      }
+    ]
+  },
+  "templates\/search.json": {
+    "sections": [
+      {
+        "id": "search_results_header.twig",
+        "settings": {}
+      },
+      {
+        "id": "product_listing.twig",
+        "settings": {
+          "auto_open": true,
+          "show_highest_price": true
+        }
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "page_title": "Search",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/account.addresses.edit.json": {
+    "sections": [
+      {
+        "id": "main.addresses.edit.twig"
+      }
+    ],
+    "settings": {
+      "header": 1,
+      "footer": 1,
+      "page_title": "Edit Address",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/contact.page.json": {
+    "sections": [
+      {
+        "id": "contact_form.twig"
+      }
+    ],
+    "settings": {
+      "header": 1,
+      "footer": 1,
+      "page_title": "Contact us",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/404.json": {
+    "sections": [
+      {
+        "id": "main.404.twig"
+      }
+    ],
+    "settings": {
+      "header": 1,
+      "footer": 1,
+      "page_title": "404 - Not Found",
+      "layout": "base.twig"
+    }
+  },
+  "templates\/gift_card_show.json": {
+    "sections": [
+      {
+        "id": "main.gift_card_show.twig"
+      }
+    ],
+    "settings": {
+      "header": 1,
+      "footer": 1,
+      "layout": "base.twig"
+    }
+  },
+  "templates\/gift_card_manage.json": {
+    "sections": [
+      {
+        "id": "main.gift_card_manage.twig"
+      }
+    ],
+    "settings": {
+      "header": 1,
+      "footer": 1,
+      "layout": "base.twig"
+    }
+  },
+  "templates\/gift_card.json": {
+    "sections": [
+      {
+        "id": "section.twig",
+        "blocks": [
+          {
+            "id": "spacing.twig",
+            "settings": {
+              "divider": 0,
+              "top_gap": "0",
+              "bottom_gap": "3"
+            }
+          },
+          {
+            "id": "text.twig",
+            "settings": {
+              "content": "<h2 style=\"text-align: center;\">GIFT CARDS<\/h2>"
+            }
+          },
+          {
+            "id": "spacing.twig",
+            "settings": {
+              "divider": 0,
+              "top_gap": "0",
+              "bottom_gap": "2"
+            }
+          },
+          {
+            "id": "text.twig",
+            "settings": {
+              "content": "<p style=\"text-align: center;\">Purchase a gift card or manage an existing gift card.<\/p>"
+            }
+          },
+          {
+            "id": "spacing.twig",
+            "settings": {
+              "divider": 0,
+              "top_gap": "0",
+              "bottom_gap": "2"
+            }
+          },
+          {
+            "id": "row.twig",
+            "settings": {
+              "classes": null
+            },
+            "blocks": [
+              {
+                "id": "column.twig",
+                "settings": {
+                  "col_span_xl": "40",
+                  "col_span_lg": "40",
+                  "col_span_md": "100",
+                  "col_span_sm": "100",
+                  "col_span": "100",
+                  "classes": "offset-lg-4"
+                },
+                "blocks": [
+                  {
+                    "id": "button_group.twig",
+                    "settings": {
+                      "classes": null,
+                      "gap": 2
+                    },
+                    "blocks": [
+                      {
+                        "id": "button.twig",
+                        "settings": {
+                          "link": 1,
+                          "label": "Purchase a gift card",
+                          "url": "\/gift-cards\/purchase",
+                          "type": "dark"
+                        }
+                      },
+                      {
+                        "id": "button.twig",
+                        "settings": {
+                          "link": 1,
+                          "label": "Manage a gift card",
+                          "url": "\/gift-cards\/manage",
+                          "type": "outline-dark"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "settings": {
+      "header": 1,
+      "footer": 1,
+      "page_title": "Gift Card",
+      "layout": "base.twig"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<script schema type="application/json">
+    {
+        "name": "Column",
+        "icon": "columns",
+        "description": "",
+        "settings": {
+            "col_span_xl": {
+                "label": "Desktop",
+                "type": "range",
+                "steps": 5,
+                "max": 100,
+                "min": 0,
+                "append": "%",
+                "default": "100"
+            },
+            "col_span_lg": {
+                "label": "Tablet landscape",
+                "type": "range",
+                "steps": 5,
+                "max": 100,
+                "min": 0,
+                "append": "%",
+                "default": "100"
+            },
+            "col_span_md": {
+                "label": "Tablet portrait",
+                "type": "range",
+                "steps": 5,
+                "max": 100,
+                "min": 0,
+                "append": "%",
+                "default": "100"
+            },
+            "col_span": {
+                "label": "Mobile",
+                "type": "range",
+                "steps": 5,
+                "max": 100,
+                "min": 0,
+                "append": "%",
+                "default": "100"
+            },
+            "classes": {
+                "label": "CSS Classes",
+                "type": "text"
+            }
+        }
+    }
+</script>
+
+<div class="
+{%if schema.settings.col_span.value %}col-{{ ((schema.settings.col_span.value *12 ) / 100) | round(0, 'floor') }} {% endif %}
+{%if schema.settings.col_span_md.value %}col-md-{{ ((schema.settings.col_span_md.value *12 ) / 100) | round(0, 'floor') }} {% endif %}
+{%if schema.settings.col_span_lg.value %}col-lg-{{ ((schema.settings.col_span_lg.value *12 ) / 100) | round(0, 'floor') }} {% endif %}
+{%if schema.settings.col_span_xl.value %}col-xl-{{ ((schema.settings.col_span_xl.value *12 ) / 100) | round(0, 'floor') }} {% endif %}
+{{ schema.settings.classes.value }}
+">
+    <blocks></blocks>
+</div>

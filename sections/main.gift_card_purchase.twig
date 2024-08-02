@@ -1,0 +1,170 @@
+<script schema type="application/json">
+    {
+        "name": "Gift Card Purchase Section",
+        "allowed_templates": [
+            "gift_card_purchase.json"
+        ],
+        "settings": {}
+    }
+</script>
+
+{% block styles %}
+    <style>
+        #gift_card_custom_value_container {
+            position: relative;
+        }
+
+        .money_input_currency_symbol {
+            position: absolute;
+            left: 10px;
+            top: 8px;
+        }
+
+        #gift_card_custom_value_container #gift_card_custom_value_input {
+            padding-left: 30px;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(function () {
+
+            let recipientCount = {% if old('recipients') | length %}{{ old('recipients') | length }}{% else %}1{% endif %};
+
+            let maxGiftCardValue = {{ money_format(globals.store.max_gift_card_balance, false, false, true) }};
+
+            function recalculateTotal() {
+                let value = $('input[name="card_value"]:checked').val();
+                if ($('#gift_card_custom_value_input').val().length > 0) {
+                    value = $('#gift_card_custom_value_input').val();
+                }
+                $('#gift_card_total').html('Total: ' + MONO.formatMoney(value, store_currency, true, false, 0.01, maxGiftCardValue, recipientCount));
+            }
+
+            $('input[name="card_value"]').on('change', function (e) {
+                $('#gift_card_value').html(MONO.formatMoney($('input[name="card_value"]:checked').val(), store_currency, true, false, 0.01, maxGiftCardValue));
+                recalculateTotal();
+            });
+
+            $('#custom_gift_card_value_btn').on('click', function (e) {
+                $('#gift_card_values').addClass('d-none');
+                $('#gift_card_custom_value_container').removeClass('d-none');
+                $('#gift_card_custom_value_input').val($('input[name="card_value"]:checked').val());
+                $('#gift_card_custom_value_input').blur();
+                $('#gift_card_custom_value_input').focus();
+            });
+
+
+            $('#gift_card_custom_value_input').on('blur', function (e) {
+                $(this).val(MONO.formatMoney($(this).val(), store_currency, false, false, 0.01, maxGiftCardValue));
+                $('#gift_card_value').html(MONO.formatMoney($(this).val(), store_currency, true, false, 0.01, maxGiftCardValue));
+                recalculateTotal();
+            });
+
+            $('.add-recipient-btn').on('click', function (e) {
+                if (recipientCount >= 5) {
+                    return;
+                }
+                $('#gift_card_recipients').append('<div><div class="input-group mb-2 recipient-container"><input name="recipients[]" placeholder="Email address" type="email" class="form-control"><button class="btn btn-outline-dark recipient-remove-btn" type="button" style="font-size: 20px; font-weight: bold;" id="button-addon1">x</button></div></div>')
+                recipientCount += 1;
+                if (recipientCount == 5) {
+                    $('.add-recipient-btn').addClass('d-none');
+                }
+                if (recipientCount > 1) {
+                    $('.recipient-container').addClass('input-group');
+                    $('.recipient-remove-btn').removeClass('d-none');
+                    $('#gift_card_total').removeClass('d-none');
+                }
+                recalculateTotal();
+            });
+
+            $('body').on('click', '.recipient-remove-btn', function (e) {
+                $('.add-recipient-btn').removeClass('d-none');
+                $(this).parent().parent().remove();
+                recipientCount -= 1;
+                if (recipientCount <= 1) {
+                    $('.recipient-container').removeClass('input-group');
+                    $('.recipient-remove-btn').addClass('d-none');
+                    $('#gift_card_total').addClass('d-none');
+                }
+                recalculateTotal();
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    {% from "macros/form_error.twig" import formError %}
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-lg-8">
+                <svg id="gift_card_svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 971 586">
+                    <defs>
+                        <style>
+                            svg {
+                                width: auto;
+                                height: auto;
+                            }
+
+                            .cls-1 {
+                                font-size: 35px;
+                                font-weight: bold;
+                            }
+
+                            .cls-1, .cls-3 {
+                                font-family: Arial;
+                            }
+
+                            .cls-3 {
+                                font-size: 31.51px;
+                                font-weight: bold;
+                            }
+
+                            .cls-4 {
+                                letter-spacing: 0em;
+                            }
+
+                            .cls-5 {
+                                fill: #fff;
+                                filter: url(#drop-shadow-1);
+                            }
+                        </style>
+                        <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+                            <feOffset dx="0" dy="0"/>
+                            <feGaussianBlur result="blur" stdDeviation="11.34"/>
+                            <feFlood flood-color="#000" flood-opacity=".25"/>
+                            <feComposite in2="blur" operator="in"/>
+                            <feComposite in="SourceGraphic" in2=""/>
+                        </filter>
+                    </defs>
+                    <path class="cls-5"
+                          d="M42.79,34.52H921.3c8.19,0,14.84,6.65,14.84,14.84v493.89c0,4.57-3.71,8.28-8.28,8.28H42.79c-4.57,0-8.28-3.71-8.28-8.28V42.79c0-4.57,3.71-8.28,8.28-8.28Z"/>
+                    <image width="8000" height="7803" transform="translate(33.02 33.02) scale(.04)"
+                           xlink:href="https://assets.gomonobill.com/monobill/red_bow.png"/>
+                    <g transform="translate(50%, 50%)">
+                        <image xlink:href="{{ globals.store.logo.public_path }}" x="50%" y="50%" height="248"
+                               width="284" transform="translate(-142,-124)">{{ globals.store.name }}</image>
+                    </g>
+                    <text class="cls-1" transform="translate(913.75 92.74)">
+                        <tspan x="0" y="0" direction="rtl"
+                               id="gift_card_value">{{ money_format(extract_cents(old('custom_card_value') ? old('custom_card_value') : old('card_value')? old('card_value') : 10), true, false, false, false, globals.store.currency) }}</tspan>
+                    </text>
+                    <text class="cls-3" transform="translate(740.75 527.67)">
+                        <tspan x="0" y="0">GIFT CARD</tspan>
+                    </text>
+                </svg>
+            </div>
+            <div class="col-lg-4">
+                <div class="p-3">
+                    <div id="alerts"></div>
+                    <blocks></blocks>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

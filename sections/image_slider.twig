@@ -1,0 +1,113 @@
+<script schema type="application/json">
+    {
+        "name": "Image slider",
+        "icon": "images",
+        "description": "A slide show of images with captions and buttons.",
+        "settings": {
+            "show_slide_indicators": {
+                "label": "Slide indicators",
+                "type": "toggle",
+                "default": true
+            },
+            "show_slide_arrows": {
+                "label": "Slide arrows",
+                "type": "toggle",
+                "default": true
+            },
+            "fade_effect": {
+                "label": "Fade effect",
+                "type": "toggle",
+                "default": false
+            },
+            "pause_on_hover": {
+                "label": "Pause on hover",
+                "type": "toggle",
+                "default": false
+            },
+            "full_width": {
+                "label": "Make slider expand the entire page",
+                "type": "toggle",
+                "default": true
+            },
+            "slide_interval": {
+                "label": "Slide interval",
+                "type": "range",
+                "steps": 1,
+                "prepend": "Change slides every ",
+                "append": " seconds.",
+                "max": 60,
+                "min": 1,
+                "default": 8
+            },
+            "slides": {
+                "label": "Slides",
+                "type": "slides"
+            }
+        },
+        "on_update_javascript": "$(element).find('.carousel').carousel();"
+    }
+</script>
+
+{% block content %}
+    {% if schema.settings.full_width.value == false %}
+        <div class="container mt-5">
+    {% endif %}
+    <div id="mb_slider{{ schema.index }}"
+         class="carousel slide {% if schema.settings.fade_effect.value == true %}carousel-fade{% endif %}"
+         {% if schema.settings.pause_on_hover.value == false %}data-bs-pause="false"{% endif %} data-bs-ride="carousel"
+         data-bs-interval="{{ schema.settings.slide_interval.value * 1000 }}">
+        {% if schema.settings.show_slide_indicators.value == true %}
+            <div class="carousel-indicators">
+                {% for key, slide in schema.settings.slides.value %}
+                    <button type="button" data-bs-target="#mb_slider{{ schema.index }}" data-bs-slide-to="{{ key }}"
+                            {% if(key == 0) %}class="active"{% endif %} aria-current="true"
+                            aria-label="Slide {{ key }}"></button>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="carousel-inner">
+            {% for key, slide in schema.settings.slides.value %}
+                <div class="mb__slider_slide carousel-item {% if(key == 0) %}active{% endif %}"
+                     style="background-image: url('{% if slide.image %}{{ slide.image.public_path }}{% else %}https://assets.gomonobill.com/monobill/default_slide.jpg{% endif %}'); background-position: center {{ slide.image_position }};">
+                    <div class="slide-text text-center {% if slide.align_content == 'left' %}left-align{% elseif slide.align_content == 'center' %}center-align{% elseif slide.align_content == 'right' %}right-align{% endif %}">
+                        {% if slide.heading or slide.text %}
+                            <div class="slide-lines">
+                                {% if slide.heading %}<h1
+                                        class="slide-heading text-white">{{ __('custom.' ~ slide.heading) }}</h1>{% endif %}
+                                {% if slide.text %}<h4
+                                        class="slide-subheading text-white">{{ __('custom.' ~ slide.text) }}</h4>{% endif %}
+                            </div>
+                        {% endif %}
+                        {% if slide.button_text %}<a href="{{ slide.button_url }}"
+                                                     class="btn slide-btn btn-outline-light">
+                            <span>{{ __('custom.' ~ slide.button_text) }}</span></a>{% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="mb__slider_slide carousel-item active"
+                     style="background-image: url('https://assets.gomonobill.com/monobill/default_slide.jpg'); background-position: center;">
+                    <div class="slide-text text-center center-align">
+                        <div class="slide-lines">
+                            <h2 class="text-white">{{ __('info.add_slide_default_text') }}</h2>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if schema.settings.show_slide_arrows.value == true %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#mb_slider{{ schema.index }}"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">{{ __('buttons.previous') }}</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mb_slider{{ schema.index }}"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">{{ __('buttons.next') }}</span>
+            </button>
+        {% endif %}
+    </div>
+    {% if schema.settings.full_width.value == false %}
+        </div>
+    {% endif %}
+{% endblock %}

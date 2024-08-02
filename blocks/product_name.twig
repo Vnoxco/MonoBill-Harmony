@@ -1,0 +1,11 @@
+<script schema type="application/json">
+    {
+        "name": "Product name",
+        "icon": "heading",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+<h1 class="product_name">
+    {{ __('custom.' ~ product.name) }}
+</h1>

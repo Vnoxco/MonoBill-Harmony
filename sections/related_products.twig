@@ -1,0 +1,52 @@
+<script schema type="application/json">
+    {
+        "name": "Related Products",
+        "allowed_templates": [
+            "product.json"
+        ],
+        "settings": {
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Related Products"
+            },
+            "related_products": {
+                "label": "Related Products",
+                "type": "related_products",
+                "hidden_in_customizer": true
+            }
+        },
+        "on_update_javascript": "$('.items').slick({infinite: true,slidesToShow: 1,slidesToScroll: 1,arrows: true,variableWidth: true,centerMode: true,prevArrow: \"<button type='button' class='slick-prev pull-left'><i class='fa fa-angle-left' aria-hidden='true'></i></button>\",nextArrow: \"<button type='button' class='slick-next pull-right'><i class='fa fa-angle-right' aria-hidden='true'></i></button>\"});"
+    }
+</script>
+
+{% block content %}
+    {% from "macros/product_card.twig" import productCard %}
+    <div class="container">
+        {% if schema.settings.related_products.related_products | length > 0 %}
+            <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~ schema.settings.title.value) }}</h2>
+            <div class="items no-print">
+                {% for relatedProduct in schema.settings.related_products.related_products %}
+                    {{ productCard(relatedProduct) }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('.items').slick({
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: true,
+                centerMode: true,
+                variableWidth: true,
+                prevArrow: "<button type='button' class='slick-prev pull-left'><i class='fa fa-angle-left' aria-hidden='true'></i></button>",
+                nextArrow: "<button type='button' class='slick-next pull-right'><i class='fa fa-angle-right' aria-hidden='true'></i></button>"
+            });
+        });
+    </script>
+{% endblock %}

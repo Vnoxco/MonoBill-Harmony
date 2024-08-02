@@ -1,0 +1,315 @@
+<script schema type="application/json">
+    {
+        "name": "Main Order Section",
+        "allowed_templates": [
+            "account.order.json"
+        ]
+    }
+</script>
+
+{% block content %}
+    <div class="container mt-5">
+        <h3>{{ __('titles.order_number', {order_number: order.order_number}) }}</h3>
+        <hr>
+        <div class="row mt-2">
+            <div class="col-lg-8">
+                {% if input('payment-success') == 1 %}
+                    <div class="alert alert-success">
+                        {{ __('notification.order_payment_success') }}
+                    </div>
+                {% elseif order.balance > 0 and order.status != 'cancelled' %}
+                    <div class="alert alert-danger">
+                        {{ __('notifications.order_outstanding_balance', {balance: order.balance_converted_formatted}) }}
+                        <br>
+                        <a class="btn btn-danger mt-2"
+                           href="{{ url('account/orders/' ~ order.id ~ '/checkout') }}">{{ __('buttons.pay_now') }}</a>
+                    </div>
+                {% endif %}
+                {{ __('info.placed_on', {date: order.created_at_formatted}) }}
+                <div>
+                    <span class="me-2">{{ __('info.payment_status', {status:  __('forms.' ~ order.payment_status)}) }}</span> {{ __('info.order_status', {status: __('forms.' ~ order.status)}) }}
+                </div>
+                {% if order.tracking_number %}
+                    <div>{{ __('info.tracking_number', {tracking_number: order.tracking_number}) }}</div>
+                {% endif %}
+                <div class="mt-3">
+                    {% if order.payment_status == 'paid' or order.payment_status == 'partially_paid' or order.payment_status == 'refunded' %}
+                        <a class="btn btn-light me-2 mb-2"
+                           href="{{ url('account/orders/' ~ order.id ~ '/invoice') }}">{{ __('buttons.view_invoice') }}</a>
+                    {% endif %}
+                    {% if order.checkout_session.address and order.status != 'cancelled' and order.fulfilled_amount == 0 %}
+                        <a class="btn btn-light me-2 mb-2"
+                           href="{{ url('account/orders/' ~ order.id ~ '/change-shipping-address') }}">{{ __('buttons.change_shipping_address') }}</a>
+                    {% endif %}
+                    {% if order.can_cancel and order.cancel_request_date is null %}
+                        <a class="btn btn-light me-2 mb-2"
+                           href="{{ url('account/orders/' ~ order.id ~ '/cancel') }}">{{ __('buttons.cancel_order') }}</a>
+                    {% endif %}
+                    {% if order.items_remaining_amount_to_return > 0 and globals.store.return_system_enabled %}
+                        <a class="btn btn-light me-2 mb-2"
+                           href="{{ url('account/orders/' ~ order.id ~ '/return') }}">{{ __('buttons.request_return') }}</a>
+                    {% endif %}
+                </div>
+                <table class="table mt-3 table-responsive">
+                    <thead>
+                    <tr>
+                        <th scope="col" width="65%">{{ __('titles.description') }}</th>
+                        <th scope="col" width="15%">{{ __('titles.sku') }}</th>
+                        <th scope="col" width="10%">{{ __('titles.price') }}</th>
+                        <th scope="col" width="5%">{{ __('titles.qty') }}</th>
+                        <th scope="col">{{ __('titles.total') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order.order_items %}
+                        <tr>
+                            <td class="align-middle">
+                                {% if item.gift_card_value %}
+                                    {{ __('titles.gift_card') }}
+                                    {% if item.gift_card_recipients | length > 0 %}
+                                        <p class="small mb-0">{{ __('forms.recipients') }}
+                                            : {{ item.gift_card_recipients | join(', ') }}</p>
+                                    {% endif %}
+                                    {% if item.gift_card_message %}
+                                        <p class="small mb-0">{{ __('forms.message') }}
+                                            : {{ item.gift_card_message }}</p>
+                                    {% endif %}
+                                    {% if item.gift_cards | length > 0 %}
+                                        {{ __('titles.gift_cards') }}:<br>
+                                    {% endif %}
+                                    {% for gift_card in item.gift_cards %}
+                                        <a href="/gift-cards/manage/{{ gift_card.uuid }}">{{ gift_card.code_formatted }}</a>
+                                        <br>
+                                    {% endfor %}
+                                {% else %}
+                                    {% if item.product or item.variant %}
+                                        <a class="text-dark"
+                                           href="{{ url(item.product.link.uri) }}{% if item.variant %}?variant={{ item.variant.id }} {% endif %}"
+                                           title="View this product" target="_blank">{{ item.product.name }}</a>
+                                    {% else %}
+                                        {{ item.custom_item_name }}
+                                    {% endif %}
+                                    <div class="d-block item-config">
+                                        {% if item.variant %}
+                                            {% for variantOptionValue in item.variant.variant_option_values %}
+                                                {{ variantOptionValue.product_variant_option.name }}:
+                                                <span class="me-2">
+                                            {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
+                                                <span class="swatch"
+                                                      style="background-color:{{ variantOptionValue.value }}">
+                                            </span>
+                                            {% else %}
+                                                {{ variantOptionValue.value }}
+                                            {% endif %}
+                                        </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                {% if item.variant %}
+                                    {{ item.variant.sku }}
+                                {% elseif item.product %}
+                                    {{ item.product.sku }}
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                {% if item.unit_price < item.original_unit_price %}
+                                    <span class="d-block"
+                                          style="color: #909090; text-decoration: line-through !important; margin-bottom: 0px;">
+                                        {{ item.original_unit_price_formatted }}
+                                    </span>
+                                {% endif %}
+                                {{ item.unit_price_formatted }}
+                            </td>
+                            <td class="align-middle">{{ item.quantity }}</td>
+                            <td class="align-middle">
+                                {% if item.unit_price_total < item.original_unit_price_total %}
+                                    <span class="d-block"
+                                          style="color: #909090; text-decoration: line-through !important; margin-bottom: 0px;">
+                                        {{ item.original_unit_price_total_formatted }}
+                                    </span>
+                                {% endif %}
+                                {{ item.unit_price_total_formatted }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4" class="text-end">{{ __('info.subtotal') }}</td>
+                        <td>{{ order.original_subtotal_formatted }}</td>
+                    </tr>
+                    {% if order.checkout_session.shipping_total %}
+                        <tr>
+                            <td colspan="4" class="text-end">{{ __('info.shipping') }}</td>
+                            <td>{{ order.checkout_session.shipping_total_formatted }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if order.pickup_fee %}
+                        <tr>
+                            <td colspan="4" class="text-end">{{ __('info.pickup_fee') }}</td>
+                            <td>{{ order.pickup_fee_formatted }}</td>
+                        </tr>
+                    {% endif %}
+                    {% for discount in order.discounts %}
+                        <tr>
+                            <td colspan="4" class="text-end"><small class="text-muted"><i
+                                            class="fa fa-tags"></i></small> {{ discount.pivot.code }}</td>
+                            <td>-{{ money_format(discount.pivot.discount_value, true) }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% for tax in order.taxes %}
+                        <tr>
+                            <td colspan="4" class="text-end">{{ tax.name }}</td>
+                            <td>{{ tax.order_tax_total_formatted }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-end">{{ __('info.total') }}</th>
+                        <td>{{ order.total_formatted }}</td>
+                    </tr>
+                    {% if order.balance > 0 %}
+                        <tr>
+                            <th colspan="4" class="text-end">{{ __('info.balance') }}</th>
+                            <td>{{ order.balance_formatted }}</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+                {% if order.transactions | length %}
+                    <h4 class="mt-3">{{ __('titles.transactions') }}</h4>
+                    {% for transaction in order.all_transactions %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        {{ (transaction.payment_gateway_name) ? transaction.payment_gateway_name : transaction.payment_gateway }}
+                                        <br>
+                                        {% if transaction.total_paid > 0 %}
+                                            {{ __('info.paid') }}: {{ transaction.total_paid_converted_formatted }}<br>
+                                        {% endif %}
+                                        {% if transaction.total_refunded %}
+                                            {{ __('info.refunded') }}: {{ transaction.total_refunded_converted_formatted }}
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        {{ transaction.created_at_time_formatted }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if order.return_requests | length and dump(globals.store.return_system_enabled) %}
+                    <h4 class="mt-4">{{ __('titles.return_requests') }}</h4>
+                    {% for return_request in order.return_requests %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <b>#{{ return_request.request_number }}</b><br>
+                                        {{ return_request.created_at_time_formatted }}
+                                    </div>
+                                    <div>
+                                        {% if return_request.status == 'pending_review' %}
+                                            <a href="{{ url('/account/orders/' ~ order.id ~ '/return-requests/' ~ return_request.id ~ '/cancel') }}"
+                                               class="btn btn-light btn-sm">{{ __('buttons.cancel') }}</a>
+                                        {% else %}
+                                            <b>{{ __('forms.' ~ return_request.status) }}</b>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% for key, item in return_request.items %}
+                                    <hr>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            {% if item.order_item.product or item.order_item.variant %}
+                                                <a class="text-dark"
+                                                   href="{{ url(item.order_item.product.link.uri) }}{% if item.order_item.variant %}?variant={{ item.order_item.variant.id }} {% endif %}"
+                                                   title="View this product"
+                                                   target="_blank">{{ item.order_item.product.name }}</a>
+                                            {% else %}
+                                                {{ item.order_item.custom_item_name }}
+                                            {% endif %}
+                                            <div class="d-block item-config">
+                                                {% if item.order_item.variant %}
+                                                    {% for variantOptionValue in item.order_item.variant.variant_option_values %}
+                                                        {{ variantOptionValue.product_variant_option.name }}:
+                                                        <span class="me-2">
+                                                {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
+                                                    <span class="swatch"
+                                                          style="background-color:{{ variantOptionValue.value }}">
+                                                </span>
+                                                {% else %}
+                                                    {{ variantOptionValue.value }}
+                                                {% endif %}
+                                            </span>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            {{ __('info.return_qty', {return_amount: item.return_amount}) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                {% if order.billing_first_name %}
+                    <div class="mb-4">
+                        <h5 class="h5">{{ __('titles.billing_address') }}</h5>
+                        {{ order.billing_first_name }} {{ order.billing_last_name }}<br>
+                        {{ order.billing_address }}<br>
+                        {% if order.billing_address_2 %}{{ order.billing_address_2 }}<br>{% endif %}
+                        {{ order.billing_city }}, {{ order.billing_state_name }} {{ order.billing_postal_code }}<br>
+                        {{ order.billing_country_name }}<br>
+                        {% if order.billing_phone_number %}{{ order.billing_phone_number }}<br>{% endif %}
+                        {% if order.billing_company %}{{ order.billing_company }}<br>{% endif %}
+                    </div>
+                {% endif %}
+                {% if order.shipping_first_name %}
+                    <h5 class="h5">{{ __('titles.shipping_address') }}</h5>
+                    {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br>
+                    {{ order.shipping_address }}<br>
+                    {% if order.shipping_address_2 %}{{ order.shipping_address_2 }}<br>{% endif %}
+                    {{ order.shipping_city }}, {{ order.shipping_state_name }} {{ order.shipping_postal_code }}<br>
+                    {{ order.shipping_country_name }}<br>
+                    {% if order.shipping_phone_number %}{{ order.shipping_phone_number }}<br>{% endif %}
+                    {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
+                {% endif %}
+                {% if order.checkout_session.pickup_option and order.status != 'collected' %}
+                    {% if order.pickup_time %}
+                        <h6 class="h6">Order pickup time: {{ order.checkout_session.pickup_time_formatted }}</h6>
+                    {% endif %}
+                    {% if order.pickup_instructions %}
+                        <a href='#!' class="text-primary" data-toggle="modal"
+                           data-target="#pickup-instructions">{{ __('buttons.view_pickup_instructions') }}</a>
+                        <div class="modal fade" id="pickup-instructions" tabindex="-1"
+                             aria-labelledby="pickup-instructions-label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title h5"
+                                            id="pickup-instructions-label">{{ __('titles.pickup_instructions') }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ order.checkout_session.pickup_option.instructions | raw }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

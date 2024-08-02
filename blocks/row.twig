@@ -1,0 +1,16 @@
+<script schema type="application/json">
+    {
+        "name": "Row",
+        "icon": "th-list",
+        "settings": {
+            "classes": {
+                "label": "CSS Classes",
+                "type": "text"
+            }
+        }
+    }
+</script>
+
+<div class="row {{ schema.settings.classes.value }}">
+    <blocks></blocks>
+</div>

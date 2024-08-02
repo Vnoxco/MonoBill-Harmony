@@ -1,0 +1,14 @@
+{% macro categoryList(child) %}
+    <ul class="links-list-padded mb-2">
+        {% for child in child.children %}
+            <li><a href="{{ url(child.link.uri) }}" class="d-flex">
+                    <span class="flex-grow-1">{{ __('custom.' ~ child.name) }}</span>
+                    <span class="mb__filter_product_count">{{ child.products_count }}</span>
+                </a>
+                {% if child.children | length > 0 %}
+                    {{ _self.categoryList(child) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

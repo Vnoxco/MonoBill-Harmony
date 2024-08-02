@@ -1,0 +1,41 @@
+{% macro productCard(product) %}
+    <div class="product-card ms-auto me-auto">
+        <a href="{{ url(product.uri) }}" class="d-block">
+            {% if product.track_inventory == true and product.available == false %}
+                <div class="out-of-stock">{{ __('forms.currently_unavailable') }}</div>
+            {% endif %}
+            {% if (product.price > 0 and product.compare_price > product.price and product.default_variant_id == null) or (product.default_variant_price > 0 and product.default_variant_compare_price > product.default_variant_price) %}
+                <div class="product-sale"><i class="fa fa-tag"></i> {{ __('forms.sale') }}</div>
+            {% endif %}
+
+            <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+                 style="width:300px; height:300px; background-image: url('{% if product.default_variant_image_path %}{{ cdn(product.default_variant_image_path) }}{% elseif product.default_image_path %}{{ cdn(product.default_image_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');background-size: contain;">
+                {# <button class="btn btn-light quick-view" data-quick-view="{{ product.id }}">{{ __('buttons.quick_view') }}</button> #}
+            </div>
+            <div class="text-start">
+                <div class="name mt-2">{{ product.name }}</div>
+                {% if product.default_variant_id %}
+                    {% if product.default_variant_price <= 0 %}
+                        <span class="d-block">{{ __('forms.free') }}</span>
+                    {% else %}
+                        <span>{{ money_format(convert_currency(product.default_variant_price), true) }}
+                            {% if product.default_variant_compare_price > 0 %}
+                                <del>{{ money_format(convert_currency(product.default_variant_compare_price)) }}</del>
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                {% else %}
+                    {% if product.price <= 0 %}
+                        <span class="d-block">{{ __('forms.free') }}</span>
+                    {% else %}
+                        <span>{{ money_format(convert_currency(product.price), true) }}
+                            {% if product.compare_price > 0 %}
+                                <del>{{ money_format(convert_currency(product.compare_price)) }}</del>
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </a>
+    </div>
+{% endmacro %}

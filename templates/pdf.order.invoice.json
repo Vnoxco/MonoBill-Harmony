@@ -1,0 +1,14 @@
+{
+    "settings": {
+        "page_title": {
+            "label": "Page title",
+            "type": "text",
+            "default": "Invoice"
+        },
+        "layout": {
+            "label": "Layout",
+            "type": "layout",
+            "default": "blank.twig"
+        }
+    }
+}

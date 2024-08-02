@@ -1,0 +1,9 @@
+<script schema type="application/json">
+    {
+        "name": "Product categories",
+        "icon": "th-large",
+        "allowed_sections": ["product.twig"]
+    }
+</script>
+
+{% if product.categories | length > 0 %}<p class="m-0 mt-1">{{ __('forms.category') }}: {% for category in product.categories %}<a href="{{ url(category.link.uri) }}">{% if loop.last %}{{ __('custom.' ~ category.name) }}{% else %}{{ __('custom.' ~ category.name) }}, {% endif %}</a>{% endfor %}</p> {% endif %}

@@ -1,0 +1,159 @@
+<script schema type="application/json">
+    {
+        "name": "Main Account Section",
+        "allowed_templates": [
+            "account.json"
+        ]
+    }
+</script>
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="text-center">
+            <h3>{{ __('titles.my_account') }}</h3>
+            <a href="{{ url('/account/change-password') }}"
+               class="btn btn-transparent"><u>{{ __('buttons.change_password') }}</u></a>
+            <form class="d-inline" method="post" action="{{ url('/account/logout') }}">
+                {{ csrf_input | raw }}
+                <button type="submit" class="btn btn-transparent"><u>{{ __('buttons.logout') }}</u></button>
+            </form>
+        </div>
+        <div class="mt-4 row">
+            <div class="col-lg-4 order-lg-last">
+                <div class="mb-4">
+                    <h4>{{ __('titles.account_details') }}</h4>
+                    {{ auth().user.name }}<br>
+                    {{ auth().user.email_address }}<br>
+                    {% if auth().user.default_address %}
+                        {{ auth().user.default_address.address }}<br>
+                        {% if auth().user.default_address.address_2 %}{{ auth().user.default_address.address_2 }}
+                            <br>{% endif %}
+                        {{ auth().user.default_address.city }}, {{ auth().user.default_address.state_name }} {{ auth().user.default_address.postal_code }}
+                        <br>
+                        {{ auth().user.default_address.country_name }}<br>
+                        {% if auth().user.default_address.phone_number %}{{ auth().user.default_address.phone_number }}
+                            <br>{% endif %}
+                        {% if auth().user.default_address.company %}{{ auth().user.default_address.company }}
+                            <br>{% endif %}
+                    {% endif %}
+                    <a href="{{ url('/account/addresses') }}"
+                       class="btn btn-outline-dark mt-3 d-block">{{ __('buttons.view_addresses') }}
+                        ({{ auth().user.addresses | length }})</a>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <h4>{{ __('titles.order_history') }}</h4>
+                <div>
+                    <span>{{ __('forms.showing_orders_for') }}</span>
+                    <select class="form-control d-inline-block ms-2 mb__select" style="width: 160px" id="orderTime">
+                        <option value="last_30_days">{{ __('forms.last_30_days') }}</option>
+                        <option value="past_3_months" selected>{{ __('forms.last_3_months') }}</option>
+                        {% for year in auth().user.order_years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <table class="mt-3 table table-bordered" id="customer_orders">
+                    <thead>
+                    <tr>
+                        <th width="150">{{ __('titles.order') }}</th>
+                        <th>{{ __('titles.date') }}</th>
+                        <th>{{ __('titles.status') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# {% for order in auth().user.orders %} #}
+                    {# <tr> #}
+                    {#  <th class="align-middle"><a href="/order/{{ order.id }}" class="btn btn-outline-primary">#{{ order.order_number }}</a></th> #}
+                    {#  <td class="align-middle">{{ order.created_at_formatted }}</td> #}
+                    {#  <td class="align-middle">{{ __('forms.' ~ order.status) }}</td> #}
+                    {# </tr> #}
+                    {# {% else %} #}
+                    {# <tr> #}
+                    {#  <td class="align-middle" colspan="4">You haven't placed any orders.</td> #}
+                    {# </tr> #}
+                    {# {% endfor %} #}
+                    </tbody>
+                </table>
+                <h4 class="mt-4">{{ __('titles.estimate_history') }}</h4>
+                <div>
+                    <span>{{ __('forms.showing_estimates_for') }}</span>
+                    <select class="form-control d-inline-block ms-2 mb__select" style="width: 160px" id="estimateTime">
+                        <option value="last_30_days">{{ __('forms.last_30_days') }}</option>
+                        <option value="past_3_months" selected>{{ __('forms.last_3_months') }}</option>
+                        {% for year in auth().user.estimate_years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <table class="mt-3 table table-bordered" id="customer_estimates">
+                    <thead>
+                    <tr>
+                        <th width="150">{{ __('titles.estimate') }}</th>
+                        <th>{{ __('titles.created') }}</th>
+                        <th>{{ __('titles.expires') }}</th>
+                        <th>{{ __('titles.total') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        $(function () {
+            let getOrders = function () {
+                let tbody = $('#customer_orders').find('tbody');
+                tbody.html('<tr><td colspan="3">{{ __('info.loading_orders') }}</td></tr>');
+                MONO.getOrders($('#orderTime').val(), function (orders) {
+                    tbody.html('');
+                    $.each(orders, function (key, order) {
+                        tbody.append('<tr>' +
+                            '<th class="align-middle"><a href="' + MONO.mbURL('/account/orders/' + order.id) + '" class="btn btn-outline-primary">#' + order.order_number + '</a></th>' +
+                            '<td class="align-middle">' + order.created_at_formatted + '</td>' +
+                            '<td class="align-middle">' + order.status_formatted + '</td>' +
+                            '</tr>');
+                    });
+                    if (!orders.length) {
+                        tbody.html('<tr><td colspan="4">{{ __('info.no_orders') }}</td></tr>');
+                    }
+                });
+            }
+
+            let getEstimates = function () {
+                let tbody = $('#customer_estimates').find('tbody');
+                tbody.html('<tr><td colspan="4">{{ __('info.loading_estimates') }}</td></tr>');
+                MONO.getEstimates($('#estimateTime').val(), function (estimates) {
+                    tbody.html('');
+                    $.each(estimates, function (key, estimate) {
+                        tbody.append('<tr>' +
+                            '<th class="align-middle"><a href="' + MONO.mbURL('/estimates/' + estimate.id + '/' + estimate.password) + '" class="btn btn-outline-primary">#' + estimate.estimate_number + '</a></th>' +
+                            '<td class="align-middle">' + estimate.created_at_formatted + '</td>' +
+                            '<td class="align-middle">' + ((estimate.expiration_date_formatted) ? estimate.expiration_date_formatted : '{{ __('info.never_expires') }}') + '</td>' +
+                            '<td class="align-middle">' + estimate.total_formatted + '</td>' +
+                            '</tr>');
+                    });
+                    if (!estimates.length) {
+                        tbody.html('<tr><td colspan="4">{{ __('info.no_estimates') }}</td></tr>');
+                    }
+                });
+            }
+
+            getOrders();
+
+            getEstimates();
+
+            $('#orderTime').on('change', function () {
+                getOrders();
+            });
+
+            $('#estimateTime').on('change', function () {
+                getEstimates();
+            });
+        });
+    </script>
+{% endblock %}

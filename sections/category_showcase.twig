@@ -1,0 +1,69 @@
+<script schema type="application/json">
+    {
+        "name": "Category showcase",
+        "description": "Showcase your best selling categories.",
+        "icon": "th",
+        "settings": {
+            "title": {
+                "label": "Title",
+                "type": "text",
+                "default": "Categories"
+            },
+            "categories": {
+                "label": "Categories",
+                "type": "categories"
+            },
+            "categories_per_row": {
+                "label": " ",
+                "type": "range",
+                "steps": 1,
+                "max": 4,
+                "prepend": "Show ",
+                "append": " categories per row.",
+                "min": 1,
+                "default": "2"
+            }
+        }
+    }
+</script>
+
+{% block content %}
+    <div class="container">
+        {% if schema.settings.title.value | length > 0 %}
+            <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~ schema.settings.title.value) }}</h2>
+        {% endif %}
+        <div class="row">
+            {% for category in schema.settings.categories.categories %}
+                <div class="mt-5 col-md-{% if schema.settings.categories_per_row.value == 2 %}6{% elseif schema.settings.categories_per_row.value == 3 %}4{% elseif schema.settings.categories_per_row.value == 4 %}3{% endif %}">
+                    <a href="{{ url(category.uri) }}" style="text-decoration: none; outline: none; border: none;">
+                        <div class="call-to-action-card card border-0"
+                             style="background-image: url('{% if category.thumbnail_path %}{{ cdn(category.thumbnail_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                <h4 class="call-to-action-title">{{ __('custom.' ~ category.name) }}</h4>
+                                <div class="text-center">
+                                    <button class="btn btn-outline-light">{{ __('buttons.shop_category') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                {% for i in 1..2 %}
+                    <div class="mt-5 col-md-6">
+                        <a href="#!" style="text-decoration: none; outline: none; border: none;">
+                            <div class="call-to-action-card card border-0"
+                                 style="background-image: url('https://assets.gomonobill.com/monobill/default_slide.jpg');">
+                                <div class="card-body text-center d-flex flex-column justify-content-center">
+                                    <h4 class="text-white">{{ __('info.category_showcase_default_text') }}</h4>
+                                    <div class="text-center">
+                                        <button class="btn btn-outline-light">{{ __('buttons.shop_category') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

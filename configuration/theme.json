@@ -1,0 +1,39 @@
+{
+  "name": "Harmony",
+  "author": "MonoBill",
+  "version": "1.2.1",
+  "description": "Lightweight expressive theme designed to make your products stand out.",
+  "support_url": "",
+  "documentation_url": "",
+  "image_preview": "",
+  "settings": {
+    "color_scheme": {
+      "type": "option",
+      "label": "Color scheme",
+      "default": "#262626",
+      "options": {
+        "#dddddd": "Light",
+        "#262626": "Dark",
+        "#f99d52": "Orange",
+        "#0c79f3": "Blue",
+        "#fcc9ff": "Pink"
+      }
+    },
+    "favicon": {
+      "type": "image",
+      "label": "Favicon"
+    },
+    "favicon_16": {
+      "type": "image",
+      "label": "Favicon 16"
+    },
+    "favicon_32": {
+      "type": "image",
+      "label": "Favicon 32"
+    },
+    "favicon_apple": {
+      "type": "image",
+      "label": "Apple Icon"
+    }
+  }
+}

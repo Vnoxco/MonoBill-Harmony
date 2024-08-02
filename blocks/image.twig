@@ -1,0 +1,18 @@
+<script schema type="application/json">
+    {
+        "name": "Image",
+        "icon": "image",
+        "settings": {
+            "alt": {
+                "label": "Name",
+                "type": "text"
+            },
+            "image": {
+                "label": "Image",
+                "type": "image"
+            }
+        }
+    }
+</script>
+
+<img class="img-fluid" src="{{ schema.settings.image.image.public_path }}" alt="{{ schema.settings.alt.value }}">
