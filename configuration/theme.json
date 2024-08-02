@@ -7,18 +7,6 @@
   "documentation_url": "",
   "image_preview": "",
   "settings": {
-    "color_scheme": {
-      "type": "option",
-      "label": "Color scheme",
-      "default": "#262626",
-      "options": {
-        "#dddddd": "Light",
-        "#262626": "Dark",
-        "#f99d52": "Orange",
-        "#0c79f3": "Blue",
-        "#fcc9ff": "Pink"
-      }
-    },
     "favicon": {
       "type": "image",
       "label": "Favicon"
