@@ -571,21 +571,13 @@ $(function(){
     }
     
     function scrollDownSearchResults() {
-        if(currentCursorPos === -1 || currentCursorPos + 1 > resultsLength - 1) {
+        if (currentCursorPos === -1 || currentCursorPos + 1 > resultsLength - 1) {
             currentCursorPos = 0;
         } else {
             currentCursorPos += 1;
         }
         $('#mb__search_autocomplete').find('[data-search-index="' + currentCursorPos + '"]').focus();
     }
-    
-    searchInput.on('keydown', function(e) {
-        if (event.keyCode === 13 && resultsLength === 1) {
-            e.preventDefault();
-            let hyperlink = $('#mb__search_autocomplete').find('a');
-            window.location.href = hyperlink.attr('href');
-        }
-    });
     
     $('body').on('keydown', function(e) {
         if(event.keyCode === 38 && resultsLength > 0 && ($('[data-search-index]:focus').length || searchInput.is(':focus'))) {
