@@ -29,13 +29,13 @@
     <header class="nav-type-1">
         <nav class="navbar navbar-expand-lg bg-white">
             <div class="container flex-nowrap">
-                <div style="width: 86px" class="d-lg-none">
-                    <button class="navbar-toggler d-print-none" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav"
-                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
+                <button class="navbar-toggler collapsed" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#navOffcanvas"
+                        aria-controls="navOffcanvas">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <a class="navbar-brand text-uppercase"
                    style="font-size: {{ schema.settings.logo_size.value / 1.5 }}rem;" href="{{ url('/') }}">
                     {% if schema.settings.image_logo.value == 1 and globals.store.logo %}
@@ -45,33 +45,37 @@
                         {{ globals.store.name }}
                     {% endif %}
                 </a>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        {% if schema.settings.menu.menu %}
-                            {% for menuItem in schema.settings.menu.menu.items %}
-                                <li class="nav-item {% if menuItem.children | length > 0 %}dropdown{% endif %}">
-                                    <a href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% else %}#{% endif %}"
-                                       class="nav-link {% if menuItem.children | length > 0 %}dropdown-toggle{% endif %}"
-                                       {% if menuItem.children | length > 0 %}data-bs-toggle="dropdown"
-                                       aria-expanded="false"{% endif %}>{{ __('custom.' ~ menuItem.name) }}</a>
-                                    {% if menuItem.children | length > 0 %}
-                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            {% for child in menuItem.children %}
-                                                <li>
-                                                    <a class="dropdown-item"
-                                                       href="{% if child.type == 'link' %}{{ url(child.url) }}{% elseif child.type == 'page' %}{{ url(child.page.uri) }}{% elseif child.type == 'category' %}{{ url(child.product_category.uri) }}{% elseif child.type == 'product' %}{{ url(child.product.uri) }}{% endif %}"
-                                                       class="nav-link">{{ __('custom.' ~ child.name) }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-                        <li class="nav-item d-lg-none">
-                            <a class="nav-link" href="{{ url('/account') }}">{{ __('buttons.account') }}</a>
-                        </li>
-                    </ul>
+                <div class="offcanvas offcanvas-start" data-bs-hideresize="true" data-bs-backdrop="false" tabindex="-1"
+                     id="navOffcanvas" aria-labelledby="offcanvasNavbarExample-expand-xxlLabel"
+                     aria-hidden="true">
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav container">
+                            {% if schema.settings.menu.menu %}
+                                {% for menuItem in schema.settings.menu.menu.items %}
+                                    <li class="nav-item {% if menuItem.children | length > 0 %}dropdown{% endif %}">
+                                        <a href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% else %}#{% endif %}"
+                                           class="nav-link {% if menuItem.children | length > 0 %}dropdown-toggle{% endif %}"
+                                           {% if menuItem.children | length > 0 %}data-bs-toggle="dropdown"
+                                           aria-expanded="false"{% endif %}>{{ __('custom.' ~ menuItem.name) }}</a>
+                                        {% if menuItem.children | length > 0 %}
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                {% for child in menuItem.children %}
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                           href="{% if child.type == 'link' %}{{ url(child.url) }}{% elseif child.type == 'page' %}{{ url(child.page.uri) }}{% elseif child.type == 'category' %}{{ url(child.product_category.uri) }}{% elseif child.type == 'product' %}{{ url(child.product.uri) }}{% endif %}"
+                                                           class="nav-link">{{ __('custom.' ~ child.name) }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            <li class="nav-item d-lg-none">
+                                <a class="nav-link" href="{{ url('/account') }}">{{ __('buttons.account') }}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <ul class="navbar-nav flex-row">
                     <li class="nav-item d-print-none">

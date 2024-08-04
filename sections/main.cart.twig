@@ -151,14 +151,9 @@
                 </div>
             </div>
         {% else %}
-            <div class="row mt-2">
-                <div class="col-lg-9">
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <h4>{{ __('placeholders.no_items_in_cart') }}</h4>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center mt-5">
+                <h4>{{ __('placeholders.no_items_in_cart') }}</h4>
+                <a class="btn btn-dark mt-3" href="{{ url('/') }}">{{ __('buttons.continue_shopping') }}</a>
             </div>
         {% endif %}
     </div>

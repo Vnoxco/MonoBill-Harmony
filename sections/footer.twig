@@ -24,6 +24,31 @@
                 "label": "Region selector",
                 "type": "toggle",
                 "default": true
+            },
+            "show_paypal_logo": {
+                "label": "PayPal logo",
+                "type": "toggle",
+                "default": true
+            },
+            "show_visa_logo": {
+                "label": "Visa logo",
+                "type": "toggle",
+                "default": true
+            },
+            "show_mastercard_logo": {
+                "label": "MasterCard logo",
+                "type": "toggle",
+                "default": true
+            },
+            "show_discover_logo": {
+                "label": "Discover logo",
+                "type": "toggle",
+                "default": true
+            },
+            "show_american_express_logo": {
+                "label": "American Express logo",
+                "type": "toggle",
+                "default": true
             }
         }
     }
@@ -88,6 +113,28 @@
                 </div>
                 <hr>
                 <div class="row">
+                    <div class="order-sm-last mb-3 mb-sm-0 col-sm-6 text-sm-end">
+                        {% if schema.settings.show_paypal_logo.value == true %}
+                        <img src="https://assets.gomonobill.com/monobill/payment-gateways/paypal_sm.jpeg"
+                             style="max-width: 50px" alt="PayPal">
+                        {% endif %}
+                        {% if schema.settings.show_visa_logo.value == true %}
+                        <img src="https://monobill.nyc3.digitaloceanspaces.com/monobill/cards/visa.png"
+                             style="max-width: 50px" alt="Visa">
+                        {% endif %}
+                        {% if schema.settings.show_mastercard_logo.value == true %}
+                        <img src="https://assets.gomonobill.com/monobill/cards/master.png"
+                             style="max-width: 50px" alt="Master Card">
+                        {% endif %}
+                        {% if schema.settings.show_american_express_logo.value == true %}
+                            <img src="https://assets.gomonobill.com/monobill/cards/american-express.png"
+                                 style="max-width: 50px" alt="American Express">
+                        {% endif %}
+                        {% if schema.settings.show_discover_logo.value == true %}
+                        <img src="https://assets.gomonobill.com/monobill/cards/discover.png"
+                             style="max-width: 50px" alt="Discover">
+                        {%  endif %}
+                    </div>
                     <div class="col-sm-6">
                         <small class="d-block mb-3">&copy; {{ 'now' | date('Y') }} <a
                                     class="link-secondary text-decoration-none"

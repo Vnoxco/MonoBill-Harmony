@@ -716,3 +716,12 @@ function reloadSection(index, success) {
         }
      });
 }
+
+let navOffcanvas = document.getElementById('navOffcanvas')
+
+navOffcanvas.addEventListener('show.bs.offcanvas', function () {
+    $('[data-bs-target="#navOffcanvas"]').removeClass('collapsed');
+})
+navOffcanvas.addEventListener('hide.bs.offcanvas', function () {
+    $('[data-bs-target="#navOffcanvas"]').addClass('collapsed');
+})
