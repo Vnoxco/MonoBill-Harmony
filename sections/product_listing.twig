@@ -84,9 +84,35 @@
             animation: pulse-loading 1s infinite ease-in-out;
         }
 
+        .mb__filter_mobile_close_button_container {
+            display: none;
+            position: fixed;
+            bottom: 1rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .mb__filter_mobile_close_button {
+            line-height: 1.2rem;
+            background: #fff !important;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 1rem !important;
+            z-index: 1000;
+            font-size: 1rem;
+            color: #808080;
+        }
+
         @media (max-width: 1199px) {
             .mb__filter .filter_section.order-section {
                 border-left: none !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .mb__filter_drawer.shown .mb__filter_mobile_close_button_container {
+                display: block;
             }
         }
     </style>
@@ -375,7 +401,7 @@
 
     </script>
 {% endblock %}
-        
+
 {% block content %}
     {% from "macros/category_list.twig" import categoryList %}
     {% from "macros/pricing.twig" import pricing %}
@@ -636,7 +662,7 @@
                             {% endif %}
                         </div>
                         <div class="mb__filter_mobile_close_button_container">
-                            <button class="mb__filter_mobile_close_button close-btn">{{ __('buttons.show_filtered_products') }}</button>
+                            <button class="btn close-btn mb__filter_mobile_close_button">{{ __('buttons.show_filtered_products') }}</button>
                         </div>
                     </div>
                 </div>
