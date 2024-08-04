@@ -2,6 +2,7 @@ const url_params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
 });
 
+
 window.MONO = {
     get: function (url, data, success, error) {
         if (typeof data === "function") {
@@ -212,6 +213,15 @@ window.MONO = {
         return `${integerPart}${decimalPart ? dec + decimalPart : ''}`;
     }
 };
+
+let navOffcanvas = document.getElementById('navOffcanvas')
+let bsNavOffcanvas = new bootstrap.Offcanvas(navOffcanvas);
+navOffcanvas.addEventListener('show.bs.offcanvas', function () {
+    $('[data-bs-target="#navOffcanvas"]').removeClass('collapsed');
+})
+navOffcanvas.addEventListener('hide.bs.offcanvas', function () {
+    $('[data-bs-target="#navOffcanvas"]').addClass('collapsed');
+})
 
 $(function(){
     
@@ -440,8 +450,11 @@ $(function(){
     
     function handleSearchBtn(event) {
         event.preventDefault();
+        bsNavOffcanvas.hide();
         $('#mb__search_container').fadeIn("fast");
-        focusSearchInput();
+        setTimeout(function() {
+            focusSearchInput();
+        }, 500)
     }
     
     document.getElementById('mb__search_btn').addEventListener('click', handleSearchBtn);
@@ -716,12 +729,3 @@ function reloadSection(index, success) {
         }
      });
 }
-
-let navOffcanvas = document.getElementById('navOffcanvas')
-
-navOffcanvas.addEventListener('show.bs.offcanvas', function () {
-    $('[data-bs-target="#navOffcanvas"]').removeClass('collapsed');
-})
-navOffcanvas.addEventListener('hide.bs.offcanvas', function () {
-    $('[data-bs-target="#navOffcanvas"]').addClass('collapsed');
-})

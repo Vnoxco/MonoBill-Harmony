@@ -145,10 +145,13 @@
     <div class="drawer" id="region-select">
         <div class="drawer-body scroll right">
             <div class="d-flex">
-                <h3 class="flex-grow-1">{{ __('titles.currency_and_region') }}</h3>
-                <button class="btn close-btn"><i class="bi bi-x-lg"></i></button>
+                <div class="flex-grow-1 pt-2">
+                    {{ __('titles.currency_and_region') }}
+                </div>
+                <button class="btn close-btn pe-0"><i class="bi bi-x-lg"></i></button>
             </div>
-            <ul class="regions mt-5">
+            <hr class="mt-3 mb-2">
+            <ul class="regions">
                 {% for code, country in globals.store.enabled_countries %}
                     <li>
                         <a href="?x_user_currency={{ country.currency_code }}&x_user_language={{ country.language }}&x_user_country={{ code }}"><span

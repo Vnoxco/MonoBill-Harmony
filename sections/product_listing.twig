@@ -31,29 +31,6 @@
             padding-right: 1rem;
         }
 
-        .mb__filter_drawer {
-            position: fixed;
-            z-index: 900;
-            background: #fff;
-            top: 0;
-            bottom: 0;
-            right: -400px;
-            height: 100%;
-            width: 400px;
-            overflow-y: scroll;
-            padding: 2rem;
-        }
-
-        .mb__filter_drawer.shown {
-            box-shadow: 0 0 30px 30px rgb(0 0 0 / 15%);
-        }
-
-        .mb__filter_close_button {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            line-height: 1.2rem;
-        }
 
         .mb__filter .filter_section {
             padding-top: .5rem;
@@ -107,43 +84,11 @@
             animation: pulse-loading 1s infinite ease-in-out;
         }
 
-        .mb__filter_mobile_close_button_container {
-            display: none;
-            position: fixed;
-            bottom: 1rem;
-            left: 0;
-            right: 0;
-            text-align: center;
-        }
-
-        .mb__filter_mobile_close_button {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            padding: 1rem;
-            z-index: 1000;
-            font-size: 1rem;
-            color: #808080;
-        }
-
         @media (max-width: 1199px) {
             .mb__filter .filter_section.order-section {
                 border-left: none !important;
             }
         }
-
-        @media (max-width: 400px) {
-            .mb__filter_drawer {
-                width: 100%;
-                padding: 1rem;
-                padding-bottom: 6rem;
-            }
-
-            .mb__filter_drawer.shown .mb__filter_mobile_close_button_container {
-                display: block;
-            }
-        }
-
     </style>
 {% endblock %}
 
@@ -369,54 +314,6 @@
 
         });
 
-        $('body').on('click', '[data-mb-toggle-filter]', function (e) {
-            toggleFilterDrawer();
-        });
-
-        $('body').on('click', '.mb__filter_close_button', function (e) {
-            closeFilterDrawer();
-        });
-
-        $(document).on('click touchend', function (e) {
-            if ($('.mb__filter_drawer').css('right') == '0px') {
-                let focused = $(document.activeElement);
-                if ($(e.target).closest('.mb__filter_drawer').length === 0 && (typeof focused[0] === 'undefined' || focused.closest('.mb__filter_drawer').length === 0)) {
-                    closeFilterDrawer();
-                }
-            }
-        });
-
-        function toggleFilterDrawer() {
-            if ($('.mb__filter_drawer').css('right') == '0px') {
-                closeFilterDrawer();
-            } else {
-                openFilterDrawer();
-            }
-        }
-
-        function openFilterDrawer() {
-            $('.mb__filter_drawer').addClass('opening');
-            $('.mb__filter_drawer').animate({
-                right: 0
-            }, 300, function () {
-                $('.mb__filter_drawer').removeClass('opening');
-            });
-            $('.mb__filter_drawer').addClass('shown');
-            $('body').addClass('overflow-hidden');
-        }
-
-        function closeFilterDrawer() {
-            $('.mb__filter_drawer').addClass('closing');
-            $('.mb__filter_drawer').animate({
-                right: '-' + $('.mb__filter_drawer').outerWidth() + 'px'
-            }, 300, function () {
-                $('.mb__filter_drawer').removeClass('closing');
-                $('.mb__filter_drawer').removeClass('shown');
-            });
-
-            $('body').removeClass('overflow-hidden');
-        }
-
         let lastRequest = null;
 
         function renderSection(productsSection, filtersSection) {
@@ -536,7 +433,7 @@
                             </div>
                             {% if get_store_plan_feature('product_filters') %}
                                 <div class="filter_section ps-3 pe-3 ms-auto">
-                                    <button data-mb-toggle-filter
+                                    <button data-mb-toggle-drawer="#mb__filter_drawer"
                                             class="btn btn-transparent p-0">{{ __('buttons.filter') }}
                                         <i class="bi bi-filter"></i></button>
                                 </div>
@@ -584,143 +481,113 @@
             {% endif %}
         </div>
         {% if get_store_plan_feature('product_filters') %}
-            <div class="mb__filter_drawer">
-                <div class="position-relative">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 pt-2">
-                            {{ __('titles.filter_sort') }}
+            <div class="drawer right mb__filter_drawer" id="mb__filter_drawer">
+                <div class="drawer-body scroll right">
+                    <div class="position-relative">
+                        <div class="d-flex">
+                            <div class="flex-grow-1 pt-2">
+                                {{ __('titles.filter_sort') }}
+                            </div>
+                            <button class="btn close-btn pe-0"><i class="bi bi-x-lg"></i></button>
                         </div>
-                        <button class="btn mb__filter_close_button pe-0"><i class="bi bi-x-lg"></i></button>
-                    </div>
-                    <hr class="mt-1">
-                    <div class="accordion mt-2 accordion-flush" id="accordionPanelsStayOpenExample">
-                        {% if  category.children | length %}
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button ps-0 pe-0" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#categories-collapse"
-                                            {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ __('titles.categories') }}</button>
-                                </h2>
-                                <div id="categories-collapse"
-                                     class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
-                                    <ul class="links-list mt-3 mb-3">
-                                        {% for child in category.children %}
-                                            <li><a href="{{ url(child.link.uri) }}" class="d-flex">
-                                                    <span class="flex-grow-1">{{ child.name }}</span>
-                                                    <span class="mb__filter_product_count">{{ child.products_count }}</span>
-                                                </a>
-                                                {% if child.children | length > 0 %}
-                                                    {{ categoryList(child) }}
-                                                {% endif %}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                            <hr class="m-0">
-                        {% endif %}
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button ps-0 pe-0" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#price-collapse"
-                                        {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ __('titles.price') }}</button>
-                            </h2>
-                            <div id="price-collapse"
-                                 class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
-                                <div class="mt-3 mb-3">
-                                    {% if products_on_sale_count > 0 %}
-                                        <div class="mb__filter_variant_option_value">
-                                            <div class="flex-grow-1">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="filter.sale"
-                                                           value="1"
-                                                           id="variant_sale_option_value_1" {% if filter_exists('sale', 1) == true %} checked="checked" {% endif %}>
-                                                    <label class="form-check-label cursor-pointer"
-                                                           for="variant_sale_option_value_1">
-                                                        {{ __('titles.sale') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="mb__filter_product_count">{{ products_on_sale_count }}</div>
-                                        </div>
-                                    {% endif %}
-                                    <div class="mb__price_inputs">
-                                        <div>
-                                            <div class="form-floating mb-3">
-                                                <input type="number" class="form-control" id="filter_price_from"
-                                                       placeholder="{{ globals.user_currency.symbol }} {{ __('forms.from') }}"
-                                                       value="{{ input('filter.price.gte') }}">
-                                                <label for="filter_price_from">{{ globals.user_currency.symbol }} {{ __('forms.from') }}</label>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-floating mb-3">
-                                                <input type="number" class="form-control" id="filter_price_to"
-                                                       placeholder="{{ globals.user_currency.symbol }} {{ __('forms.to') }}"
-                                                       value="{{ input('filter.price.lte') }}">
-                                                <label for="filter_price_to">{{ globals.user_currency.symbol }} {{ __('forms.to') }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="m-0">
-                        {% if brands | length %}
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button ps-0 pe-0" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#brand-collapse"
-                                            {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ __('titles.brand') }}</button>
-                                </h2>
-                                <div id="brand-collapse"
-                                     class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
-                                    <div class="mt-3 mb-3">
-                                        {% for name, product_count in brands %}
-                                            <div class="mb__filter_variant_option_value">
-                                                <div class="flex-grow-1">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                               name="filter.brand"
-                                                               value="{{ name }}"
-                                                               id="product_brand_{{ name | lower }}" {% if filter_exists('brand', name) == true %} checked="checked" {% endif %}>
-                                                        <label class="form-check-label cursor-pointer"
-                                                               for="product_brand_{{ name | lower }}">
-                                                            {{ name }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="mb__filter_product_count">{{ product_count }}</div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="m-0">
-                        {% endif %}
-                        {% if variant_options | length %}
-                            {% for name, variant_option in variant_options %}
+                        <hr class="mt-3 mb-0">
+                        <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+                            {% if  category.children | length %}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">
                                         <button class="accordion-button ps-0 pe-0" type="button"
                                                 data-bs-toggle="collapse"
-                                                data-bs-target="#variant-options-collapse-{{ name }}"
-                                                {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ name }}</button>
+                                                data-bs-target="#categories-collapse"
+                                                {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ __('titles.categories') }}</button>
                                     </h2>
-                                    <div id="variant-options-collapse-{{ name }}"
+                                    <div id="categories-collapse"
+                                         class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
+                                        <ul class="links-list mt-3 mb-3">
+                                            {% for child in category.children %}
+                                                <li><a href="{{ url(child.link.uri) }}" class="d-flex">
+                                                        <span class="flex-grow-1">{{ child.name }}</span>
+                                                        <span class="mb__filter_product_count">{{ child.products_count }}</span>
+                                                    </a>
+                                                    {% if child.children | length > 0 %}
+                                                        {{ categoryList(child) }}
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr class="m-0">
+                            {% endif %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button ps-0 pe-0" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#price-collapse"
+                                            {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ __('titles.price') }}</button>
+                                </h2>
+                                <div id="price-collapse"
+                                     class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
+                                    <div class="mt-3 mb-3">
+                                        {% if products_on_sale_count > 0 %}
+                                            <div class="mb__filter_variant_option_value">
+                                                <div class="flex-grow-1">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               name="filter.sale"
+                                                               value="1"
+                                                               id="variant_sale_option_value_1" {% if filter_exists('sale', 1) == true %} checked="checked" {% endif %}>
+                                                        <label class="form-check-label cursor-pointer"
+                                                               for="variant_sale_option_value_1">
+                                                            {{ __('titles.sale') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb__filter_product_count">{{ products_on_sale_count }}</div>
+                                            </div>
+                                        {% endif %}
+                                        <div class="mb__price_inputs">
+                                            <div>
+                                                <div class="form-floating mb-3">
+                                                    <input type="number" class="form-control" id="filter_price_from"
+                                                           placeholder="{{ globals.user_currency.symbol }} {{ __('forms.from') }}"
+                                                           value="{{ input('filter.price.gte') }}">
+                                                    <label for="filter_price_from">{{ globals.user_currency.symbol }} {{ __('forms.from') }}</label>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-floating mb-3">
+                                                    <input type="number" class="form-control" id="filter_price_to"
+                                                           placeholder="{{ globals.user_currency.symbol }} {{ __('forms.to') }}"
+                                                           value="{{ input('filter.price.lte') }}">
+                                                    <label for="filter_price_to">{{ globals.user_currency.symbol }} {{ __('forms.to') }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="m-0">
+                            {% if brands | length %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button ps-0 pe-0" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#brand-collapse"
+                                                {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ __('titles.brand') }}</button>
+                                    </h2>
+                                    <div id="brand-collapse"
                                          class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
                                         <div class="mt-3 mb-3">
-                                            {% for value, product_count in variant_option.values %}
+                                            {% for name, product_count in brands %}
                                                 <div class="mb__filter_variant_option_value">
                                                     <div class="flex-grow-1">
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
-                                                                   name="filter.opt.{{ name | lower }}"
-                                                                   value="{{ value }}"
-                                                                   id="variant_{{ name | lower }}_option_value_{{ value | lower }}" {% if filter_exists('opt.' ~ name | lower, value) == true %} checked="checked" {% endif %}>
+                                                                   name="filter.brand"
+                                                                   value="{{ name }}"
+                                                                   id="product_brand_{{ name | lower }}" {% if filter_exists('brand', name) == true %} checked="checked" {% endif %}>
                                                             <label class="form-check-label cursor-pointer"
-                                                                   for="variant_{{ name | lower }}_option_value_{{ value | lower }}">
-                                                                {{ value }}
+                                                                   for="product_brand_{{ name | lower }}">
+                                                                {{ name }}
                                                             </label>
                                                         </div>
                                                     </div>
@@ -731,11 +598,46 @@
                                     </div>
                                 </div>
                                 <hr class="m-0">
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    <div class="mb__filter_mobile_close_button_container">
-                        <button class="mb__filter_mobile_close_button mb__filter_close_button">{{ __('buttons.show_filtered_products') }}</button>
+                            {% endif %}
+                            {% if variant_options | length %}
+                                {% for name, variant_option in variant_options %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button ps-0 pe-0" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#variant-options-collapse-{{ name }}"
+                                                    {% if schema.settings.auto_open.value == true %}aria-expanded="true"{% endif %}>{{ name }}</button>
+                                        </h2>
+                                        <div id="variant-options-collapse-{{ name }}"
+                                             class="accordion-collapse collapse {% if schema.settings.auto_open.value == true %}show{% endif %}">
+                                            <div class="mt-3 mb-3">
+                                                {% for value, product_count in variant_option.values %}
+                                                    <div class="mb__filter_variant_option_value">
+                                                        <div class="flex-grow-1">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                       name="filter.opt.{{ name | lower }}"
+                                                                       value="{{ value }}"
+                                                                       id="variant_{{ name | lower }}_option_value_{{ value | lower }}" {% if filter_exists('opt.' ~ name | lower, value) == true %} checked="checked" {% endif %}>
+                                                                <label class="form-check-label cursor-pointer"
+                                                                       for="variant_{{ name | lower }}_option_value_{{ value | lower }}">
+                                                                    {{ value }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb__filter_product_count">{{ product_count }}</div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="m-0">
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="mb__filter_mobile_close_button_container">
+                            <button class="mb__filter_mobile_close_button close-btn">{{ __('buttons.show_filtered_products') }}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -749,7 +651,8 @@
                 {% else %}
                     <p class="p-5 text-center">{{ __('info.no_products_found_filtered') }}</p>
                     <div class="text-center">
-                        <a href="{{ url() }}" data-clear-filters="true" class="btn btn-dark">{{ __('buttons.clear_filters') }}</a>
+                        <a href="{{ url() }}" data-clear-filters="true"
+                           class="btn btn-dark">{{ __('buttons.clear_filters') }}</a>
                     </div>
                 {% endif %}
             {% endif %}
