@@ -4,7 +4,7 @@
             {% if product.track_inventory == true and product.available == false %}
                 <div class="out-of-stock">{{ __('forms.currently_unavailable') }}</div>
             {% endif %}
-            {% if (product.price > 0 and product.compare_price > product.price and product.default_variant_id == null) or (product.default_variant_price > 0 and product.default_variant_compare_price > product.default_variant_price) %}
+            {% if product.on_sale %}
                 <div class="product-sale"><i class="fa fa-tag"></i> {{ __('forms.sale') }}</div>
             {% endif %}
 
