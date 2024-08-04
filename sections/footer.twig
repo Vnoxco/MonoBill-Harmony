@@ -2,6 +2,11 @@
     {
         "name": "Footer",
         "settings": {
+            "image_logo": {
+                "label": "Show image logo",
+                "type": "toggle",
+                "default": 1
+            },
             "logo_size": {
                 "label": "Logo size",
                 "type": "range",
@@ -9,47 +14,16 @@
                 "max": 15,
                 "min": 1,
                 "append": "x",
-                "default": "10"
+                "default": "2"
             },
-            "menu_1_title": {
-                "label": "Menu 1 title",
-                "type": "text",
-                "default": "Features"
+            "menu": {
+                "label": "Menu",
+                "type": "menu"
             },
-            "menu_1": {
-                "label": "Menu 1",
-                "type": "menu",
-                "default": ""
-            },
-            "menu_2_title": {
-                "label": "Menu 2 title",
-                "type": "text",
-                "default": "Company"
-            },
-            "menu_2": {
-                "label": "Menu 2",
-                "type": "menu",
-                "default": ""
-            },
-            "menu_3_title": {
-                "label": "Menu 3 title",
-                "type": "text",
-                "default": "Resources"
-            },
-            "menu_3": {
-                "label": "Menu 3",
-                "type": "menu",
-                "default": ""
-            },
-            "menu_4_title": {
-                "label": "Menu 4 title",
-                "type": "text",
-                "default": "Support"
-            },
-            "menu_4": {
-                "label": "Menu 4",
-                "type": "menu",
-                "default": ""
+            "region_selector": {
+                "label": "Region selector",
+                "type": "toggle",
+                "default": true
             }
         }
     }
@@ -67,85 +41,84 @@
     <div class="mt-auto">
         <footer class="mt-5 py-5 border-top no-print mb__footer">
             <div class="container">
-                <div class="row mt-5 justify-content-between">
-                    <div class="col-6 col-md-3">
-                        {% if schema.settings.menu_1.menu %}
-                            <h5>{{ __('custom.' ~ 'custom.' ~ schema.settings.menu_1_title.value) }}</h5>
-                            <ul class="list-unstyled text-small">
-                                {% for menuItem in schema.settings.menu_1.menu.items %}
-                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
-                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                <div class="row">
+                    <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                        <a class="text-uppercase"
+                           style="font-size: {{ schema.settings.logo_size.value / 1.5 }}rem;" href="{{ url('/') }}">
+                            {% if schema.settings.image_logo.value == 1 and globals.store.logo %}
+                                <img src="{{ globals.store.logo.public_path }}" class="img-fluid"
+                                     style="max-width: {{ schema.settings.logo_size.value * 70 }}px;" alt="{{ globals.store.name }}">
+                            {% else %}
+                                {{ globals.store.name }}
+                            {% endif %}
+                        </a>
+                        <div class="subscription_container">
+                            <h6 class="mt-4">{{ __('info.subscribe_to_newsletter') }}</h6>
+                            <form autocomplete="off" class="mt-2" action="{{ url('/newsletter') }}" method="post">
+                                {{ csrf_input | raw }}
+                                <div class="input-group">
+                                    <input id="mb__subscribe_email" type="email" name="email_address"
+                                           class="form-control" placeholder="{{ __('placeholders.your_email_here') }}"
+                                           autocomplete="none" required="">
+                                    <button class="btn btn-dark" type="submit"><i
+                                                class="bi bi-send"></i> {{ __('buttons.join') }}</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-3">
-                        {% if schema.settings.menu_2.menu %}
-                            <h5>{{ __('custom.' ~ schema.settings.menu_2_title.value) }}</h5>
-                            <ul class="list-unstyled text-small">
-                                {% for menuItem in schema.settings.menu_2.menu.items %}
-                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
-                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
-                                    </li>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            {% if schema.settings.menu.menu %}
+                                {% for item in schema.settings.menu.menu.items %}
+                                    <div class="col-6 col-xl-3 col-lg-6">
+                                        <h5>{{ item.name }}</h5>
+                                        <ul class="list-unstyled text-small">
+                                            {% for menuItem in item.children %}
+                                                <li class="mb-1">
+                                                    <a class="link-secondary text-decoration-none"
+                                                       href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                 {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                    <div class="col-6 col-md-3">
-                        {% if schema.settings.menu_3.menu %}
-                            <h5>{{ __('custom.' ~ schema.settings.menu_3_title.value) }}</h5>
-                            <ul class="list-unstyled text-small">
-                                {% for menuItem in schema.settings.menu_3.menu.items %}
-                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
-                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                    <div class="col-6 col-md-3">
-                        {% if schema.settings.menu_4.menu %}
-                            <h5>{{ __('custom.' ~ schema.settings.menu_4_title.value) }}</h5>
-                            <ul class="list-unstyled text-small">
-                                {% for menuItem in schema.settings.menu_4.menu.items %}
-                                    <li class="mb-1"><a class="link-secondary text-decoration-none"
-                                                        href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}">{{ __('custom.' ~ menuItem.name) }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-                <hr class="hr-faded">
+                <hr>
                 <div class="row">
                     <div class="col-sm-6">
                         <small class="d-block mb-3">&copy; {{ 'now' | date('Y') }} <a
                                     class="link-secondary text-decoration-none"
                                     href="/">{{ globals.store.name }}</a>. {{ __('All Rights Reserved') }}</small>
                         <div>
-                            <div class="d-block d-sm-inline-block mt-3">
-                                <label class="d-block mb-2">{{ __('forms.currency') }}</label>
-                                <select id="mb__currency_select"
-                                        class="mb__select bg-transparent rounded-start rounded-end">
-                                    {% for currency in globals.store.currencies %}
-                                        <option value="{{ currency.code }}"
-                                                {% if globals.user_currency.code == currency.code %}selected="selected"{% endif %}>{{ currency.code }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="d-block d-sm-inline-block ms-lg-3 mt-3">
-                                <label class="d-block mb-2">{{ __('forms.language') }}</label>
-                                <select id="mb__language_select"
-                                        class="mb__select bg-transparent rounded-start rounded-end">
-                                    {% for key, language in globals.languages %}
-                                        <option value="{{ key }}"
-                                                {% if locale == key %}selected="selected"{% endif %}>{{ __('custom.' ~ language) }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <button class="btn btn-link text-white"
-                                    data-mb-toggle-drawer="#region-select">{{ __('buttons.select_your_region') }}</button>
+                            {% if schema.settings.region_selector.value == false %}
+                                <div class="d-block d-sm-inline-block mt-3">
+                                    <label class="d-block mb-2">{{ __('forms.currency') }}</label>
+                                    <select id="mb__currency_select"
+                                            class="mb__select bg-transparent rounded-start rounded-end">
+                                        {% for currency in globals.store.currencies %}
+                                            <option value="{{ currency.code }}"
+                                                    {% if globals.user_currency.code == currency.code %}selected="selected"{% endif %}>{{ currency.code }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="d-block d-sm-inline-block ms-lg-3 mt-3">
+                                    <label class="d-block mb-2">{{ __('forms.language') }}</label>
+                                    <select id="mb__language_select"
+                                            class="mb__select bg-transparent rounded-start rounded-end">
+                                        {% for key, language in globals.languages %}
+                                            <option value="{{ key }}"
+                                                    {% if locale == key %}selected="selected"{% endif %}>{{ __('custom.' ~ language) }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <button class="btn btn-link text-dark p-0"
+                                        data-mb-toggle-drawer="#region-select"><i
+                                            class="bi bi-globe"></i> {{ __('buttons.select_your_region') }}</button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

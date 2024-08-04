@@ -15,9 +15,9 @@
         <h3 class="h2 text-center mt-5 pt-5"><b>{{ __('titles.coming_soon') }}</b></h3>
         <div class="row">
             <div class="offset-md-4 col-md-4">
-                {% if input('mb_notification') %}
-                    <div class="alert alert-{{ input('mb_notification').type }}" role="alert">
-                        <i class="fa fa-exclamation-circle"></i> {{ input('mb_notification').message | raw }}
+                {% if notification %}
+                    <div class="alert alert-{{ notification.type }}" role="alert">
+                        <i class="fa fa-exclamation-circle"></i> {{ notification.message | raw }}
                     </div>
                 {% else %}
                     <p class="text-center mt-5">{{ __('info.coming_soon_info_line_1') }}
@@ -25,7 +25,6 @@
                 {% endif %}
                 <form action="{{ url('/newsletter') }}" method="post">
                     {{ csrf_input | raw }}
-                    <input type="hidden" name="audience" value="coming_soon">
                     <label class="floating-input">
                         <span class="floating-label">{{ __('forms.email_address') }}</span>
                         <input type="text" name="email_address"

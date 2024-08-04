@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "page_title": {
+      "label": "Page title",
+      "type": "text",
+      "default": "Manage your email subscription"
+    },
+    "layout": {
+      "type": "layout"
+    }
+  }
+}

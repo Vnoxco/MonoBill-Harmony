@@ -882,5 +882,12 @@
       "page_title": "Gift Card",
       "layout": "base.twig"
     }
+  },
+  "templates\/newsletter_subscription.json": {
+    "sections": [
+      {
+        "id": "main.newsletter.twig"
+      }
+    ]
   }
 }

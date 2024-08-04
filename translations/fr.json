@@ -136,7 +136,13 @@
     "tracking_number": "Numéro de suivi: :tracking_number",
     "return_qty": "Qté à retourner: :return_amount",
     "loading_estimates": "Chargement des estimations",
-    "no_estimates": "Vous n'avez aucune estimation."
+    "no_estimates": "Vous n'avez aucune estimation.",
+    "subscribe_to_newsletter": "Abonnez-vous à notre newsletter",
+    "manage_your_subscription": "Gérer votre abonnement",
+    "manage_newsletter_info": "Sélectionnez le type de communications par email que vous souhaitez recevoir :",
+    "newsletter_news": "Dernières nouvelles de notre magasin",
+    "newsletter_promotional_emails": "Emails promotionnels",
+    "newsletter_third_party_marketing": "Matériel marketing de tiers travaillant avec nous"
   },
   "buttons": {
     "my_account": "Mon compte",
@@ -183,7 +189,9 @@
     "change_shipping_address": "Changer l'adresse de livraison",
     "request_return": "Demander un retour",
     "view_pickup_instructions": "Voir les instructions de ramassage",
-    "checkout": "Vérifier"
+    "checkout": "Vérifier",
+    "join": "Rejoindre",
+    "save_preferences": "Enregistrer les préférences"
   },
   "questions": {
     "cancel_return_request": "Êtes-vous sûr de vouloir annuler cette demande de retour ?",
@@ -194,12 +202,14 @@
     "no_items_in_cart": "Votre panier est vide",
     "search": "Rechercher...",
     "select_reason": "-- Veuillez sélectionner une raison --",
-    "select_action": "-- Veuillez sélectionner une action --"
+    "select_action": "-- Veuillez sélectionner une action --",
+    "your_email_here": "Votre email ici"
   },
   "notifications": {
     "registration_success": "Vous vous êtes inscrit avec succès. Veuillez vérifier votre e-mail pour un lien de vérification.",
     "reset_link_sent_to_email": "Un lien de réinitialisation du mot de passe sera envoyé à votre e-mail.",
     "order_payment_success": "Merci pour votre paiement. Il peut y avoir un délai de traitement en fonction du mode de paiement utilisé.",
-    "order_outstanding_balance": "Il reste un solde de :balance sur cette commande."
+    "order_outstanding_balance": "Il reste un solde de :balance sur cette commande.",
+    "newsletter_register_success": "Merci de vous être inscrit à notre newsletter. Vous recevrez rapidement un e-mail de confirmation."
   }
 }

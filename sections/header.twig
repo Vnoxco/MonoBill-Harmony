@@ -50,7 +50,7 @@
                         {% if schema.settings.menu.menu %}
                             {% for menuItem in schema.settings.menu.menu.items %}
                                 <li class="nav-item {% if menuItem.children | length > 0 %}dropdown{% endif %}">
-                                    <a href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% endif %}"
+                                    <a href="{% if menuItem.type == 'link' %}{{ url(menuItem.url) }}{% elseif menuItem.type == 'page' %}{{ url(menuItem.page.uri) }}{% elseif menuItem.type == 'category' %}{{ url(menuItem.product_category.uri) }}{% elseif menuItem.type == 'product' %}{{ url(menuItem.product.uri) }}{% else %}#{% endif %}"
                                        class="nav-link {% if menuItem.children | length > 0 %}dropdown-toggle{% endif %}"
                                        {% if menuItem.children | length > 0 %}data-bs-toggle="dropdown"
                                        aria-expanded="false"{% endif %}>{{ __('custom.' ~ menuItem.name) }}</a>
@@ -130,8 +130,9 @@
     {% if notification %}
         <div class="row justify-content-center mt-4">
             <div class="col-sm-8 col-md-6 col-xl-4">
-                <div class="alert alert-{{ notification.type }}" role="alert">
+                <div class="alert alert-{{ notification.type }} alert-dismissible fade show" role="alert">
                     <i class="fa fa-exclamation-circle"></i> {{ notification.message | raw }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
         </div>
@@ -140,8 +141,8 @@
     <div class="drawer" id="region-select">
         <div class="drawer-body scroll right">
             <div class="d-flex">
-                <h2 class="flex-grow-1">{{ __('titles.currency_and_region') }}</h2>
-                <button class="btn close-btn"><i class="fa fa-times"></i></button>
+                <h3 class="flex-grow-1">{{ __('titles.currency_and_region') }}</h3>
+                <button class="btn close-btn"><i class="bi bi-x-lg"></i></button>
             </div>
             <ul class="regions mt-5">
                 {% for code, country in globals.store.enabled_countries %}

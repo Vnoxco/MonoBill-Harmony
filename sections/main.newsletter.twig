@@ -1,0 +1,80 @@
+<script schema type="application/json">
+    {
+        "name": "Main Newsletter Section",
+        "allowed_templates": [
+            "newsletter_subscription.json"
+        ],
+        "settings": {
+            "image_logo": {
+                "label": "Show image logo",
+                "type": "toggle",
+                "default": 1
+            },
+            "logo_size": {
+                "label": "Logo size",
+                "type": "range",
+                "steps": 1,
+                "max": 15,
+                "min": 1,
+                "append": "x",
+                "default": "2"
+            }
+        }
+    }
+</script>
+
+{% block content %}
+    <div class="container pt-5">
+        <div class="row">
+            <div class="offset-lg-3 col-lg-6">
+                <a class="text-uppercase text-center d-block"
+                   style="font-size: {{ schema.settings.logo_size.value / 1.5 }}rem;" href="{{ url('/') }}">
+                    {% if schema.settings.image_logo.value == 1 and globals.store.logo %}
+                        <img src="{{ globals.store.logo.public_path }}" class="img-fluid"
+                             style="max-width: {{ schema.settings.logo_size.value * 70 }}px;"
+                             alt="{{ globals.store.name }}">
+                    {% else %}
+                        {{ globals.store.name }}
+                    {% endif %}
+                </a>
+                <div class="card mt-4">
+                    <form action="{{ url() }}" method="post">
+                        <div class="card-body">
+                            <h5>{{ __('info.manage_your_subscription') }}</h5>
+                            <p>{{ __('info.manage_newsletter_info') }}</p>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="floatingInput"
+                                       value="{{ subscription.email }}" disabled>
+                                <label for="floatingInput">{{ __('forms.email_address') }}</label>
+                            </div>
+
+                            {{ csrf_input | raw }}
+                            <input type="hidden" name="_method" value="PUT">
+                            <div class="mb-3 form-check">
+                                <input name="news" type="checkbox" class="form-check-input" id="check1"
+                                       {% if subscription.news %}checked{% endif %}>
+                                <label class="form-check-label" for="check1">{{ __('info.newsletter_news') }}</label>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input name="sales_and_marketing" type="checkbox" class="form-check-input" id="check2"
+                                       {% if subscription.sales_and_marketing %}checked{% endif %}>
+                                <label class="form-check-label"
+                                       for="check2">{{ __('info.newsletter_promotional_emails') }}</label>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input name="third_party_marketing" type="checkbox" class="form-check-input" id="check3"
+                                       {% if subscription.third_party_marketing %}checked{% endif %}>
+                                <label class="form-check-label"
+                                       for="check3">{{ __('info.newsletter_third_party_marketing') }}</label>
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <a class="btn btn-link text-dark" href="/">{{ __('buttons.cancel') }}</a>
+                            <button class="btn btn-primary">{{ __('buttons.save_preferences') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

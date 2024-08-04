@@ -571,7 +571,7 @@ $(function(){
     }
     
     function scrollDownSearchResults() {
-        if (currentCursorPos === -1 || currentCursorPos + 1 > resultsLength - 1) {
+        if(currentCursorPos === -1 || currentCursorPos + 1 > resultsLength - 1) {
             currentCursorPos = 0;
         } else {
             currentCursorPos += 1;

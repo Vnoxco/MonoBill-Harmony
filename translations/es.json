@@ -136,7 +136,13 @@
       "tracking_number": "Número de seguimiento: :tracking_number",
       "return_qty": "Cant. de devolución :return_amount",
       "loading_estimates": "Cargando estimaciones",
-      "no_estimates": "No tienes estimaciones."
+      "no_estimates": "No tienes estimaciones.",
+      "subscribe_to_newsletter": "Suscríbete a nuestro boletín",
+      "manage_your_subscription": "Gestiona tu suscripción",
+      "manage_newsletter_info": "Selecciona qué tipo de comunicaciones por correo electrónico deseas recibir:",
+      "newsletter_news": "Últimas noticias de nuestra tienda",
+      "newsletter_promotional_emails": "Correos electrónicos promocionales",
+      "newsletter_third_party_marketing": "Material de marketing de terceros que trabajan con nosotros"
    },
    "buttons": {
       "my_account": "Mi cuenta",
@@ -183,7 +189,9 @@
       "change_shipping_address": "Cambiar dirección de envío",
       "request_return": "Solicitar devolución",
       "view_pickup_instructions": "Ver instrucciones de recogida",
-      "checkout": "Verificar"
+      "checkout": "Verificar",
+      "join": "Unirse",
+      "save_preferences": "Guardar preferencias"
    },
    "questions": {
       "cancel_return_request": "¿Estás seguro de que quieres cancelar esta solicitud de devolución?",
@@ -194,12 +202,14 @@
       "no_items_in_cart": "Tu carrito está vacío",
       "search": "Buscar...",
       "select_reason": "-- Por favor selecciona una razón --",
-      "select_action": "-- Por favor selecciona una acción --"
+      "select_action": "-- Por favor selecciona una acción --",
+      "your_email_here": "Tu correo electrónico aquí"
    },
    "notifications": {
       "registration_success": "Te has registrado exitosamente. Por favor revisa tu correo electrónico para obtener un enlace de verificación.",
       "reset_link_sent_to_email": "Se enviará un enlace de restablecimiento de contraseña a tu correo electrónico.",
       "order_payment_success": "Gracias por tu pago. Puede haber un retraso en el procesamiento dependiendo del método de pago utilizado.",
-      "order_outstanding_balance": "Hay un saldo pendiente de :balance en este pedido."
+      "order_outstanding_balance": "Hay un saldo pendiente de :balance en este pedido.",
+      "newsletter_register_success": "Gracias por suscribirse a nuestro boletín informativo. Recibirás un correo electrónico de confirmación en breve."
    }
 }
