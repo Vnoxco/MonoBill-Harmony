@@ -721,6 +721,25 @@
       "layout": "base.twig"
     }
   },
+  "templates\/products.json": {
+    "sections": [
+      {
+        "id": "products_header.twig"
+      },
+      {
+        "id": "product_listing.twig",
+        "settings": {
+          "auto_open": true,
+          "show_highest_price": true
+        }
+      }
+    ],
+    "settings": {
+      "header": "1",
+      "footer": "1",
+      "layout": "base.twig"
+    }
+  },
   "templates\/account.addresses.edit.json": {
     "sections": [
       {

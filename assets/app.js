@@ -223,6 +223,18 @@ navOffcanvas.addEventListener('hide.bs.offcanvas', function () {
     $('[data-bs-target="#navOffcanvas"]').addClass('collapsed');
 })
 
+let lastScrollTop = 0;
+const body = document.body;
+window.addEventListener('scroll', function() {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > lastScrollTop || scrollTop === 0) {
+        body.classList.remove('fixed-header');
+    } else {
+        body.classList.add('fixed-header');
+    }
+    lastScrollTop = scrollTop;
+});
+
 $(function(){
     
     function checkCountry()

@@ -302,6 +302,21 @@ hr {
   opacity: 1;
 }
 
+header {
+  top: -90px;
+  transition: all 0.3s ease-in-out;
+}
+
+.fixed-header {
+  padding-top: 82px;
+}
+.fixed-header header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 300;
+}
+
 .slider-handle {
   background: #0B79F3;
 }
@@ -547,7 +562,7 @@ hr {
 .slick-next:hover,
 .slick-next:focus {
   padding: 40px 15px;
-  z-index: 798;
+  z-index: 100;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 2px;

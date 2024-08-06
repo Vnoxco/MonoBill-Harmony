@@ -49,7 +49,7 @@
                      id="navOffcanvas" aria-labelledby="offcanvasNavbarExample-expand-xxlLabel"
                      aria-hidden="true">
                     <div class="offcanvas-body">
-                        <ul class="navbar-nav container">
+                        <ul class="navbar-nav container justify-content-center">
                             {% if schema.settings.menu.menu %}
                                 {% for menuItem in schema.settings.menu.menu.items %}
                                     <li class="nav-item {% if menuItem.children | length > 0 %}dropdown{% endif %}">
