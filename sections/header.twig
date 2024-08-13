@@ -92,8 +92,7 @@
                     <li class="nav-item d-print-none">
                         <a class="nav-link active position-relative" aria-current="page" href="{{ url('cart') }}">
                             <i class="bi bi-cart"></i>
-                            {% if globals.cart.quantity > 0 %}<span
-                                    class="mb__cart-quantity mb_cart_quantity">{{ globals.cart.quantity > 99 ? '99+' : globals.cart.quantity }}</span>{% endif %}
+                            <span class="mb__cart_quantity mb_cart_quantity {% if globals.cart.quantity > 0 %}active{% endif %}">{% if globals.cart.quantity > 0 %}{{ globals.cart.quantity > 99 ? '99+' : globals.cart.quantity }}{% endif %}</span>
                         </a>
                     </li>
                 </ul>

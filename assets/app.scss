@@ -1537,19 +1537,21 @@ a:hover {
   border-radius: 50%;
 }
 
-.mb__cart-quantity {
+.mb__cart_quantity {
   display: block;
   position: absolute;
   background-color: #000;
   right: .1rem;
   top: .4rem;
-  width: 20px;
   height: 20px;
   color: #fff;
   border-radius: 50%;
   font-size: .6rem;
   line-height: 1.2rem;
   text-align: center;
+  &.active {
+    width: 20px;
+  }
 }
 
 .mb__status-indicator.mb__status_online {
