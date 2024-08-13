@@ -8,7 +8,7 @@
     }
 </script>
 
-<form id="configure_product_form" method="post" action="{{ url('/cart') }}">
+<form id="configure_product_form" method="post" enctype="multipart/form-data" action="{{ url('/cart') }}">
     {{ csrf_input | raw }}
 
     <input name="id" value="{{ product.id }}" type="hidden">
@@ -32,6 +32,6 @@
         </button>
         <button name="action" value="buy_it_now" type="submit" class="btn btn-dark" id="mb_buy_now">
             {{ __('buttons.buy_it_now') }}
-            </a>
+        </button>
     </div>
 </form>

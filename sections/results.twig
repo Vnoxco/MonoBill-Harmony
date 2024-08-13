@@ -68,22 +68,6 @@
             cursor: pointer;
         }
 
-        @keyframes pulse-loading {
-            0% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.4;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .loading-products {
-            animation: pulse-loading 1s infinite ease-in-out;
-        }
-
         .mb__filter_mobile_close_button_container {
             display: none;
             position: fixed;
@@ -369,11 +353,11 @@
 
             if (typeof filterCache[location.pathname + query] !== 'undefined') {
                 renderSection(filterCache[location.pathname + query].products_section, filterCache[location.pathname + query].filters_section);
-                $('#products_section_{{ schema.index }}').removeClass('loading-products');
+                $('#products_section_{{ schema.index }}').removeClass('mb__loading');
                 return;
             }
 
-            $('#products_section_{{ schema.index }}').addClass('loading-products');
+            $('#products_section_{{ schema.index }}').addClass('mb__loading');
 
 
             lastRequest = MONO.get({
@@ -382,7 +366,7 @@
                 retry: 1,
                 success: function (response) {
 
-                    response = $(response);
+                    response = $(response.html);
 
                     let productsSection = response.find('#products_section_{{ schema.index }}')[0].outerHTML;
                     let filtersSection = response.find('#filters_section_{{ schema.index }}')[0].outerHTML;
@@ -394,7 +378,7 @@
 
                     renderSection(productsSection, filtersSection);
 
-                    $('#products_section_{{ schema.index }}').removeClass('loading-products');
+                    $('#products_section_{{ schema.index }}').removeClass('mb__loading');
                 }
             });
         }
@@ -404,7 +388,7 @@
 
 {% block content %}
     {% from "macros/category_list.twig" import categoryList %}
-    {% from "macros/pricing.twig" import pricing %}
+    {% from "macros/results_paginated.twig" import results_paginated %}
 
     <span id="mb__product_listing_section_index" data-value="{{ schema.index }}"></span>
 
@@ -431,30 +415,30 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% if products_without_filter_count > 0 %}
+                    {% if results_without_filter_count > 0 %}
                         <div class="col-xl-6 col-lg-12 d-flex">
                             <div class="filter_section ps-3 pe-3 d-none d-xl-block">
-                                {% if products_without_filter_count == products.data | length %}
-                                    {{ __('text.showing_all_results', {
-                                        shown_count: products.total
+                                {% if results_without_filter_count == results.data | length %}
+                                    {{ __('info.showing_all_results', {
+                                        shown_count: results.total
                                     }) }}
                                 {% else %}
-                                    {{ __('text.showing_results', {
-                                        shown_count: products.data | length,
-                                        total_count: products.total
+                                    {{ __('info.showing_results', {
+                                        shown_count: results.data | length,
+                                        total_count: results.total
                                     }) }}
                                 {% endif %}
                             </div>
                             <div class="filter_section order-section border-start border-end p-0 flex-xl-grow-1">
                                 <select class="d-inline form-control mb__select border-0 pt-2" id="sort_by">
                                     <option value=""
-                                            {% if input('sort_by') == '' %}selected{% endif %}>{{ __('text.default_sorting') }}</option>
+                                            {% if input('sort_by') == '' %}selected{% endif %}>{{ __('forms.sort_by_relevance') }}</option>
                                     <option value="2"
-                                            {% if input('sort_by') == '2' %}selected{% endif %}>{{ __('text.sort_by_price_low_to_high') }}</option>
+                                            {% if input('sort_by') == '2' %}selected{% endif %}>{{ __('forms.sort_by_price_low_to_high') }}</option>
                                     <option value="3"
-                                            {% if input('sort_by') == '3' %}selected{% endif %}>{{ __('text.sort_by_price_high_to_low') }}</option>
+                                            {% if input('sort_by') == '3' %}selected{% endif %}>{{ __('forms.sort_by_price_high_to_low') }}</option>
                                     <option value="4"
-                                            {% if input('sort_by') == '4' %}selected{% endif %}>{{ __('text.sort_by_latest') }}</option>
+                                            {% if input('sort_by') == '4' %}selected{% endif %}>{{ __('forms.sort_by_latest') }}</option>
                                 </select>
                             </div>
                             {% if get_store_plan_feature('product_filters') %}
@@ -669,13 +653,25 @@
             </div>
         {% endif %}
         <div class="container" id="products_section_{{ schema.index }}">
-            {% if products_without_filter_count < 1 %}
-                <p class="p-5 text-center">{{ __('info.no_products_found') }}</p>
+            {% if results_without_filter_count < 1 %}
+                <p class="p-5 text-center">
+                    {% if 'category.json' in template_name %}
+                        {{ __('info.no_products_found') }}
+                    {% else %}
+                        {{ __('info.no_results_found') }}
+                    {% endif %}
+                </p>
             {% else %}
-                {% if products.data | length > 0 %}
-                    {{ pricing(products) }}
+                {% if results.data | length > 0 %}
+                    {{ results_paginated(results) }}
                 {% else %}
-                    <p class="p-5 text-center">{{ __('info.no_products_found_filtered') }}</p>
+                    <p class="p-5 text-center">
+                        {% if 'category.json' in template_name %}
+                            {{ __('info.no_products_found_filtered') }}
+                        {% else %}
+                            {{ __('info.no_results_found_filtered') }}
+                        {% endif %}
+                    </p>
                     <div class="text-center">
                         <a href="{{ url() }}" data-clear-filters="true"
                            class="btn btn-dark">{{ __('buttons.clear_filters') }}</a>

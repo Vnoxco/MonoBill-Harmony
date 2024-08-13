@@ -93,44 +93,46 @@
                         <a class="nav-link active position-relative" aria-current="page" href="{{ url('cart') }}">
                             <i class="bi bi-cart"></i>
                             {% if globals.cart.quantity > 0 %}<span
-                                    class="mb__cart-quantity mb_cart_quantity">{{ globals.cart.quantity }}</span>{% endif %}
+                                    class="mb__cart-quantity mb_cart_quantity">{{ globals.cart.quantity > 99 ? '99+' : globals.cart.quantity }}</span>{% endif %}
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
-    </header>
-
-    {% if template_name != 'search.json' %}
-        <div class="search-container w-100 top-0 auto-hide" id="mb__search_container">
-            <div class="container">
-                <div class="position-relative">
-                    <div class="search-box mb-2 w-100 pt-3 pb-2">
-                        <form method="get" action="{{ url('/search') }}" class="flex-grow-1">
-                            {{ mb_dev_fields | raw }}
-                            <div class="input-group input-group-lg">
+        {% if template_name != 'search.json' %}
+            <div class="search-container w-100 top-0 auto-hide" id="mb__search_container">
+                <div class="mb__search_overlay"></div>
+                <div class="container">
+                    <div class="position-relative">
+                        <div class="search-box mb-2 w-100 pt-3 pb-2">
+                            <form method="get" action="{{ url('/search') }}" class="flex-grow-1">
+                                {{ mb_dev_fields | raw }}
+                                <div class="input-group input-group-lg">
                             <span class="input-group-text bg-transparent">
                                 <i class="mb__search-icon bi bi-search"></i>
                                 <svg class="mb__search-spinner" style="display: none; width: 20px; height: 20px;"
                                      viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none"
                                                                  stroke-width="5"></circle></svg>
                             </span>
-                                <input id="mb__search_input" type="search" name="q" value=""
-                                       class="form-control search-group-input"
-                                       placeholder="{{ __('placeholders.search') }}" required>
+                                    <input id="mb__search_input" type="search" name="q" value=""
+                                           class="form-control search-group-input"
+                                           placeholder="{{ __('placeholders.search') }}" required>
+                                </div>
+                            </form>
+                            <div class="ms-3">
+                                <button id="mb__search_dismiss_btn" class="btn btn-outline-dark"><i class="bi bi-x-lg"
+                                                                                                    style="font-size: 1.35rem;"></i>
+                                </button>
                             </div>
-                        </form>
-                        <div class="ms-3">
-                            <button id="mb__search_dismiss_btn" class="btn btn-outline-dark"><i class="bi bi-x-lg"
-                                                                                                style="font-size: 1.35rem;"></i>
-                            </button>
                         </div>
+                        <div id="mb__search_autocomplete" style="display: none"></div>
                     </div>
-                    <div id="mb__search_autocomplete"></div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+        <div class="mb__dynamic_cart_wrapper container"></div>
+    </header>
+
     {% if notification %}
         <div class="row justify-content-center mt-4">
             <div class="col-sm-8 col-md-6 col-xl-4">
@@ -141,25 +143,4 @@
             </div>
         </div>
     {% endif %}
-
-    <div class="drawer" id="region-select">
-        <div class="drawer-body scroll right">
-            <div class="d-flex">
-                <div class="flex-grow-1 pt-2">
-                    {{ __('titles.currency_and_region') }}
-                </div>
-                <button class="btn close-btn pe-0"><i class="bi bi-x-lg"></i></button>
-            </div>
-            <hr class="mt-3 mb-2">
-            <ul class="regions">
-                {% for code, country in globals.store.enabled_countries %}
-                    <li>
-                        <a href="?x_user_currency={{ country.currency_code }}&x_user_language={{ country.language }}&x_user_country={{ code }}"><span
-                                    class="fi fi-{{ code | lower }}"></span> {{ __('custom.' ~ country.name) }} <span
-                                    class="currency">{{ country.currency_code }} {{ country.currency_symbol }}</span></a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
 {% endblock %}

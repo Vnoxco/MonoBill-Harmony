@@ -1,0 +1,46 @@
+<script schema type="application/json">
+    {
+        "name": "Main Blog Section",
+        "allowed_templates": [
+            "blog.json"
+        ],
+        "settings": {
+        }
+    }
+</script>
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="fs-2">{{ __('titles.blog') }}</h1>
+        <div>
+            <div class="row mt-5">
+                {% for blogPost in blog_posts.data %}
+                    <a href="{{ url(blogPost.link.uri) }}" class="col-lg-6 mb-5">
+                        <img src="{{ blogPost.thumbnail.public_path }}" class="card-img-top rounded blog-post-img"
+                             alt="{{ blogPost.title }}">
+                        <h6 class="text-uppercase small muted fw-bold mt-4">{{ blogPost.blog_post_category.name }}</h6>
+                        <h4 class="card-title mt-3 fw-bold">{{ blogPost.title }}</h4>
+                        <small class="text-muted fw-bold">{{ blogPost.published_at_formatted }}</small>
+                        <p class="text-muted mt-2">{{ blogPost.excerpt }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% if blog_posts.last_page > 1 %}
+            <nav>
+                <ul class="pagination">
+                    {% for link in blog_posts.links %}
+                        <li class="page-item {% if link.active or link.url == null %}disabled{% endif %}">
+                            {% if link.active or link.url == null %}
+                                <span class="page-link border-0 rounded-0" aria-hidden="true">{{ link.label | raw }}</span>
+                            {% else %}
+                                <a class="page-link border-0 rounded-0"
+                                   href="{{ url('/blog' ~ link.url) }}">{{ link.label | raw }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}

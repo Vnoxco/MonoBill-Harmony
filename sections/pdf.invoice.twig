@@ -10576,7 +10576,7 @@
                     {% if globals.store.company_tax_id is not null %}
                         <p>{{ __('forms.tin') }}: {{ globals.store.company_tax_id }}</p>
                     {% endif %}
-                    <p><a href="{{ url('/') }}">{{ url('/') }}</a></p>
+                    <p><a href="https://{{ globals.store.default_domain.domain }}">https://{{ globals.store.default_domain.domain }}</a></p>
                 </td>
                 <td class="td-50 text-right">
                     <p style="font-size: 24px;" class="mb-2">#{{ invoice.invoice_number }}</p>

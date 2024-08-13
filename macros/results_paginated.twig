@@ -1,0 +1,93 @@
+{% macro results_paginated(results) %}
+    {% from "macros/card.twig" import card %}
+    <div class="row">
+        {% for result in results.data %}
+            {{ template_name }}
+            <div class="col-6 col-md-4 col-lg-3 text-center mb-3 mt-3">
+                {% if result.mb_type == 'products' %}
+                    {{ card({
+                        heading: result.product_brands_name ?? '⠀',
+                        title: result.products_name,
+                        image_path: result.gallery_files_path,
+                        badge: result.on_sale ? __('titles.sale') : null,
+                        price: result.product_variants_price ?? result.products_price,
+                        compare_price: result.product_variants_compare_price ?? result.compare_price,
+                        uri: result.cms_links_uri,
+                        track_inventory: result.products_track_inventory,
+                        available: result.available
+                    }) }}
+                {% elseif result.mb_type == 'blog_posts' %}
+                    {{ card({
+                        heading: result.store_blog_post_categories_name,
+                        badge: __('titles.blog'),
+                        title: result.title,
+                        subtitle: result.published_at_formatted,
+                        uri: result.cms_links_uri,
+                        image_path: result.gallery_files_path,
+                        image_fill: true
+                    }) }}
+                {% elseif result.mb_type == 'product_categories' %}
+                    {{ card({
+                        badge: __('titles.category'),
+                        title: result.product_categories_name,
+                        uri: result.cms_links_uri,
+                        image_path: result.gallery_files_path,
+                        image_fill: true
+                    }) }}
+                {% elseif result.mb_type == 'cms_pages' %}
+                    {{ card({
+                        badge: __('titles.page'),
+                        title: result.title,
+                        uri: result.cms_links_uri,
+                        image_path: result.gallery_files_path ?? 'https://assets.gomonobill.com/monobill/page.png?v2',
+                        image_fill: true,
+                    }) }}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% if results.total > results.per_page %}
+        <div class="card mt-4">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-9">
+                        {% if results.last_page > 1 %}
+                            <nav>
+                                <ul class="pagination">
+                                    {% for link in results.links %}
+                                        <li class="page-item {% if link.active or link.url == null %}disabled{% endif %}">
+                                            {% if link.active or link.url == null %}
+                                                <span class="page-link border-0 rounded-0"
+                                                      aria-hidden="true">{{ link.label | raw }}</span>
+                                            {% else %}
+                                                <a class="page-link border-0 rounded-0"
+                                                   href="{{ link.url }}">{{ link.label | raw }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3 text-md-right">
+                        <select id="items_per_page"
+                                class="d-inline-block form-control border-0 border-start mb__select mt-2 mt-md-0">
+                            {% if results.total >= 25 %}
+                            <option value="25" {% if input('items_per_page') == '25' %}selected{% endif %}>
+                                25 {{ __('placeholders.items_per_page') }}</option>{% endif %}
+                            {% if results.total >= 50 %}
+                            <option value="50" {% if input('items_per_page') == '50' %}selected{% endif %}>
+                                50 {{ __('placeholders.items_per_page') }}</option>{% endif %}
+                            {% if results.total >= 100 %}
+                            <option value="100" {% if input('items_per_page') == '100' %}selected{% endif %}>
+                                100 {{ __('placeholders.items_per_page') }}</option>{% endif %}
+                            {% if results.total >= 200 %}
+                            <option value="200" {% if input('items_per_page') == '200' %}selected{% endif %}>
+                                200 {{ __('placeholders.items_per_page') }}</option>{% endif %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

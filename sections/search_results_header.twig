@@ -11,8 +11,8 @@
 <div class="container mt-5 mb-5">
     <h1 class="text-center fs-3">{{ __('titles.search_results') }}</h1>
     <div class="row mt-4 mb-4">
-        <div class="col-lg-4 offset-lg-4">
-            <div class="search-container position-relative d-block border-0">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="search-container position-relative d-block border-0 active">
                 <div class="search-box">
                     <form method="get" action="{{ url('/search') }}" class="flex-grow-1">
                         {{ mb_dev_fields | raw }}
@@ -25,7 +25,7 @@
                         </div>
                     </form>
                 </div>
-                <div id="mb__search_autocomplete" style="top: 3rem"></div>
+                <div id="mb__search_autocomplete" style="top: 3rem; display: none"></div>
             </div>
         </div>
     </div>

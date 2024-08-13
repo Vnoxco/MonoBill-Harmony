@@ -26,12 +26,16 @@
                 "hidden_in_customizer": true,
                 "type": "blog_posts"
             }
-        },
-        "on_update_javascript": "initBlogSlick();"
+        }
     }
 </script>
 
+<script on_update type="text/javascript">
+    initSlick{{ schema.index }}();
+</script>
+
 {% block content %}
+    {% from "macros/card.twig" import card %}
     <div class="container">
         {% if schema.settings.blog_posts.blog_posts | length > 0 or 'theme_editor=1' in url() %}
             <h2 class="text-center mt-5 mb-5">{{ __(schema.settings.title.value) }}</h2>
@@ -39,15 +43,14 @@
         {% if schema.settings.blog_posts.blog_posts | length > 0 %}
             <div class="items items_{{schema.index}} no-print">
                 {% for post in schema.settings.blog_posts.blog_posts %}
-                    <a href="{{ url(post.uri) }}" class="d-block">
-                       <div class="slider-card left-align">
-                            <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
-                                 style="width:300px; height:300px; background-image: url('{%if post.thumbnail_path %}{{ cdn(post.thumbnail_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
-                            </div>
-                            <div class="name">{{ __('custom.' ~ post.title) }}</div>
-                            <div class="date">{{ post.published_at_formatted }}</div>
-                       </div>
-                    </a>
+                    {{ card({
+                        heading: __('custom.' ~ post.category_name),
+                        title: __('custom.' ~ post.title),
+                        subtitle: post.published_at_formatted,
+                        uri: post.uri,
+                        image_path: post.thumbnail_path,
+                        image_fill: true
+                    }) }}
                 {% endfor %}
             </div>
         {% elseif 'theme_editor=1' in url() %}
@@ -58,7 +61,7 @@
 
 {% block scripts %}
     <script>
-        let initBlogSlick = function() {
+        let initSlick{{ schema.index }} = function() {
             $('.items.items_{{schema.index}}').slick({
                 infinite: true,
                 variableWidth: true,
@@ -72,7 +75,7 @@
             });
         }
         $(document).ready(function () {
-            initBlogSlick();
+            initSlick{{ schema.index }}();
         });
     </script>
 {% endblock %}

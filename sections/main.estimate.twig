@@ -75,8 +75,8 @@
                             <p><a href="mailto:{{ globals.store.email }}">{{ globals.store.email }}</a></p>
                             {% if globals.store.company_tax_id is not null %}
                                 <p>{{ __('forms.tax_id') }}: {{ globals.store.company_tax_id }}</p>
-                            {% endif %} 
-                            <p><a href="{{ url('/') }}">{{ url('/') }}</a></p>
+                            {% endif %}
+                            <p><a href="https://{{ globals.store.default_domain.domain }}">https://{{ globals.store.default_domain.domain }}</a></p>
                         </div>
                         <div class="col-6 text-right">
                             <p class="text-primary" style="font-size: 24px; font-weight: bold; text-transform: uppercase;">{{ __('titles.estimate') }}</p>
@@ -213,7 +213,7 @@
                         </div>
                     {% endif %}
                     <div class="text-center d-print-none">
-                        {% if estimate.customer_accepted_at == null and (estimate.expiration_date is null or date() < date(estimate.expiration_date)) %}<a href="{{ url() ~ '/accept' }}" class="btn btn-primary mt-4 mb-4 btn-lg text-white">{{ __('buttons.accept_estimate') }}</a><br>{% endif %}
+                        {% if estimate.customer_accepted_at == null and (estimate.expiration_date is null or date() < date(estimate.expiration_date)) %}<a href="{{ url('/estimates/' ~ estimate.id ~ '/' ~ estimate.password ~ '/accept') }}" class="btn btn-primary mt-4 mb-4 btn-lg text-white">{{ __('buttons.accept_estimate') }}</a><br>{% endif %}
                         <a href="{% if auth().check() %}{{url('/account')}}{% else %}{{ url('/') }}{% endif %}"><i class="bi bi-arrow-left"></i> {{ __('buttons.back_to_client_area') }}</a> - <a target="_blank" href="{{url('/estimates/'~ estimate.id ~ '/' ~ estimate.password ~ '/pdf')}}"><i class="bi bi-file-pdf"></i> {{ __('buttons.download_pdf') }}</a>
                     </div>
                 </div>

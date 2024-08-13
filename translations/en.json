@@ -21,12 +21,8 @@
         "shipping_dimensions_uom_ft": "ft",
         "out_of_stock": "Out of stock",
         "currency": "Currency",
-        "language": "Language"
-    },
-    "text": {
-        "showing_results": "Showing :shown_count of :total_count results",
-        "showing_all_results": "Showing all :shown_count results",
-        "default_sorting": "Default sorting",
+        "language": "Language",
+        "sort_by_relevance": "Sort by relevance",
         "sort_by_latest": "Sort by latest",
         "sort_by_price_low_to_high": "Sort by price: low to high",
         "sort_by_price_high_to_low": "Sort by price: high to low"
@@ -54,7 +50,7 @@
         "account_details": "Account details",
         "password_access": "Password access",
         "not_found": "Not found",
-        "shopping_cart": "Shopping cart",
+        "your_cart": "Your cart",
         "your_saved_items": "Your saved items",
         "customer_reviews": "Customer Reviews",
         "confirm_removal": "Confirm removal",
@@ -75,7 +71,6 @@
         "qty_to_return": "Qty. to return",
         "order_why_returning": "Why are you returning these item(s)?",
         "cancel_return_request": "Cancel return request #:request_number",
-        "password_required_to_enter_store": "You are required to enter a password to access this store.",
         "create_account": "Create account",
         "return_requests": "Return requests",
         "description": "Description",
@@ -84,10 +79,15 @@
         "shipping_address": "Shipping address",
         "pickup_instructions": "Pick up instructions",
         "created": "Created",
-        "expires": "Expires"
+        "expires": "Expires",
+        "blog": "Blog",
+        "suggestions": "Suggestions",
+        "page": "Page"
     },
     "info": {
         "products_max_price": "The highest price is :price",
+        "no_results_found": "No results were found. Try changing the search term you provided.",
+        "no_results_found_filtered": "No results were found with the filters applied. Try removing some or all of the filters.",
         "no_products_found": "No products were found.",
         "no_products_found_filtered": "No products were found with the filters applied. Try removing some or all of the filters.",
         "no_orders": "No orders were found for the period selected.",
@@ -95,6 +95,7 @@
         "loading_orders": "Loading orders...",
         "loading_invoices": "Loading invoices...",
         "password_required_page": "You are required to enter a password to access this page.",
+        "password_required_to_enter_store": "You are required to enter a password to access this store.",
         "404_page": "The page you are looking for doesn't exist.",
         "app_reviews_based_on_reviews": "Based on :count review.|Based on :count reviews.",
         "show_all_reviews": "Show all reviews",
@@ -142,7 +143,12 @@
         "manage_newsletter_info": "Select which kind of email communications you would like to receive:",
         "newsletter_news": "Latest news from our store",
         "newsletter_promotional_emails": "Promotional emails",
-        "newsletter_third_party_marketing": "Marketing material from third parties working with us"
+        "newsletter_third_party_marketing": "Marketing material from third parties working with us",
+        "showing_results": "Showing :shown_count of :total_count results",
+        "showing_all_results": "Showing all :shown_count results",
+        "item_added_to_cart": "Item added to your cart",
+        "taxes": "Taxes",
+        "calculated_at_checkout": "Calculated at checkout"
     },
     "buttons": {
         "my_account": "My account",
@@ -189,9 +195,14 @@
         "change_shipping_address": "Change shipping address",
         "request_return": "Request return",
         "view_pickup_instructions": "View pick up instructions",
-        "checkout": "Checkout",
+        "proceed_to_checkout": "Proceed to Checkout",
         "join": "Join",
-        "save_preferences": "Save preferences"
+        "save_preferences": "Save preferences",
+        "previous_post": "Previous post",
+        "next_post": "Next post",
+        "search_for": "Search for \":query\"",
+        "view_cart_quantity": "View cart (:quantity)",
+        "apply": "Apply"
     },
     "questions": {
         "cancel_return_request": "Are you sure you want to cancel this return request?",
@@ -203,7 +214,8 @@
         "search": "Search...",
         "select_reason": "-- Please select a reason --",
         "select_action": "-- Please select an action --",
-        "your_email_here": "Your email here"
+        "your_email_here": "Your email here",
+        "apply_discount_gift_card": "Add discount code or gift card"
     },
     "notifications": {
         "registration_success": "You've registered successfully. Please check your email for a verification link.",

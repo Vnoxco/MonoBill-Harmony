@@ -13,19 +13,32 @@
                 "label": "Products",
                 "type": "products"
             }
-        },
-        "on_update_javascript": "initProductSlick();"
+        }
     }
 </script>
 
+<script on_update type="text/javascript">
+    initSlick{{ schema.index }}();
+</script>
+
 {% block content %}
-    {% from "macros/product_card.twig" import productCard %}
+    {% from "macros/card.twig" import card %}
     <div class="container">
         <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~ schema.settings.title.value) }}</h2>
         {% if schema.settings.products.products | length > 0 %}
             <div class="items items_{{schema.index}} no-print">
                 {% for product in schema.settings.products.products %}
-                   {{ productCard(product) }}
+                   {{ card({
+                       heading: product.brand_name ?? '⠀',
+                       title: product.name,
+                       image_path: product.default_variant_image_path ? product.default_variant_image_path : product.default_image_path,
+                       badge: product.on_sale ? __('titles.sale') : null,
+                       price: product.default_variant_price ?? product.price,
+                       compare_price: product.default_variant_compare_price ?? product.compare_price,
+                       uri: product.uri,
+                       track_inventory: product.track_inventory,
+                       available: product.available
+                   }) }}
                 {% endfor %}
             </div>
         {% else %}
@@ -36,7 +49,7 @@
 
 {% block scripts %}
     <script>
-        let initProductSlick = function () {
+        let initSlick{{ schema.index }} = function () {
             $('.items.items_{{schema.index}}').slick({
                 infinite: true,
                 variableWidth: true,
@@ -49,8 +62,9 @@
                 nextArrow: "<button type='button' class='slick-next pull-right'><i class='bi bi-chevron-right'></i></button>"
             });
         }
+
         $(document).ready(function () {
-            initProductSlick();
+            initSlick{{schema.index}}();
         });
     </script>
 {% endblock %}

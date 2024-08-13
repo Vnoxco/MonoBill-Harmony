@@ -1,0 +1,15 @@
+<script schema type="application/json">
+    {
+        "name": "Page content",
+        "icon": "file-alt",
+        "settings": {}
+    }
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="offset-lg-2 col-lg-8">
+            {{ renderTwig(page.content, page) | raw }}
+        </div>
+    </div>
+</div>

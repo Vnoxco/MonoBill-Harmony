@@ -1,0 +1,40 @@
+<script schema type="application/json">
+    {
+        "name": "Page navigator",
+        "icon": "arrows-alt-h",
+        "settings": {}
+    }
+</script>
+
+<div class="bg-light pt-3 pb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 position-relative">
+                {% if page.previous_page %}
+                    <a href="{{ url(page.previous_page.link.uri) }}">
+                        <div class="d-flex align-items-center pt-5 pb-5">
+                            <i class="bi bi-arrow-left fs-3 position-absolute"></i>
+                            <div class="flex-grow-1 text-center">
+                                <div>{{ __('buttons.previous_post') }}</div>
+                                <div class="fw-bold">{{ __('custom.' ~ page.previous_page.title) }}</div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 position-relative">
+                {% if page.next_page %}
+                    <a href="{{ url(page.next_page.link.uri) }}">
+                        <div class="d-flex align-items-center pt-5 pb-5">
+                            <div class="flex-grow-1 text-center">
+                                <div>{{ __('buttons.next_post') }}</div>
+                                <div class="fw-bold">{{ __('custom.' ~ page.next_page.title) }}</div>
+                            </div>
+                            <i class="bi bi-arrow-right fs-3 position-absolute" style="right: 10px"></i>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

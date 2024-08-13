@@ -6,10 +6,5 @@
 </script>
 
 {% block content %}
-    <div class="page-header" style="background-image: url('{{ page.thumbnail.public_path  }}');">
-        <h2 class="text-center {% if page.thumbnail == null %}text-dark{% endif %}">{{__('custom.' ~ page.title)}}</h2>
-    </div>
-    <div class="container mt-5">
-        {{ renderTwig(page.content, page) | raw }}
-    </div>
+    <blocks></blocks>
 {% endblock %}

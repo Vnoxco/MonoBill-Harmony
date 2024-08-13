@@ -1,0 +1,75 @@
+{% set totalResults = (search_results.suggestions | length) + (search_results.blog_posts | length) + ( search_results.pages | length) + (search_results.product_categories | length) + (search_results.products | length)  %}
+<div class="mb__autocomplete"
+     data-results-count="{{ totalResults + 1 }}">
+    <div class="mb__search_results {% if totalResults == 0 %}p-0{% endif %}">
+        {% if search_results.suggestions | length or search_results.blog_posts | length or search_results.pages | length or search_results.product_categories | length %}
+            <div class="mb__search_results_group">
+                {% if search_results.suggestions | length %}
+                    <div>
+                        <div class="mb__search_results_title">{{ __('titles.suggestions') }}</div>
+                        <ul class="mb__search_results_list">
+                            {% for suggestion in search_results.suggestions %}
+                                <li><a tabindex="-1"  class="mb__search_result_txt" data-search-index="{{ loop.index }}"
+                                       href="{{ url(suggestion.uri) }}">{{ ucfirst(suggestion.label) }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if search_results.blog_posts | length %}
+                    <div>
+                        <div class="mb__search_results_title">{{ __('titles.blog_posts') }}</div>
+                        <ul class="mb__search_results_list">
+                            {% for blog_post in search_results.blog_posts %}
+                                <li><a tabindex="-1"  class="mb__search_result_txt"
+                                       data-search-index="{{ loop.index + search_results.suggestions | length }}"
+                                       href="{{ url(blog_post.uri) }}">{{ blog_post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if search_results.pages | length %}
+                    <div>
+                        <div class="mb__search_results_title">{{ __('titles.pages') }}</div>
+                        <ul class="mb__search_results_list">
+                            {% for page in search_results.pages %}
+                                <li>
+                                    <a tabindex="-1"  class="mb__search_result_txt"
+                                       data-search-index="{{ loop.index + search_results.suggestions | length + search_results.blog_posts | length }}"
+                                       href="{{ url(page.uri) }}">{{ page.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if search_results.products | length %}
+            <div class="mb__search_results_group">
+                <div>
+                    <div class="mb__search_results_title">{{ __('titles.products') }}</div>
+                    <ul class="mb__search_results_list">
+                        {% for product in search_results.products %}
+                            <li>
+                                <a tabindex="-1"  class="mb__search_result_product"
+                                   data-search-index="{{ loop.index + search_results.suggestions | length + search_results.blog_posts | length + search_results.pages | length }}"
+                                   href="{{ url(product.uri) }}">
+                                    <div class="mb__search_result_img">
+                                        <img src="{{ product.image_url }}" alt="{{ __('custom.' ~ product.name) }}">
+                                    </div>
+                                    <p class="mb__search_result_product_name mb__search_result_txt">{{ __('custom.' ~ product.name) }}</p>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb__search_result_search">
+        <a tabindex="-1" href="{{ url('/search?q=' ~ input('q')) }}"
+           data-search-index="{{ search_results.suggestions | length + search_results.blog_posts | length + search_results.pages | length + search_results.products | length + 1 }}">
+            {{ __('buttons.search_for', {query: input('q')}) }}
+            <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+</div>

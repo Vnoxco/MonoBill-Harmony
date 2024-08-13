@@ -15,19 +15,32 @@
                 "type": "related_products",
                 "hidden_in_customizer": true
             }
-        },
-        "on_update_javascript": "$('.items').slick({infinite: true,slidesToShow: 1,slidesToScroll: 1,arrows: true,variableWidth: true,centerMode: true,prevArrow: \"<button type='button' class='slick-prev pull-left'><i class='fa fa-angle-left' aria-hidden='true'></i></button>\",nextArrow: \"<button type='button' class='slick-next pull-right'><i class='fa fa-angle-right' aria-hidden='true'></i></button>\"});"
-    }
+        }
+}
+</script>
+
+<script on_update type="text/javascript">
+    initSlick{{ schema.index }}();
 </script>
 
 {% block content %}
-    {% from "macros/product_card.twig" import productCard %}
+    {% from "macros/card.twig" import card %}
     <div class="container">
         {% if schema.settings.related_products.related_products | length > 0 %}
             <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~ schema.settings.title.value) }}</h2>
-            <div class="items no-print">
+            <div class="items items_{{schema.index}} no-print">
                 {% for relatedProduct in schema.settings.related_products.related_products %}
-                    {{ productCard(relatedProduct) }}
+                    {{ card({
+                        heading: product.brand_name ? __('custom.' ~ product.brand_name) : '⠀',
+                        title: __('custom.' ~ product.name),
+                        image_path: product.default_variant_image_path ? product.default_variant_image_path : product.default_image_path,
+                        badge: product.on_sale ? __('titles.sale') : null,
+                        price: product.default_variant_price ?? product.price,
+                        compare_price: product.default_variant_compare_price ?? product.compare_price,
+                        uri: product.uri,
+                        track_inventory: product.track_inventory,
+                        available: product.available
+                    }) }}
                 {% endfor %}
             </div>
         {% endif %}
@@ -36,8 +49,8 @@
 
 {% block scripts %}
     <script>
-        $(document).ready(function () {
-            $('.items').slick({
+        let initSlick{{ schema.index }} = function() {
+            $('.items_{{schema.index}}').slick({
                 infinite: true,
                 slidesToShow: 1,
                 slidesToScroll: 1,
@@ -47,6 +60,9 @@
                 prevArrow: "<button type='button' class='slick-prev pull-left'><i class='fa fa-angle-left' aria-hidden='true'></i></button>",
                 nextArrow: "<button type='button' class='slick-next pull-right'><i class='fa fa-angle-right' aria-hidden='true'></i></button>"
             });
+        }
+        $(document).ready(function () {
+            initSlick{{schema.index}}();
         });
     </script>
 {% endblock %}

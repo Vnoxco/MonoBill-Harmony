@@ -75,8 +75,8 @@
                             <p><a href="mailto:{{ globals.store.email }}">{{ globals.store.email }}</a></p>
                             {% if globals.store.company_tax_id is not null %}
                                 <p>{{ __('forms.tax_id') }}: {{ globals.store.company_tax_id }}</p>
-                            {% endif %} 
-                            <p><a href="{{ url('/') }}">{{ url('/') }}</a></p>
+                            {% endif %}
+                            <p><a href="https://{{ globals.store.default_domain.domain }}">https://{{ globals.store.default_domain.domain }}</a></p>
                         </div>
                         <div class="col-6 text-right">
                             <p class="text-primary" style="font-size: 24px; font-weight: bold; text-transform: uppercase;">{{ __('titles.invoice') }}</p>

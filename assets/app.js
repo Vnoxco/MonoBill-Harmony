@@ -1,5 +1,5 @@
 const url_params = new Proxy(new URLSearchParams(window.location.search), {
-  get: (searchParams, prop) => searchParams.get(prop),
+    get: (searchParams, prop) => searchParams.get(prop),
 });
 
 
@@ -10,15 +10,15 @@ window.MONO = {
             success = data;
             data = {};
         }
-        
-        
-        if(typeof url === 'object') {
+
+
+        if (typeof url === 'object') {
             data = url.data;
             success = url.success;
             error = url.error;
             url = url.url;
         }
-        
+
         return MONO.ajax(url, "GET", data, false, success, error);
     },
     post: function (url, data, success, error) {
@@ -27,7 +27,7 @@ window.MONO = {
             success = data;
             data = {};
         }
-        if(typeof url === 'object') {
+        if (typeof url === 'object') {
             data = url.data;
             success = url.success;
             error = url.error;
@@ -41,7 +41,7 @@ window.MONO = {
             success = data;
             data = {};
         }
-        if(typeof url === 'object') {
+        if (typeof url === 'object') {
             data = url.data;
             success = url.success;
             error = url.error;
@@ -55,7 +55,7 @@ window.MONO = {
             success = data;
             data = {};
         }
-        if(typeof url === 'object') {
+        if (typeof url === 'object') {
             data = url.data;
             success = url.success;
             error = url.error;
@@ -67,20 +67,20 @@ window.MONO = {
         if (typeof FormData == 'undefined' || !(data instanceof FormData) && typeof data == "object" || typeof data == "object" && !(data instanceof FormData)) {
             data = $.param(data);
         }
-    
+
         let tokenString = '';
         if (typeof csrfToken !== "undefined") {
             tokenString = '&_token=' + csrfToken;
         }
-    
+
         let options = {
             type: type,
             url: url,
             cache: cache,
             crossDomain: true,
-            headers : { 
-              'ngrok-skip-browser-warning':true,
-              'accept': 'application/json'
+            headers: {
+                'ngrok-skip-browser-warning': true,
+                'accept': 'application/json'
             },
             async: true,
             success: function (data, textStatus, xhr) {
@@ -108,55 +108,55 @@ window.MONO = {
         }
         return $.ajax(options);
     },
-    getOrders: function(time, callback) {
+    getOrders: function (time, callback) {
         this.get(this.mbURL('/account/orders/json'), {
             period: time,
-        }, function(response) {
+        }, function (response) {
             callback(response.content.orders);
-        }, function(err) {
+        }, function (err) {
             //TODO alert error loading orders.
         })
     },
-    getEstimates: function(time, callback) {
+    getEstimates: function (time, callback) {
         this.get(this.mbURL('/account/estimates/json'), {
             period: time,
-        }, function(response) {
+        }, function (response) {
             callback(response.content.estimates);
-        }, function(err) {
+        }, function (err) {
             //TODO alert error loading orders.
         })
     },
-    mbURL: function(uri) {
+    mbURL: function (uri) {
         if (!uri) {
             return window.location.href;
         }
-        if(!uri.startsWith('/')) {
+        if (!uri.startsWith('/')) {
             uri = '/' + uri;
         }
-        
+
         let url = window.location.origin + uri;
-        
+
         let hashParts = uri.split('#');
-        
+
         let hash = (hashParts.length > 1) ? hashParts[1] : null;
-    
-    
-        if(hash) {
+
+
+        if (hash) {
             //Remove the hash from the URL and add it back later or else this will cause problems with the query parameters.
             url = url.replaceAll('#' + hash, '');
         }
-    
+
         let keysToKeep = [
             'theme_editor',
             'theme',
             'authenticated',
             'dev-preview'
         ];
-        
-        for(let i = 0; i < keysToKeep.length; i++) {
+
+        for (let i = 0; i < keysToKeep.length; i++) {
             let key = keysToKeep[i];
-            if(this.queryExists(key)) {
-                if(url.indexOf('?') !== -1) {
+            if (this.queryExists(key)) {
+                if (url.indexOf('?') !== -1) {
                     url += '&' + key + '=' + this.query(key);
                 } else {
                     url += '?' + key + '=' + this.query(key);
@@ -165,51 +165,51 @@ window.MONO = {
         }
         return url + ((hash) ? '#' + hash : '');
     },
-    queryExists: function(key) {
+    queryExists: function (key) {
         return (window.location.href.indexOf('?' + key + '=') != -1 || window.location.href.indexOf('&' + key + '=') != -1);
     },
-    query: function(key) {
+    query: function (key) {
         let params = new URLSearchParams(new URL(window.location.href).search);
         return params.get(key);
     },
-    formatMoney: function(number, currency, showCurrencySymbol, showCurrencyCode, min, max, multiplier) {
+    formatMoney: function (number, currency, showCurrencySymbol, showCurrencyCode, min, max, multiplier) {
         let decimal_places = currency.decimals;
         let decimal_point = currency.decimal_point;
         let thousands_separator = currency.thousands_separator;
         number = number.toString().replaceAll(thousands_separator, '').replaceAll(decimal_point, '.');
-        if(number < min) {
+        if (number < min) {
             number = min;
         }
-        if(number > max) {
+        if (number > max) {
             number = max;
         }
-        if(multiplier) {
+        if (multiplier) {
             number = number * multiplier;
         }
         return (showCurrencySymbol ? currency.symbol : '') + this.formatNumber(number, decimal_places, decimal_point, thousands_separator) + (showCurrencyCode ? ' ' + currency.code : '');
     },
-    formatNumber: function(number, decimals = 0, dec_point = '.', thousands_sep = ',') {
+    formatNumber: function (number, decimals = 0, dec_point = '.', thousands_sep = ',') {
         const n = isFinite(+number) ? +number : 0;
         const prec = isFinite(+decimals) ? Math.abs(decimals) : 0;
         const sep = thousands_sep || ',';
         const dec = dec_point || '.';
-        
+
         const toFixedFix = (num, precision) => {
             const k = Math.pow(10, precision);
             return Math.round(num * k) / k;
         };
-        
+
         let [integerPart, decimalPart] = (prec ? toFixedFix(n, prec) : Math.round(n)).toString().split('.');
-        
+
         if (integerPart.length > 3) {
             integerPart = integerPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
         }
-        
+
         if ((decimalPart || '').length < prec) {
             decimalPart = decimalPart || '';
             decimalPart += '0'.repeat(prec - decimalPart.length);
         }
-        
+
         return `${integerPart}${decimalPart ? dec + decimalPart : ''}`;
     }
 };
@@ -225,23 +225,43 @@ navOffcanvas.addEventListener('hide.bs.offcanvas', function () {
 
 let lastScrollTop = 0;
 const body = document.body;
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > lastScrollTop || scrollTop === 0) {
-        body.classList.remove('fixed-header');
-    } else {
+    if (scrollTop > 82) {
         body.classList.add('fixed-header');
+    } else {
+        body.classList.remove('fixed-header');
+    }
+    if (scrollTop > lastScrollTop || scrollTop === 0) {
+        body.classList.remove('fixed-header-shown');
+    } else {
+        body.classList.add('fixed-header-shown');
     }
     lastScrollTop = scrollTop;
 });
 
-$(function(){
-    
-    function checkCountry()
-    {
-        if(typeof no_postal_code_countries === 'undefined') return;
+function onTab(event) {
+    if (event.key === 'Tab') {
+        document.documentElement.classList.add('mb__tabbing');
+        window.removeEventListener('keydown', onTab);
+        window.addEventListener('mousedown', onMouse);
+    }
+}
+
+function onMouse() {
+    document.documentElement.classList.remove('mb__tabbing');
+    window.removeEventListener('mousedown', onMouse);
+    window.addEventListener('keydown', onTab);
+}
+
+window.addEventListener('keydown', onTab);
+
+$(function () {
+
+    function checkCountry() {
+        if (typeof no_postal_code_countries === 'undefined') return;
         let val = $('.country-select').val();
-        if(no_postal_code_countries.includes(val)) {
+        if (no_postal_code_countries.includes(val)) {
             $('#postal_container').addClass('d-none');
             $('#country_container').removeClass('col-lg-4');
             $('#country_container').removeClass('col-lg-6');
@@ -251,12 +271,12 @@ $(function(){
             $('#postal_container').removeClass('d-none');
             $('#country_container').addClass('col-lg-6');
         }
-        if(val === 'AE') {
+        if (val === 'AE') {
             $('#country_container').addClass('col-lg-6');
             $('#state_container').removeClass('d-none');
             $('#state_container').addClass('col-lg-6');
             $('#state_container').removeClass('col-lg-4');
-        } else if(val === 'US' || val === 'GB' || val === 'CA') {
+        } else if (val === 'US' || val === 'GB' || val === 'CA') {
             $('#state_container').removeClass('d-none');
             $('#state_container').removeClass('col-lg-6');
             $('#state_container').addClass('col-lg-4');
@@ -271,383 +291,406 @@ $(function(){
             $('#postal_container').addClass('col-lg-6');
             $('#postal_container').removeClass('col-lg-4');
         }
-        
-        if(val === 'AE') {
+
+        if (val === 'AE') {
             $('#state').parent().find('.floating-label').html('Emirate');
             $('#state').html('');
             var options = [];
-            $.each(arab_emirates, function(key, value)
-            {
-              options.push('<option value="'+ key +'">'+ value +'</option>');
+            $.each(arab_emirates, function (key, value) {
+                options.push('<option value="' + key + '">' + value + '</option>');
             });
             $('#state').html(options.join(''));
         }
-        if(val === 'US') {
+        if (val === 'US') {
             $('#state').parent().find('.floating-label').html('State');
             $('#state').html('');
-           var options = [];
-            $.each(us_states, function(key, value)
-            {
-              options.push('<option value="'+ key +'">'+ value +'</option>');
+            var options = [];
+            $.each(us_states, function (key, value) {
+                options.push('<option value="' + key + '">' + value + '</option>');
             });
             $('#state').html(options.join(''));
         }
-        if(val === 'GB') {
+        if (val === 'GB') {
             $('#state').parent().find('.floating-label').html('Region');
             $('#state').html('');
             var options = [];
-            $.each(gb_regions, function(key, value)
-            {
-              options.push('<option value="'+ key +'">'+ value +'</option>');
+            $.each(gb_regions, function (key, value) {
+                options.push('<option value="' + key + '">' + value + '</option>');
             });
             $('#state').html(options.join(''));
         }
-        if(val === 'CA') {
+        if (val === 'CA') {
             $('#state').parent().find('.floating-label').html('Province');
             $('#state').html('');
             var options = [];
-            $.each(canada_provinces, function(key, value)
-            {
-              options.push('<option value="'+ key +'">'+ value +'</option>');
+            $.each(canada_provinces, function (key, value) {
+                options.push('<option value="' + key + '">' + value + '</option>');
             });
             $('#state').html(options.join(''));
         }
     }
-    
+
     checkCountry();
-    
-    $('body').on('change', '.country-select', function(){
-      checkCountry();
+
+    $('body').on('change', '.country-select', function () {
+        checkCountry();
     });
-    
-    $('body').on('click', '[data-mb-toggle-drawer]', function(e){
+
+    $('body').on('click', '[data-mb-toggle-drawer]', function (e) {
         $('.modal').modal('hide');
         e.preventDefault();
         let drawerId = $(this).data('mb-toggle-drawer');
         let drawerBody = $(drawerId).find('.drawer-body');
-        
-        if(drawerBody.hasClass('scroll')){
+
+        if (drawerBody.hasClass('scroll')) {
             $('body').css({overflow: 'hidden'});
         }
-        
+
         $(drawerId).find('.drawer-body.right').css({
-           right: '-450px' 
+            right: '-450px'
         });
         $(drawerId).find('.drawer-body.right').animate({
             right: "+=450",
         }, 300);
-        
+
         $(drawerId).addClass('shown');
     });
-    
-    
-    $('body').on('click', '.drawer .btn.close-btn', function(e){
+
+
+    $('body').on('click', '.drawer .btn.close-btn', function (e) {
         e.preventDefault();
         let drawerBody = $(this).closest('.drawer-body');
-        if(drawerBody.hasClass('scroll')){
+        if (drawerBody.hasClass('scroll')) {
             $('body').css({overflow: ""});
         }
         $(this).closest('.drawer-body.right').animate({
-                right: "-=450",
-        }, 300, function() {
+            right: "-=450",
+        }, 300, function () {
             $(this).closest('.drawer').removeClass('shown');
         });
     });
-    
-    $('body').on('click', '.drawer', function(e){
+
+    $('body').on('click', '.drawer', function (e) {
         let target = $(e.target);
-        if(target.hasClass('drawer')) {
+        if (target.hasClass('drawer')) {
             let drawerBody = target.find('.drawer-body');
-            if(drawerBody.hasClass('scroll')){
+            if (drawerBody.hasClass('scroll')) {
                 $('body').css({overflow: ""});
             }
             target.find('.drawer-body.right').animate({
-                    right: "-=450",
-            }, 300, function() {
+                right: "-=450",
+            }, 300, function () {
                 $(this).closest('.drawer').removeClass('shown');
             });
         }
     });
-    
+
     function updateQueryStringParameter(uri, key, value) {
-      var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");
-      if (uri.match(re)) {
-        return uri.replace(re, '$1' + key + "=" + value + '$2');
-      } else {
-        var hash =  '';
-        if( uri.indexOf('#') !== -1 ){
-            hash = uri.replace(/.*#/, '#');
-            uri = uri.replace(/#.*/, '');
+        var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");
+        if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        } else {
+            var hash = '';
+            if (uri.indexOf('#') !== -1) {
+                hash = uri.replace(/.*#/, '#');
+                uri = uri.replace(/#.*/, '');
+            }
+            var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+            return uri + separator + key + "=" + value + hash;
         }
-        var separator = uri.indexOf('?') !== -1 ? "&" : "?";    
-        return uri + separator + key + "=" + value + hash;
-      }
     }
-    
+
     $('body').on('slid.bs.carousel', '.carousel', function (e) {
         $('[data-bs-target="#' + $(this).attr('id') + '"][data-bs-slide-to="' + e.from + '"]').removeClass('selected');
         $('[data-bs-target="#' + $(this).attr('id') + '"][data-bs-slide-to="' + e.to + '"]').addClass('selected');
     });
-                
+
     function updateCartItemQuantity(itemId) {
         let quantityInput = $('[data-cart-item-quantity-input="' + itemId + '"]');
         let cartItemId = quantityInput.data('cart-item-quantity-input');
         let quantity = quantityInput.val();
-        
+
         quantityInput.parents('.cart-item').addClass('disabled');
-        
+
         //Update the quantity using ajax...
-        MONO.put('/cart/update-quantity/' + itemId + '?cuuid=' + window.cart_uuid, {
+        MONO.put(MONO.mbURL('/cart/update-quantity/' + itemId + '?cuuid=' + window.cart_uuid), {
             quantity: quantity,
             _token: window.csrf_token
-        }, function(data){
-            if(!data.content.cart) {
+        }, function (data) {
+            if (!data.content.cart) {
                 window.location.href = MONO.mbURL('/cart');
                 return;
             }
-            quantityInput.val(data.content.item_quantity);
+            if (data.content.item_quantity == 0) {
+                quantityInput.parents('.cart-item').remove();
+            } else {
+                quantityInput.val(data.content.item_quantity);
+            }
             $('.mb_cart_subtotal_formatted').text(data.content.cart.subtotal_converted_formatted_long);
-            $('.mb_cart_quantity').text(data.content.cart.quantity);
+            $('.mb_cart_quantity').text((data.content.cart.quantity) > 99 ? '99+' : data.content.cart.quantity);
             quantityInput.parents('.cart-item').removeClass('disabled');
-        }, function() {
+        }, function () {
             quantityInput.parents('.cart-item').removeClass('disabled');
         });
     }
-    
-    $('body').on('blur', '[data-cart-item-quantity-input]', function(){
+
+    $('body').on('blur', '[data-cart-item-quantity-input]', function () {
         updateCartItemQuantity($(this).data('cart-item-quantity-input'));
     });
-    
-    $('body').on('click', '[data-update-item-quantity]', function(){
+
+    $('body').on('click', '[data-update-item-quantity]', function () {
         updateCartItemQuantity($(this).data('update-item-quantity'));
     });
-    
-    $('body').on('click', '[data-cart-item-remove]', function(e){
+
+    $('body').on('click', '[data-cart-item-remove]', function (e) {
         e.preventDefault();
         let removeBtn = $(this);
         let cartItemId = removeBtn.data('cart-item-remove');
         removeBtn.parents('.cart-item').addClass('disabled');
         MONO.delete(MONO.mbURL('/cart/remove-item/' + cartItemId + '?cuuid=' + window.cart_uuid), {
             _token: window.csrf_token
-        }, function(data){
-            if(!data.content.cart) {
+        }, function (data) {
+            if (!data.content.cart) {
                 window.location.href = MONO.mbURL('/cart');
             } else {
                 removeBtn.parents('.cart-item').remove();
                 $('.mb_cart_subtotal_formatted').text(data.content.cart.subtotal_formatted_long);
-                $('.mb_cart_quantity').text(data.content.cart.quantity);
+                $('.mb_cart_quantity').text((data.content.cart.quantity) > 99 ? '99+' : data.content.cart.quantity);
             }
-        }, function() {
+        }, function () {
             removeBtn.parents('.cart-item').removeClass('disabled');
         });
     });
 
-    $('body').on('click', '[data-remove-address]', function(e) {
+    $('body').on('click', '[data-remove-address]', function (e) {
         $('#mb__remove_address_form').attr('action', MONO.mbURL('/account/addresses/' + $(this).data('remove-address')));
     })
 
     const searchInput = $("#mb__search_input");
-    
+    let autoCompleteContainer = $('#mb__search_autocomplete');
+
     function setCursorOnEndofSearchInput() {
         var length = searchInput.val().length;
         searchInput[0].setSelectionRange(length, length);
     }
-    
+
     function focusSearchInput() {
-        searchInput.focus();
-        //For mobile to automatically focus the search input
-        searchInput.trigger('touchstart');
-        setCursorOnEndofSearchInput();
+        setTimeout(function () {
+            searchInput.focus();
+            //For mobile to automatically focus the search input
+            searchInput.trigger('touchstart');
+            setCursorOnEndofSearchInput();
+        }, 300);
     }
-    
+
     function handleSearchBtn(event) {
         event.preventDefault();
         bsNavOffcanvas.hide();
-        $('#mb__search_container').fadeIn("fast");
-        setTimeout(function() {
-            focusSearchInput();
-        }, 500)
+        let searchContainer = $('#mb__search_container');
+        searchContainer.addClass('active');
+
+        if (window.innerHeight >= 800) {
+            autoCompleteContainer.css('max-height', 800);
+        } else {
+            let distanceFromTop = autoCompleteContainer[0].getBoundingClientRect().top;
+            autoCompleteContainer.css('max-height', window.innerHeight - distanceFromTop - 10);
+        }
+        $('body').addClass('overflow-hidden');
+        focusSearchInput();
     }
-    
-    document.getElementById('mb__search_btn').addEventListener('click', handleSearchBtn);
-    
-    //For mobile to automatically focus the search input
-    searchInput.on('touchstart', function(event) {
-        event.target.focus();
-    }, { passive: true });
-    
+
     function closeSearchContainer() {
-        $('#mb__search_container').fadeOut("fast");
-        document.getElementById('mb__search_input').value = "";
+        $('#mb__search_container').removeClass('active');
+        autoCompleteContainer.css('display', 'none');
+        $('body').removeClass('overflow-hidden');
     }
-    
-    $('#mb__search_dismiss_btn').on('click',  function (event) {
+
+    document.getElementById('mb__search_btn').addEventListener('click', handleSearchBtn);
+
+    //For mobile to automatically focus the search input
+    searchInput.on('touchstart', function (event) {
+        event.target.focus();
+    }, {passive: true});
+
+    $('#mb__search_dismiss_btn').on('click', function (event) {
         event.preventDefault();
         closeSearchContainer();
     });
-    
-    let resultsLength = 0;
+
+
     let lastQuery = null;
     let searchTimeout = null;
     let searching = false;
-    let currentCursorPos = -1;
-    
+    let currentCursorPos = 0;
+
     function spin() {
-            $('.mb__search-icon').css('display', 'none');
-            $('.mb__search-spinner').css('display', 'block');
-        }
-        
+        $('.mb__search-icon').css('display', 'none');
+        $('.mb__search-spinner').css('display', 'block');
+    }
+
     function stopSpin() {
         $('.mb__search-icon').css('display', 'block');
         $('.mb__search-spinner').css('display', 'none');
     }
-    
+
     let searchCache = [];
-    
-    function handleSearch(query, hideSpinner, hideAutoComplete) {
-        
-        if(searchTimeout) {
+    let mbSearchTimeout = null;
+
+    function handleSearch(query, hideSpinner, hideAutoComplete, delay) {
+
+        if (searchTimeout) {
             clearTimeout(searchTimeout);
             stopSpin();
             searchTimeout = null;
         }
-        
-        if(query.length == 0) {
-            resultsLength = 0;
+
+        if (query.length === 0) {
             lastQuery = null;
-            $('#mb__search_autocomplete').css('display', 'none');
-            $('#mb__search_autocomplete').html('');
-            currentCursorPos = -1;
+            autoCompleteContainer.css('display', 'none');
+            autoCompleteContainer.html('');
+            currentCursorPos = 0;
             return;
         }
-        
-        if(lastQuery == query) {
+
+        if (lastQuery === query) {
+            if (!hideAutoComplete) {
+                autoCompleteContainer.css('display', 'block');
+            }
             return;
         }
-        
+
+        if (!delay) {
+            delay = 400;
+        }
+
         lastQuery = query;
-        
-        searchTimeout = setTimeout(function() {
-            if(!hideSpinner && searching) {
-                spin();
-            }
-        }, 400);
-        
+
         searching = true;
-        
-        currentCursorPos = -1;
-        
+
         function handleResponse(response) {
-            response = response.hits;
-            resultsLength = response.length;
-            if(response.length && !hideAutoComplete && searchInput.val().length) {
-                $('#mb__search_autocomplete').css('display', 'block');
-            } else {
-                $('#mb__search_autocomplete').css('display', 'none');
+            autoCompleteContainer.html(response.html);
+            if (!hideAutoComplete) {
+                autoCompleteContainer.css('display', 'block');
             }
             stopSpin();
-            $('#mb__search_autocomplete').html('');
-            for(let i = 0; i < response.length; i++) {
-                let result = response[i]._source;
-                if(result.image_url.length == 0) {
-                    result.image_url = 'https://monobill.nyc3.cdn.digitaloceanspaces.com/img%2Fplaceholder-img.jpg';
-                }
-                $('#mb__search_autocomplete').append('<a data-search-index="' + i + '" href="' + MONO.mbURL(result.url) + '">' +
-                            '<div class="mb__search-result">' +
-                                '<div class="mb__search-result-img"><img src="' + result.image_url + '" alt=""></div>' +
-                                '<div class="mb__search-result-txt">' + result.name + '</div>' +
-                            '</div>' +
-                        '</a>')
-            }
-            $(".mb__search-result-txt").mark(query);
+            $(".mb__search_result_txt").mark(query);
             searching = false;
         }
-        
-        if(typeof searchCache[query] !== 'undefined') {
+
+        if (typeof searchCache[query] !== 'undefined') {
             searching = false;
             stopSpin();
-            handleResponse(searchCache[query] );
+            handleResponse(searchCache[query]);
         } else {
-            MONO.get('https://search.monobill.com/autocomplete/' + store_id + '/products?sales_channel=online_store&q=' + query, function(response) {
-                searchCache[query] = response;
-                handleResponse(response);
-            }, function() {
-                resultsLength = 0;
-                $('#mb__search_autocomplete').html('');
-                $('#mb__search_autocomplete').css('display', 'none');
-                searching = false;
-                stopSpin();
-            });
+            if (mbSearchTimeout) {
+                clearTimeout(mbSearchTimeout);
+            }
+            mbSearchTimeout = setTimeout(function () {
+                if (!hideSpinner && searching) {
+                    spin();
+                }
+                MONO.get(MONO.mbURL('/search/auto-complete?section_id=search_autocomplete.twig&q=' + query), function (response) {
+                    mbSearchTimeout = null;
+                    searchCache[query] = response;
+                    handleResponse(response);
+                }, function () {
+                    mbSearchTimeout = null;
+                    autoCompleteContainer.html('');
+                    autoCompleteContainer.css('display', 'none');
+                    searching = false;
+                    stopSpin();
+                });
+            }, delay)
         }
-        
     }
-    
-    if(searchInput.val().length) {
-        handleSearch(searchInput.val(), true, true);
+
+    if (searchInput.val().length) {
+        handleSearch(searchInput.val(), true, true, 0);
     }
-    
+
     function scrollUpSearchResults() {
-        if(currentCursorPos === -1 || currentCursorPos - 1 < 0) {
-            currentCursorPos = resultsLength - 1;
+        if (currentCursorPos - 1 <= 0) {
+            currentCursorPos = $('.mb__autocomplete').data('results-count');
         } else {
             currentCursorPos -= 1;
         }
-        $('#mb__search_autocomplete').find('[data-search-index="' + currentCursorPos + '"]').focus();
+        autoCompleteContainer.find('[data-search-index]').removeClass('selected');
+        let elem = autoCompleteContainer.find('[data-search-index="' + currentCursorPos + '"]');
+        elem.addClass('selected');
+        autoCompleteContainer.scrollTop(autoCompleteContainer.scrollTop() + elem.position().top);
     }
-    
+
     function scrollDownSearchResults() {
-        if(currentCursorPos === -1 || currentCursorPos + 1 > resultsLength - 1) {
-            currentCursorPos = 0;
+        if (currentCursorPos + 1 > $('.mb__autocomplete').data('results-count')) {
+            currentCursorPos = 1;
         } else {
             currentCursorPos += 1;
         }
-        $('#mb__search_autocomplete').find('[data-search-index="' + currentCursorPos + '"]').focus();
+        autoCompleteContainer.find('[data-search-index]').removeClass('selected');
+        let elem = autoCompleteContainer.find('[data-search-index="' + currentCursorPos + '"]');
+        elem.addClass('selected');
+        autoCompleteContainer.scrollTop(autoCompleteContainer.scrollTop() + elem.position().top);
     }
-    
-    $('body').on('keydown', function(e) {
-        if(event.keyCode === 38 && resultsLength > 0 && ($('[data-search-index]:focus').length || searchInput.is(':focus'))) {
+
+    $('body').on('keydown', function (e) {
+        if (event.keyCode === 38 && $('.mb__autocomplete').data('results-count') > 0 && ($('[data-search-index]:focus').length || searchInput.is(':focus'))) {
             e.preventDefault();
             scrollUpSearchResults();
         }
-        if(event.keyCode === 40 && resultsLength > 0 && ($('[data-search-index]:focus').length || searchInput.is(':focus'))) {
+        if (event.keyCode === 40 && $('.mb__autocomplete').data('results-count') > 0 && ($('[data-search-index]:focus').length || searchInput.is(':focus'))) {
             e.preventDefault();
             scrollDownSearchResults();
         }
-        
-        if(event.keyCode === 8 && resultsLength > 0 && $('[data-search-index]:focus').length) {
+
+        if (event.keyCode === 8 && $('.mb__autocomplete').data('results-count') > 0 && $('[data-search-index]:focus').length) {
             e.preventDefault();
             focusSearchInput();
-            searchInput.val(searchInput.val().substring(0, searchInput.val().length-1));
+            searchInput.val(searchInput.val().substring(0, searchInput.val().length - 1));
         }
     });
-    
-    searchInput.on('input click focus', function(e) {
+
+    searchInput.on('input click focus', function (e) {
         let query = $(this).val();
         handleSearch(query);
     });
-    
-    searchInput.on('focus', function(e) {
-        if(resultsLength) {
+
+    searchInput.on('focus', function (e) {
+        if ($('.mb__autocomplete').data('results-count')) {
             $('#mb__search_autocomplete').css('display', 'block');
         }
     });
-    
-    $('body').on('click', function(e) {
-        if(!$(e.target).closest('.search-box').length && !$(e.target).closest('#mb__search_btn').length) {
+
+    searchInput.on('keydown', function (e) {
+        let keyCode = e.keyCode || e.which;
+        if (keyCode === 9) {
+            closeSearchContainer();
+        }
+        if (keyCode === 13) {
+            let selectedSearchResult = $('[data-search-index="' + currentCursorPos + '"].selected');
+            if (selectedSearchResult.length) {
+                e.preventDefault();
+                window.location.href = selectedSearchResult.attr('href');
+            }
+        }
+    });
+
+    if ($('.search-container.auto-hide').length) {
+        $('.mb__search_overlay').on('click', function (e) {
+            closeSearchContainer();
+        });
+    }
+
+    $('body').on('click', function (e) {
+        if ($(e.target).closest('.search-container').length) {
+            searchInput.focus();
+        }
+        if (!$(e.target).closest('.search-container').length && !$(e.target).closest('#mb__search_btn').length) {
             $('#mb__search_autocomplete').css('display', 'none');
         }
     });
-    
-    if($('.search-container.auto-hide').length) {
-        $('body').on('click', function(e) {
-            if(!$(e.target).closest('.search-container.auto-hide').length && !$(e.target).closest('#mb__search_btn').length) {
-                closeSearchContainer();
-            }
-        });
-    }
 });
 
-function mb__zoom(event){
+function mb__zoom(event) {
     if (!matchMedia('(pointer:fine)').matches) {
         return
     }
@@ -662,40 +705,40 @@ function mb__zoom(event){
 
 let quantitySpinnerEventTimeout = null;
 
-$('body').on('click', '.mb__quantity_spinner_minus', function(e) {
+$('body').on('click', '.mb__quantity_spinner_minus', function (e) {
     let input = $(this).parent().find('input');
-    if(input.val() <= parseInt(input.attr('min'))) {
+    if (input.val() <= parseInt(input.attr('min'))) {
         return;
     }
     input.val(parseInt(input.val()) - 1);
-    
-    if(quantitySpinnerEventTimeout) {
+
+    if (quantitySpinnerEventTimeout) {
         clearTimeout(quantitySpinnerEventTimeout);
     }
-    quantitySpinnerEventTimeout = setTimeout(function() {
+    quantitySpinnerEventTimeout = setTimeout(function () {
         input.trigger('blur');
     }, 800);
 });
 
 
-$('body').on('click', '.mb__quantity_spinner_plus', function(e) {
+$('body').on('click', '.mb__quantity_spinner_plus', function (e) {
     let input = $(this).parent().find('input');
-    if(input.val() >= parseInt(input.attr('max'))) {
+    if (input.val() >= parseInt(input.attr('max'))) {
         return;
     }
     input.val(parseInt(input.val()) + 1);
-    if(quantitySpinnerEventTimeout) {
+    if (quantitySpinnerEventTimeout) {
         clearTimeout(quantitySpinnerEventTimeout);
     }
-    quantitySpinnerEventTimeout = setTimeout(function() {
+    quantitySpinnerEventTimeout = setTimeout(function () {
         input.trigger('blur');
     }, 800);
 });
 
 let currencySelect = document.getElementById('mb__currency_select');
 
-if(currencySelect) {
-    currencySelect.addEventListener('change', function(e) {
+if (currencySelect) {
+    currencySelect.addEventListener('change', function (e) {
         let url = new URL(window.location.href);
         url.searchParams.set('x_user_currency', e.target.value);
         window.location.href = url.href;
@@ -704,8 +747,8 @@ if(currencySelect) {
 
 let countrySelect = document.getElementById('mb__country_select');
 
-if(countrySelect) {
-    countrySelect.addEventListener('change', function(e) {
+if (countrySelect) {
+    countrySelect.addEventListener('change', function (e) {
         let url = new URL(window.location.href);
         url.searchParams.set('x_user_country', e.target.value);
         window.location.href = url.href;
@@ -714,30 +757,66 @@ if(countrySelect) {
 
 let languageSelect = document.getElementById('mb__language_select');
 
-if(languageSelect) {
-    languageSelect.addEventListener('change', function(e) {
+if (languageSelect) {
+    languageSelect.addEventListener('change', function (e) {
         let url = new URL(window.location.href);
         url.searchParams.set('x_user_language', e.target.value);
         window.location.href = url.href;
     });
 }
 
+var productConfigureClicked = null;
+
+$('body').on('click', '#configure_product_form [type="submit"]', function (e) {
+    productConfigureClicked = $(this);
+});
+
+$('body').on('submit', '#configure_product_form', function (e) {
+    if (productConfigureClicked && productConfigureClicked.val() === 'add_to_cart') {
+        let buttonOldHtml = productConfigureClicked.html();
+        productConfigureClicked.attr('disabled', true);
+        productConfigureClicked.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>');
+        e.preventDefault();
+        let formData = new FormData($(this)[0]);
+        $('.mb__dynamic_cart_wrapper .mb__dynamic_cart').removeClass('active');
+        //Use ajax to submit this item to cart and render the section for the dynamic cart
+        MONO.post(MONO.mbURL('/cart?render-dynamic-cart=1&section_id=dynamic_cart.twig'),
+            formData, function (data) {
+                $('.mb_cart_quantity').text((data.cart.quantity) > 99 ? '99+' : data.cart.quantity);
+                let dynamicCartWrapper = $('.mb__dynamic_cart_wrapper');
+                dynamicCartWrapper.html(data.html);
+                setTimeout(function () {
+                    dynamicCartWrapper.find('.mb__dynamic_cart').addClass('active');
+                }, 10);
+                productConfigureClicked.attr('disabled', false);
+                productConfigureClicked.html(buttonOldHtml);
+            }, function () {
+                productConfigureClicked.attr('disabled', false);
+                productConfigureClicked.html(buttonOldHtml);
+            });
+    }
+});
+
+$('body').on('click', '.mb__dynamic_cart_wrapper .mb__dynamic_cart_close', function (e) {
+    $('.mb__dynamic_cart_wrapper .mb__dynamic_cart').removeClass('active');
+});
+
 
 function reloadSection(index, success) {
     let query = location.search;
 
-    if(query.length) {
+    if (query.length) {
         query += '&render_section=' + index;
     } else {
         query += '?render_section=' + index;
     }
-    
-     MONO.get({
+
+    MONO.get({
         url: location.pathname + query,
         timeout: 2,
         retry: 1,
-        success: function(response) {
-            success(response);
+        success: function (response) {
+            success(response.html);
         }
-     });
+    });
 }
