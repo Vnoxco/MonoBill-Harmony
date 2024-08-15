@@ -148,7 +148,8 @@
         "showing_all_results": "Showing all :shown_count results",
         "item_added_to_cart": "Item added to your cart",
         "taxes": "Taxes",
-        "calculated_at_checkout": "Calculated at checkout"
+        "calculated_at_checkout": "Calculated at checkout",
+        "no_blog_posts_found": "We haven't created any blog posts as yet. You can check back soon or subscribe to our newsletter to receive an email."
     },
     "buttons": {
         "my_account": "My account",

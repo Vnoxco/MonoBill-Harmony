@@ -284,10 +284,10 @@
                     {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
                 {% endif %}
                 {% if order.checkout_session.pickup_option and order.status != 'collected' %}
-                    {% if order.pickup_time %}
+                    {% if order.checkout_session.pickup_time %}
                         <h6 class="h6">Order pickup time: {{ order.checkout_session.pickup_time_formatted }}</h6>
                     {% endif %}
-                    {% if order.pickup_instructions %}
+                    {% if order.checkout_session.pickup_option.instructions %}
                         <a href='#!' class="text-primary" data-toggle="modal"
                            data-target="#pickup-instructions">{{ __('buttons.view_pickup_instructions') }}</a>
                         <div class="modal fade" id="pickup-instructions" tabindex="-1"

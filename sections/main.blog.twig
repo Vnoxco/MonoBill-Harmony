@@ -23,6 +23,8 @@
                         <small class="text-muted fw-bold">{{ blogPost.published_at_formatted }}</small>
                         <p class="text-muted mt-2">{{ blogPost.excerpt }}</p>
                     </a>
+                {% else %}
+                    <p>{{ __('info.no_blog_posts_found') }}</p>
                 {% endfor %}
             </div>
         </div>
@@ -32,7 +34,8 @@
                     {% for link in blog_posts.links %}
                         <li class="page-item {% if link.active or link.url == null %}disabled{% endif %}">
                             {% if link.active or link.url == null %}
-                                <span class="page-link border-0 rounded-0" aria-hidden="true">{{ link.label | raw }}</span>
+                                <span class="page-link border-0 rounded-0"
+                                      aria-hidden="true">{{ link.label | raw }}</span>
                             {% else %}
                                 <a class="page-link border-0 rounded-0"
                                    href="{{ url('/blog' ~ link.url) }}">{{ link.label | raw }}</a>
