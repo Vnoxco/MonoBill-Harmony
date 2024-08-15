@@ -1923,3 +1923,10 @@ select option.mb__out-of-stock {
     }
   }
 }
+
+.modal-backdrop {
+  z-index: 5001;
+}
+.modal {
+  z-index: 5002;
+}

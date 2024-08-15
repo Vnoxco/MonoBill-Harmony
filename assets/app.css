@@ -1772,5 +1772,12 @@ select option.mb__out-of-stock {
     font-size: 18px;
   }
 }
+.modal-backdrop {
+  z-index: 5001;
+}
+
+.modal {
+  z-index: 5002;
+}
 
 /*# sourceMappingURL=app.css.map */

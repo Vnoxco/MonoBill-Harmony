@@ -288,8 +288,8 @@
                         <h6 class="h6">Order pickup time: {{ order.checkout_session.pickup_time_formatted }}</h6>
                     {% endif %}
                     {% if order.checkout_session.pickup_option.instructions %}
-                        <a href='#!' class="text-primary" data-toggle="modal"
-                           data-target="#pickup-instructions">{{ __('buttons.view_pickup_instructions') }}</a>
+                        <a href='#!' class="text-primary" data-bs-toggle="modal"
+                           data-bs-target="#pickup-instructions">{{ __('buttons.view_pickup_instructions') }}</a>
                         <div class="modal fade" id="pickup-instructions" tabindex="-1"
                              aria-labelledby="pickup-instructions-label" aria-hidden="true">
                             <div class="modal-dialog">
@@ -297,9 +297,7 @@
                                     <div class="modal-header">
                                         <h5 class="modal-title h5"
                                             id="pickup-instructions-label">{{ __('titles.pickup_instructions') }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         {{ order.checkout_session.pickup_option.instructions | raw }}
