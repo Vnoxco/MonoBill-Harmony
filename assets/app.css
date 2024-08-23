@@ -300,6 +300,11 @@ html.mb__tabbing *:focus {
     box-shadow: 0 0 0 1px #cccccc;
   }
 }
+.monobill__section.monobill__footer {
+  margin-bottom: 0 !important;
+  margin-top: auto;
+}
+
 hr {
   margin-top: 20px;
   margin-bottom: 20px;

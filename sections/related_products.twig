@@ -1,8 +1,9 @@
 <script schema type="application/json">
     {
         "name": "Related Products",
+        "icon": "exchange-alt",
         "allowed_templates": [
-            "product.json"
+            "default.product.json"
         ],
         "settings": {
             "title": {
@@ -16,7 +17,7 @@
                 "hidden_in_customizer": true
             }
         }
-}
+    }
 </script>
 
 <script on_update type="text/javascript">
@@ -31,15 +32,15 @@
             <div class="items items_{{schema.index}} no-print">
                 {% for relatedProduct in schema.settings.related_products.related_products %}
                     {{ card({
-                        heading: product.brand_name ? __('custom.' ~ product.brand_name) : '⠀',
-                        title: __('custom.' ~ product.name),
-                        image_path: product.default_variant_image_path ? product.default_variant_image_path : product.default_image_path,
-                        badge: product.on_sale ? __('titles.sale') : null,
-                        price: product.default_variant_price ?? product.price,
-                        compare_price: product.default_variant_compare_price ?? product.compare_price,
-                        uri: product.uri,
-                        track_inventory: product.track_inventory,
-                        available: product.available
+                        heading: relatedProduct.brand_name ? __('custom.' ~ relatedProduct.brand_name) : '⠀',
+                        title: __('custom.' ~ relatedProduct.name),
+                        image_path: relatedProduct.default_variant_image_path ? relatedProduct.default_variant_image_path : relatedProduct.default_image_path,
+                        badge: relatedProduct.on_sale ? __('titles.sale') : null,
+                        price: relatedProduct.default_variant_price ?? relatedProduct.price,
+                        compare_price: relatedProduct.default_variant_compare_price ?? relatedProduct.compare_price,
+                        uri: relatedProduct.uri,
+                        track_inventory: relatedProduct.track_inventory,
+                        available: relatedProduct.available
                     }) }}
                 {% endfor %}
             </div>
