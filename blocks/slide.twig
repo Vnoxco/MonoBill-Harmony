@@ -1,0 +1,72 @@
+<script schema type="application/json">
+    {
+        "name": "Slide",
+        "icon": "images",
+        "description": "Showcase a image with a text and a button.",
+        "allowed_sections": "image_slider.twig",
+        "settings": {
+            "image": {
+                "label": "Image",
+                "type": "image",
+                "default": null
+            },
+            "heading": {
+                "label": "Heading",
+                "type": "text",
+                "default": "Showcase your products"
+            },
+            "text": {
+                "label": "Text",
+                "type": "text",
+                "default": "Do it boldly"
+            },
+            "image_position": {
+                "label": "Image position",
+                "type": "option",
+                "options": {
+                    "top": "Top",
+                    "center": "Center",
+                    "bottom": "Bottom"
+                },
+                "default": "center"
+            },
+            "content_position": {
+                "label": "Content position",
+                "type": "option",
+                "options": {
+                    "left": "Left",
+                    "center": "Center",
+                    "right": "Right"
+                },
+                "default": "left"
+            },
+            "button": {
+                "label": "Button",
+                "type": "button",
+                "default": {
+                    "label": "Button",
+                    "style": "dark"
+                }
+            }
+        }
+    }
+</script>
+
+{% from "macros/button.twig" import button %}
+
+<div class="mb__slider_slide carousel-item {% if schema.index == 0 %}active{% endif %}"
+     style="background-image: url('{% if schema.settings.image.image %}{{ schema.settings.image.image.public_path }}{% else %}https://assets.gomonobill.com/monobill/default_slide.jpg{% endif %}'); background-position: center {{ schema.settings.image_position.value }};">
+    <div class="slide-text text-center {% if schema.settings.content_position.value == 'left' %}left-align{% elseif schema.settings.content_position.value == 'center' %}center-align{% elseif schema.settings.content_position.value == 'right' %}right-align{% endif %}">
+        {% if schema.settings.heading.value or schema.settings.text.value %}
+            <div class="slide-lines">
+                {% if schema.settings.heading.value %}<h1
+                        class="slide-heading text-white">{{ __('custom.' ~ schema.settings.heading.value) }}</h1>{% endif %}
+                {% if schema.settings.text.value %}<h4
+                        class="slide-subheading text-white">{{ __('custom.' ~ schema.settings.text.value) }}</h4>{% endif %}
+            </div>
+        {% endif %}
+        {% if schema.settings.button.value.label %}
+            {{ button(schema.settings.button.value, 'resizing-btn') }}
+        {% endif %}
+    </div>
+</div>

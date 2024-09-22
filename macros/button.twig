@@ -1,0 +1,16 @@
+{% macro button(button, classes) %}
+    <a href="{% if button.type == 'url' %}
+                {{ url(button.url) }}
+             {% elseif button.type == 'product' %}
+                {{ url(button.product.uri) }}
+            {% elseif button.type == 'category' %}
+                {{ url(button.category.uri) }}
+            {% elseif button.type == 'blog_post' %}
+                {{ url(button.blog_post.uri) }}
+            {% elseif button.type == 'page' %}
+                {{ url(button.page.uri) }}
+            {% endif %}"
+       class="btn btn-{{ button.style }} btn-lg {{ classes }}">
+        {{ button.label }} {% if button.show_arrow %}<i class="bi bi-arrow-right"></i>{% endif %}
+    </a>
+{% endmacro %}
