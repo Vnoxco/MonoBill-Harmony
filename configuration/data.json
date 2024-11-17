@@ -40,27 +40,10 @@
         }
       },
       {
-        "id": "spacing.twig",
-        "settings": {
-          "gap": "5",
-          "top_gap": "3",
-          "bottom_gap": "0",
-          "divider": true
-        }
-      },
-      {
         "id": "product_slider.twig",
         "settings": {
           "title": "POPULAR ITEMS",
           "products": []
-        }
-      },
-      {
-        "id": "spacing.twig",
-        "settings": {
-          "top_gap": "0",
-          "bottom_gap": "3",
-          "divider": 0
         }
       },
       {
@@ -129,26 +112,10 @@
         ]
       },
       {
-        "id": "spacing.twig",
-        "settings": {
-          "divider": 1,
-          "top_gap": "3",
-          "bottom_gap": "4"
-        }
-      },
-      {
         "id": "category_slider.twig",
         "settings": {
           "title": "CATEGORIES",
           "categories": []
-        }
-      },
-      {
-        "id": "spacing.twig",
-        "settings": {
-          "divider": true,
-          "top_gap": "3",
-          "bottom_gap": "4"
         }
       },
       {

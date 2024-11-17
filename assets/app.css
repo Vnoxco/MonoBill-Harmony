@@ -342,9 +342,9 @@ header {
   background: #fff;
   border: 1px solid #dddddd;
   padding: 1rem 1.5rem;
-  transform: translateY(-120%);
+  transform: translateY(-200%);
   transition: transform 0.4s ease-in-out;
-  z-index: -1;
+  z-index: 500;
 }
 .mb__dynamic_cart_wrapper .mb__dynamic_cart.active {
   transform: translateY(0);
@@ -429,6 +429,10 @@ header {
   }
 }
 @media (max-width: 992px) {
+  .navbar .dropdown-menu {
+    margin-top: 0;
+  }
+
   .slide-heading {
     font-size: 34px;
   }
@@ -513,7 +517,7 @@ header {
 }
 
 .navbar .dropdown-menu {
-  margin-top: 0;
+  margin-top: 10px;
   border-radius: 0;
 }
 
@@ -1562,7 +1566,7 @@ a:hover {
 
 .mb__quantity_spinner button {
   border: 1px solid #080808;
-  border-radius: 50%;
+  border-radius: 10px;
   font-size: 0.9rem;
   padding: 0.2rem 0.37rem;
   background: none;

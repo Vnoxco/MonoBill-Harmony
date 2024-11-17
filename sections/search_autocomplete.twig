@@ -54,7 +54,7 @@
                                    data-search-index="{{ loop.index + search_results.suggestions | length + search_results.blog_posts | length + search_results.pages | length }}"
                                    href="{{ url(product.uri) }}">
                                     <div class="mb__search_result_img">
-                                        <img src="{{ product.image_url }}" alt="{{ __('custom.' ~ product.name) }}">
+                                        <img src="{%  if product.image_url %}{{ product.image_url }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}" alt="{{ __('custom.' ~ product.name) }}">
                                     </div>
                                     <p class="mb__search_result_product_name mb__search_result_txt">{{ __('custom.' ~ product.name) }}</p>
                                 </a>

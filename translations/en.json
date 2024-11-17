@@ -25,7 +25,8 @@
         "sort_by_relevance": "Sort by relevance",
         "sort_by_latest": "Sort by latest",
         "sort_by_price_low_to_high": "Sort by price: low to high",
-        "sort_by_price_high_to_low": "Sort by price: high to low"
+        "sort_by_price_high_to_low": "Sort by price: high to low",
+        "qty": "Qty."
     },
     "titles": {
         "select_billing_address": "Select billing address",
@@ -149,7 +150,8 @@
         "item_added_to_cart": "Item added to your cart",
         "taxes": "Taxes",
         "calculated_at_checkout": "Calculated at checkout",
-        "no_blog_posts_found": "We haven't created any blog posts as yet. You can check back soon or subscribe to our newsletter to receive an email."
+        "no_blog_posts_found": "We haven't created any blog posts as yet. You can check back soon or subscribe to our newsletter to receive an email.",
+        "required": "required"
     },
     "buttons": {
         "my_account": "My account",

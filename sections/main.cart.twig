@@ -40,7 +40,7 @@
                                                 : {{ item.gift_card_message }}</p>
                                         {% endif %}
                                     {% else %}
-                                        <a href="{{ url(item.product.link.uri ~ ((item.variant) ? '?variant=' ~ item.variant.id : '')) }}">{{ item.product.name }}</a>
+                                        <a href="{{ url(item.product.link.uri ~ ((item.variant) ? '?variant=' ~ item.variant.id : '')) }}" class="fs-5">{{ item.product.name }}</a>
                                         <div class="item-config">
                                             {% if item.variant %}
                                                 {% for variantOptionValue in item.variant.variant_option_values %}
@@ -55,6 +55,9 @@
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
+                                        {% for modifierOption in item.cart_item_modifier_options %}
+                                            <b>{{ modifierOption.product_modifier.name }}:</b>{% if modifierOption.quantity > 1%} {{ modifierOption.quantity }}x{% endif%} {{ modifierOption.product_modifier_option.name }}<br>
+                                        {% endfor %}
                                         {% if auth().check() and get_store_plan_feature('save_item_for_later') %}
                                             <a data-cart-item-save="{{ item.id }}" class="mt-2 mb-2 d-inline-block"
                                                style="font-size: 14px;"
@@ -69,7 +72,7 @@
                                     {% if item.gift_card_value == null and (item.product.track_inventory == false or item.max_quantity_selection > 0) %}
                                         <div class="mb__quantity_spinner">
                                             <button type="button" class="mb__quantity_spinner_minus"
-                                                    id="mb__quantity_spinner_minus"><i class="bi bi-dash-lg"></i>
+                                                    id="mb__quantity_spinner_minus" data-key="minus_{{ item.id }}"><i class="bi bi-dash-lg"></i>
                                             </button>
                                             <input type="number"
                                                    data-current-quantity="{{ item.quantity }}"
@@ -77,7 +80,7 @@
                                                    value="{{ item.quantity }}" min="0"
                                                    max="{{ (item.product.track_inventory) ? item.max_quantity_selection : '' }}">
                                             <button type="button" class="mb__quantity_spinner_plus"
-                                                    id="mb__quantity_spinner_plus"><i class="bi bi-plus-lg"></i>
+                                                    id="mb__quantity_spinner_plus" data-key="plus_{{ item.id }}"><i class="bi bi-plus-lg"></i>
                                             </button>
                                         </div>
                                     {% endif %}

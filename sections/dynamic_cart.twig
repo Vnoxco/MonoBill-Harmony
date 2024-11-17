@@ -26,26 +26,22 @@
                         : {{ item.gift_card_message }}</p>
                 {% endif %}
             {% else %}
-                {{ item.product.name }}
+                <span class="fs-5">{{ item.product.name }}</span>
                 <div class="item-config">
                     {% if item.variant %}
                         {% for variantOptionValue in item.variant.variant_option_values %}
                             <b>{{ variantOptionValue.product_variant_option.name }}:</b>
                             {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
-                                <span class="swatch"
-                                      style="background-color:{{ variantOptionValue.value }}">
-                                                                </span>
+                                <span class="swatch" style="background-color:{{ variantOptionValue.value }}"></span>
                             {% else %}
                                 {{ variantOptionValue.value }}
                             {% endif %}
                         {% endfor %}
                     {% endif %}
                 </div>
-                {% if auth().check() and get_store_plan_feature('save_item_for_later') %}
-                    <a data-cart-item-save="{{ item.id }}" class="mt-2 mb-2 d-inline-block"
-                       style="font-size: 14px;"
-                       href="#!">{{ __('buttons.save_for_later') }}</a>
-                {% endif %}
+                {% for modifierOption in item.cart_item_modifier_options %}
+                    <b>{{ modifierOption.product_modifier.name }}:</b>{% if modifierOption.quantity > 1%} {{ modifierOption.quantity }}x{% endif%} {{ modifierOption.product_modifier_option.name }}<br>
+                {% endfor %}
             {% endif %}
         </div>
     </div>

@@ -105,6 +105,9 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
+                                    {% for modifierOption in item.order_item_modifier_options %}
+                                        <b>{{ modifierOption.product_modifier.name }}:</b>{% if modifierOption.quantity > 1%} {{ modifierOption.quantity }}x{% endif%} {{ modifierOption.product_modifier_option.name }}<br>
+                                    {% endfor %}
                                 {% endif %}
                             </td>
                             <td class="align-middle">

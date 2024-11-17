@@ -90,7 +90,9 @@
                                 {% if globals.store.company_tax_id is not null %}
                                     <p>{{ __('forms.tax_id') }}: {{ globals.store.company_tax_id }}</p>
                                 {% endif %}
-                                <p><a href="https://{{ globals.store.default_domain.domain }}">https://{{ globals.store.default_domain.domain }}</a></p>
+                                <p>
+                                    <a href="https://{{ globals.store.default_domain.domain }}">https://{{ globals.store.default_domain.domain }}</a>
+                                </p>
                             </div>
                             <div class="col-6 text-right">
                                 <p class="text-primary"
@@ -171,6 +173,26 @@
                                                     {% else %}
                                                         {{ item.custom_item_name }}
                                                     {% endif %}
+                                                    <div class="d-block item-config">
+                                                        {% if item.variant %}
+                                                            {% for variantOptionValue in item.variant.variant_option_values %}
+                                                                {{ variantOptionValue.product_variant_option.name }}:
+                                                                <span class="me-2">
+                                                                    {% if variantOptionValue.product_variant_option.type == 'color_swatch' %}
+                                                                        <span class="swatch"
+                                                                              style="background-color:{{ variantOptionValue.value }}">
+                                                                    </span>
+                                                                    {% else %}
+                                                                        {{ variantOptionValue.value }}
+                                                                    {% endif %}
+                                                                </span>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    {% for modifierOption in item.order_item_modifier_options %}
+                                                        <b>{{ modifierOption.product_modifier.name }}:</b>{% if modifierOption.quantity > 1 %} {{ modifierOption.quantity }}x{% endif %} {{ modifierOption.product_modifier_option.name }}
+                                                        <br>
+                                                    {% endfor %}
                                                 </td>
                                                 <td class="text-center align-middle">{{ item.quantity }}</td>
                                                 <td class="text-right align-middle">
