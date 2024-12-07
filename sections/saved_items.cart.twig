@@ -60,7 +60,7 @@ $(function(){
        let savebtn = $(this);
        let cartItemId = savebtn.data('cart-item-save');
        savebtn.parents('.cart-item').addClass('disabled');
-       MONO.put('/cart/save-item/' + cartItemId + '?cuuid=' + window.cart_uuid, {
+       MONO.put(MONO.mbURL('/cart/save-item/' + cartItemId + '?cuuid=' + window.cart_uuid), {
            _token: window.csrf_token
        }, function(data) {
             reloadSections();
@@ -75,7 +75,7 @@ $(function(){
        let btn = $(this);
        let savedItemId = btn.data('move-to-cart');
        btn.addClass('disabled');
-       MONO.put('/cart/move-to-cart/' + savedItemId + '?cuuid=' + window.cart_uuid, {
+       MONO.put(MONO.mbURL('/cart/move-to-cart/' + savedItemId + '?cuuid=' + window.cart_uuid), {
            _token: window.csrf_token
        }, function(data) {
             reloadSections();
@@ -90,7 +90,7 @@ $(function(){
        let btn = $(this);
        let savedItemId = btn.data('delete-saved-item');
        btn.addClass('disabled');
-       MONO.delete('/cart/delete-saved-item/' + savedItemId, {
+       MONO.delete(MONO.mbURL('/cart/delete-saved-item/' + savedItemId), {
            _token: window.csrf_token
        }, function(data) {
             reloadSections();
