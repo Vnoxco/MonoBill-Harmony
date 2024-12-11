@@ -40,9 +40,9 @@
         }
       },
       {
-        "id": "product_slider.twig",
+        "id": "latest_products_slider.twig",
         "settings": {
-          "title": "POPULAR ITEMS",
+          "title": "PRODUCTS",
           "products": []
         }
       },
