@@ -42,8 +42,7 @@
       {
         "id": "latest_products_slider.twig",
         "settings": {
-          "title": "PRODUCTS",
-          "products": []
+          "title": "PRODUCTS"
         }
       },
       {
