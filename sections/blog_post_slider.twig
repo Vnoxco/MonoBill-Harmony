@@ -38,7 +38,7 @@
     {% from "macros/card.twig" import card %}
     <div class="container">
         {% if schema.settings.blog_posts.blog_posts | length > 0 or 'theme_editor=1' in url() %}
-            <h2 class="text-center mt-5 mb-5">{{ __(schema.settings.title.value) }}</h2>
+            <h2 class="text-center mb-5">{{ __(schema.settings.title.value) }}</h2>
         {% endif %}
         {% if schema.settings.blog_posts.blog_posts | length > 0 %}
             <div class="items items_{{schema.index}} no-print">

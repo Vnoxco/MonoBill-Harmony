@@ -24,7 +24,7 @@
 {% block content %}
     {% from "macros/card.twig" import card %}
     <div class="container">
-        <h2 class="text-center mt-5 mb-5">{{ __('custom.' ~schema.settings.title.value) }}</h2>
+        <h2 class="text-center mb-5">{{ __('custom.' ~schema.settings.title.value) }}</h2>
         {% if schema.settings.products.products | length > 0 %}
             <div class="items items_{{ schema.index }} no-print">
                 {% for product in schema.settings.products.products %}

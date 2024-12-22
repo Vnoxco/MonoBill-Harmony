@@ -105,6 +105,7 @@
         "blog_posts_default_text": "When you create blog posts they will show up here automatically. You can also provide tags in the customizer to show specific blog posts.",
         "category_showcase_default_text": "Add a category using the theme customizer.",
         "category_slider_default_text": "You can add categories to this section using the theme customizer.",
+        "add_slide_header_default_text": "Default slide",
         "add_slide_default_text": "Add a slide using the theme customizer.",
         "latest_products_default_text": "When you add products to your store they will automatically show up here.",
         "no_addresses": "You have no addresses associated with your account.",

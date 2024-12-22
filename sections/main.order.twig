@@ -106,8 +106,13 @@
                                         {% endif %}
                                     </div>
                                     {% for modifierOption in item.order_item_modifier_options %}
-                                        <b>{{ modifierOption.product_modifier.name }}:</b>{% if modifierOption.quantity > 1%} {{ modifierOption.quantity }}x{% endif%} {{ modifierOption.product_modifier_option.name }}<br>
+                                        <b>{{ modifierOption.product_modifier.name }}
+                                        :</b>{% if modifierOption.quantity > 1 %} {{ modifierOption.quantity }}x{% endif %} {{ modifierOption.product_modifier_option.name }}
+                                        <br>
                                     {% endfor %}
+                                    {% if order.status == 'delivered' and item.has_attachments %}
+                                        <a href="{{ url('/account/orders/' ~ order.id ~ '/download/' ~ item.id) }}" class="btn-link" target="_blank" download="Order_{{ order.order_number }}.zip">{{ __('buttons.download') }}</a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td class="align-middle">
@@ -300,7 +305,8 @@
                                     <div class="modal-header">
                                         <h5 class="modal-title h5"
                                             id="pickup-instructions-label">{{ __('titles.pickup_instructions') }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         {{ order.checkout_session.pickup_option.instructions | raw }}

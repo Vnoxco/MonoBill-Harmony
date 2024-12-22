@@ -3,6 +3,7 @@
         "name": "Image slider",
         "icon": "images",
         "description": "A slide show of images with captions and buttons.",
+        "allowed_blocks": ["slide.twig"],
         "settings": {
             "show_slide_arrows": {
                 "label": "Slide arrows",
@@ -44,13 +45,24 @@
 
 {% block content %}
     {% if schema.settings.full_width.value == false %}
-        <div class="container mt-5">
+        <div class="container">
     {% endif %}
     <div id="mb_slider{{ schema.index }}"
          class="carousel slide {% if schema.settings.fade_effect.value == true %}carousel-fade{% endif %}"
          {% if schema.settings.pause_on_hover.value == false %}data-bs-pause="false"{% endif %} data-bs-ride="carousel"
          data-bs-interval="{{ schema.settings.slide_interval.value * 1000 }}">
         <div class="carousel-inner">
+            {% if schema.blocks_count == 0 %}
+                <div class="mb__slider_slide carousel-item active"
+                     style="background-image: url('https://assets.gomonobill.com/monobill/default_slide.jpg');">
+                    <div class="slide-text text-center center-align">
+                            <div class="slide-lines">
+                                <h1 class="slide-heading text-white">{{ __('info.add_slide_header_default_text') }}</h1>
+                                <h4 class="slide-subheading text-white">{{ __('info.add_slide_default_text') }}</h4>
+                            </div>
+                    </div>
+                </div>
+            {% endif %}
             <blocks></blocks>
         </div>
         {% if schema.settings.show_slide_arrows.value == true %}

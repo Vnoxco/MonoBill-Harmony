@@ -1,0 +1,67 @@
+<script schema type="application/json">
+    {
+        "name": "Image card",
+        "description": "Showcase an image with information.",
+        "icon": "image",
+        "settings": {
+            "image": {
+                "label": "Image",
+                "type": "image"
+            },
+            "image_alt": {
+                "label": "Image alt",
+                "type": "text"
+            },
+            "title": {
+                "label": "Title",
+                "type": "text"
+            },
+            "content": {
+                "label": "Content",
+                "type": "wysiwyg"
+            },
+            "button": {
+                "label": "Button",
+                "type": "button",
+                "default": {
+                    "label": "Button",
+                    "style": "dark"
+                }
+            }
+        }
+    }
+</script>
+
+<style component_style lang="scss">
+    .image_card {
+        background-color: var(--theme-color);
+        margin-left: 0;
+        margin-right: 0;
+    }
+</style>
+
+{% block content %}
+    {% from "macros/button.twig" import button %}
+    <div class="container">
+        <div class="row align-items-center image_card">
+            <div class="col-lg-6 text-center text-lg-start pt-3 p-lg-0">
+                {% if schema.settings.image.image.public_path %}
+                    <img class="img-fluid" src="{{ schema.settings.image.image.public_path }}"
+                         alt="{{ schema.settings.alt.value }}">
+                {% else %}
+                    <img class="img-fluid" src="https://assets.gomonobill.com/monobill/default_square.jpg"
+                         alt="Default MonoBill Image">
+                {% endif %}
+            </div>
+            <div class="col-lg-6 text-center text-lg-start pt-3 pb-3 ps-lg-3 pe-lg-3">
+                <div class="pt-3 pb-3 pt-lg-5 pb-lg-5">
+                    {% if schema.settings.title.value | length %}<h2>{{ schema.settings.title.value }}</h2>{% endif %}
+                    {{ schema.settings.content.value | raw }}
+                </div>
+                {% if schema.settings.button.value.label %}
+                    {{ button(schema.settings.button.value, 'resizing-btn mb-2') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

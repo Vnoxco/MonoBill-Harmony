@@ -7,6 +7,18 @@
   "documentation_url": "",
   "image_preview": "",
   "settings": {
+    "theme_color": {
+      "label": "Theme color",
+      "type": "color-picker",
+      "default": "#FFFFFF"
+    },
+    "section_spacing": {
+      "type": "range",
+      "label": "Section spacing",
+      "min": 0,
+      "max": 10,
+      "default": 3
+    },
     "favicon": {
       "type": "image",
       "label": "Favicon"

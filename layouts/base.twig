@@ -38,9 +38,22 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css"
           integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <style>
+        :root {
+            --theme-color: {{ mb_theme.settings.theme_color.value }};
+        }
+    </style>
     <link href="{{ asset('app.css') | raw }}" rel="stylesheet">
+    <link href="{{ asset('mb_components.css') | raw }}" rel="stylesheet">
     {% block scripts_head %}{% endblock %}
     {% block styles %}{% endblock %}
+    {% if mb_theme.settings.section_spacing.value > 0 %}
+        <style>
+            .monobill__section {
+                margin-bottom: {{ mb_theme.settings.section_spacing.value }}rem;
+            }
+        </style>
+    {% endif %}
 </head>
 <body class="d-flex flex-column h-100">
 {% block content %}{% endblock %}

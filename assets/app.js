@@ -227,15 +227,20 @@ let lastScrollTop = 0;
 const body = document.body;
 window.addEventListener('scroll', function () {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > 82) {
+    let headerElement = document.getElementsByTagName('header')[0];
+    if (scrollTop > headerElement.offsetHeight) {
         body.classList.add('fixed-header');
+        body.style.paddingTop = headerElement.offsetHeight + 'px';
     } else {
         body.classList.remove('fixed-header');
+        body.style.paddingTop = 0;
     }
     if (scrollTop > lastScrollTop || scrollTop === 0) {
         body.classList.remove('fixed-header-shown');
+        headerElement.style.top = -headerElement.offsetHeight + 'px';
     } else {
         body.classList.add('fixed-header-shown');
+        headerElement.style.top = 0;
     }
     lastScrollTop = scrollTop;
 });
