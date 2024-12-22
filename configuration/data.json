@@ -22,7 +22,6 @@
         "id": "image_slider.twig",
         "settings": {
           "id": "homeSlider",
-          "slides": [],
           "slide_interval": "5",
           "show_slide_indicators": 1,
           "show_slide_arrows": 0,
@@ -45,70 +44,26 @@
           "title": "PRODUCTS"
         }
       },
+
       {
-        "id": "section.twig",
-        "blocks": [
-          {
-            "id": "row.twig",
-            "settings": {
-              "classes": null
-            },
-            "blocks": [
-              {
-                "id": "column.twig",
-                "settings": {
-                  "col_span_xl": "50",
-                  "col_span_lg": "50",
-                  "col_span_md": "100",
-                  "col_span_sm": "12",
-                  "col_span": "100",
-                  "classes": null
-                },
-                "blocks": [
-                  {
-                    "id": "call_to_action.twig",
-                    "settings": {
-                      "title": "Seasonal Sale",
-                      "caption": "Up to 25% off",
-                      "image": 42,
-                      "url": "\/category\/sale",
-                      "button_text": "Shop Now"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "column.twig",
-                "settings": {
-                  "col_span_xl": "50",
-                  "col_span_lg": "50",
-                  "col_span_md": "100",
-                  "col_span_sm": "12",
-                  "col_span": "100",
-                  "classes": null
-                },
-                "blocks": [
-                  {
-                    "id": "text_with_title.twig",
-                    "settings": {
-                      "title": "We are fashion",
-                      "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin aliquam mollis libero hendrerit auctor. Donec elementum in purus vel efficitur. Pellentesque pharetra quam commodo tincidunt consectetur.<\/p>",
-                      "title_2": "Testing"
-                    }
-                  },
-                  {
-                    "id": "text_with_title.twig",
-                    "settings": {
-                      "title": "Fashion made simple",
-                      "content": "<p>Maecenas ullamcorper dui ut lectus tristique accumsan. Etiam accumsan, ante ac luctus condimentum, sem lorem molestie velit, a viverra velit ipsum ut arcu.<\/p>",
-                      "title_2": "Testing"
-                    }
-                  }
-                ]
-              }
-            ]
+        "id": "image_card.twig",
+        "settings": {
+          "image": "",
+          "image_alt": "Man wearing watch",
+          "title": "We are fashion",
+          "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin aliquam mollis libero hendrerit auctor. Donec elementum in purus vel efficitur. Pellentesque pharetra quam commodo tincidunt consectetur.<\/p>",
+          "button": {
+            "label": "Learn more",
+            "style": "outline-dark",
+            "type": "category",
+            "product_id": null,
+            "category_id": null,
+            "product_category_id": null,
+            "cms_page_id": null,
+            "blog_post_id": null,
+            "show_arrow": 1
           }
-        ]
+        }
       },
       {
         "id": "category_slider.twig",
