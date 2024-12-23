@@ -10,7 +10,7 @@
     "theme_color": {
       "label": "Theme color",
       "type": "color-picker",
-      "default": "#FFFFFF"
+      "default": "#E9E9DD"
     },
     "section_spacing": {
       "type": "range",

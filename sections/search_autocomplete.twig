@@ -1,3 +1,11 @@
+<script schema type="application/json">
+    {
+        "name": "Search auto complete",
+        "hidden_in_customizer": true,
+        "icon": "list"
+    }
+</script>
+
 {% set totalResults = (search_results.suggestions | length) + (search_results.blog_posts | length) + ( search_results.pages | length) + (search_results.product_categories | length) + (search_results.products | length)  %}
 <div class="mb__autocomplete"
      data-results-count="{{ totalResults + 1 }}">
