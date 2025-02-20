@@ -12,6 +12,13 @@
       "type": "color-picker",
       "default": "#E9E9DD"
     },
+    "border_radius": {
+      "label": "Border radius",
+      "type": "range",
+      "min": 1,
+      "max": 10,
+      "default": 1
+    },
     "section_spacing": {
       "type": "range",
       "label": "Section spacing",

@@ -223,6 +223,22 @@ navOffcanvas.addEventListener('hide.bs.offcanvas', function () {
     $('[data-bs-target="#navOffcanvas"]').addClass('collapsed');
 })
 
+function updateOffcanvasTop() {
+    const navbar = document.querySelector(".monobill__header header");
+    const offcanvas = document.querySelector(".monobill__header .offcanvas");
+
+    if (navbar && offcanvas) {
+        let navbarHeight = navbar.offsetHeight;
+        offcanvas.style.top = navbarHeight + "px";
+    }
+}
+
+updateOffcanvasTop();
+
+// Run the function on page load and window resize
+window.addEventListener("load", updateOffcanvasTop);
+window.addEventListener("resize", updateOffcanvasTop);
+
 let lastScrollTop = 0;
 const body = document.body;
 window.addEventListener('scroll', function () {
@@ -231,7 +247,7 @@ window.addEventListener('scroll', function () {
     if (scrollTop > headerElement.offsetHeight) {
         body.classList.add('fixed-header');
         body.style.paddingTop = headerElement.offsetHeight + 'px';
-    } else {
+    } else if(scrollTop == 0) {
         body.classList.remove('fixed-header');
         body.style.paddingTop = 0;
     }

@@ -30,16 +30,6 @@
                 },
                 "default": "center"
             },
-            "content_position": {
-                "label": "Content position",
-                "type": "option",
-                "options": {
-                    "left": "Left",
-                    "center": "Center",
-                    "right": "Right"
-                },
-                "default": "left"
-            },
             "button": {
                 "label": "Button",
                 "type": "button",
@@ -54,19 +44,26 @@
 
 {% from "macros/button.twig" import button %}
 
-<div class="mb__slider_slide carousel-item {% if schema.index == 0 %}active{% endif %}"
-     style="background-image: url('{% if schema.settings.image.image %}{{ schema.settings.image.image.public_path }}{% else %}https://assets.gomonobill.com/monobill/default_slide.jpg{% endif %}'); background-position: center {{ schema.settings.image_position.value }};">
-    <div class="slide-text text-center {% if schema.settings.content_position.value == 'left' %}left-align{% elseif schema.settings.content_position.value == 'center' %}center-align{% elseif schema.settings.content_position.value == 'right' %}right-align{% endif %}">
-        {% if schema.settings.heading.value or schema.settings.text.value %}
-            <div class="slide-lines">
-                {% if schema.settings.heading.value %}<h1
-                        class="slide-heading text-white">{{ __('custom.' ~ schema.settings.heading.value) }}</h1>{% endif %}
-                {% if schema.settings.text.value %}<h4
-                        class="slide-subheading text-white">{{ __('custom.' ~ schema.settings.text.value) }}</h4>{% endif %}
+<div class="mb__slider_slide carousel-item {% if schema.index == 0 %}active{% endif %}">
+    <div class="mb__slide_parent d-lg-flex align-items-center">
+        <div class="col-lg-6 slide-img"
+             style="background-image: url('{% if schema.settings.image.image %}{{ schema.settings.image.image.public_path }}{% else %}https://assets.gomonobill.com/monobill/default_slide.jpg{% endif %}'); background-size: cover; background-position: {{ schema.settings.image_position.value }};"></div>
+        <div class="order-lg-first col-lg-6 slide-text text-center text-lg-start {% if slide.align_content == 'left' %}left-align{% elseif slide.align_content == 'center' %}center-align{% elseif slide.align_content == 'right' %}right-align{% endif %}">
+            <div class="slide-text-container">
+                <div class="p-4">
+                    {% if schema.settings.heading.value or schema.settings.text.value %}
+                        {% if schema.settings.heading.value %}<h4
+                                class="slide-subheading">{{ __('custom.' ~ schema.settings.heading.value) }}</h4>{% endif %}
+                        {% if schema.settings.text.value %}<h1
+                                class="slide-heading">{{ __('custom.' ~ schema.settings.text.value) }}</h1>{% endif %}
+                    {% endif %}
+                    {% if schema.settings.button.value.label %}
+                        <div class="mt-lg-4">
+                            {{ button(schema.settings.button.value, 'resizing-btn') }}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-        {% endif %}
-        {% if schema.settings.button.value.label %}
-            {{ button(schema.settings.button.value, 'resizing-btn') }}
-        {% endif %}
+        </div>
     </div>
 </div>

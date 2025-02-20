@@ -41,6 +41,7 @@
     <style>
         :root {
             --theme-color: {{ mb_theme.settings.theme_color.value }};
+            --theme-border-radius: {{ mb_theme.settings.border_radius.value * 0.25 }}rem;
         }
     </style>
     <link href="{{ asset('app.css') | raw }}" rel="stylesheet">

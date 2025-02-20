@@ -3,7 +3,6 @@
         "name": "Image slider",
         "icon": "images",
         "description": "A slide show of images with captions and buttons.",
-        "allowed_blocks": ["slide.twig"],
         "settings": {
             "show_slide_arrows": {
                 "label": "Slide arrows",
@@ -28,14 +27,17 @@
             "slide_interval": {
                 "label": "Slide interval",
                 "type": "range",
-                "steps": 1,
+                "steps": 10,
                 "prepend": "Change slides every ",
                 "append": " seconds.",
-                "max": 60,
+                "max": 120,
                 "min": 1,
                 "default": 8
             }
-        }
+        },
+        "allowed_blocks": ["slide.twig"],
+        "render_on_block_delete": true,
+        "on_update_javascript": "$(element).find('.carousel').carousel();"
     }
 </script>
 
@@ -43,23 +45,136 @@
     $(element).find('.carousel').carousel();
 </script>
 
+<style component_style lang="scss">
+    .mb__slider {
+        .slide-img {
+            height: 100%;
+        }
+        .mb__slider_slide {
+            height: calc(70vh);
+        }
+        .slide-text {
+            padding-right: 5rem;
+            height: 100%;
+            background-color: var(--theme-color);
+        }
+    }
+
+
+    .slider-handle {
+        background: #0B79F3;
+    }
+
+    .slide-heading {
+        font-size: 60px;
+        font-family: "Roboto", sans-serif;
+    }
+
+    .slide-subheading {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .slide-lines {
+        margin-bottom: 34px;
+    }
+
+    .slide-lines:before {
+        margin-bottom: 19px;
+    }
+
+    .slide-lines:before,
+    .slide-lines:after {
+        content: '';
+        display: inline-block;
+        height: 1px;
+        width: 185px;
+        background-color: #fff;
+    }
+
+    .slide-lines:after {
+        margin-top: 10px;
+    }
+    @media (max-width: 991px) {
+        .mb__slider {
+            .slide-img {
+                height: 400px;
+            }
+            .slide-text {
+                height: auto;
+            }
+            .mb__slider_slide {
+                height: auto;
+            }
+            .slide-text {
+                padding-right: 0;
+            }
+        }
+    }
+
+    @media (min-width: 992px) {
+        .mb__slider {
+            .mb__slide_parent {
+                height: 100%;
+            }
+            .carousel-control-prev {
+                left: 4rem;
+            }
+            .carousel-control-next {
+                right: 4rem;
+            }
+            .carousel-control-prev,
+            .carousel-control-next {
+                top: auto;
+                bottom: 10rem;
+                background-color: #000;
+                width: 50px;
+                border-radius: 50%;
+                padding: .6rem .8rem;
+            }
+            .slide-text-container {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: end;
+            }
+            .slide-text {
+                .slide-subheading {
+                    font-size: 1.2rem;
+                }
+                .slide-heading {
+                    max-width: 500px;
+                    font-size: 6rem;
+                    font-weight: bolder;
+                }
+            }
+        }
+    }
+
+</style>
+
 {% block content %}
     {% if schema.settings.full_width.value == false %}
         <div class="container">
     {% endif %}
     <div id="mb_slider{{ schema.index }}"
-         class="carousel slide {% if schema.settings.fade_effect.value == true %}carousel-fade{% endif %}"
+         class="mb__slider carousel slide {% if schema.settings.fade_effect.value == true %}carousel-fade{% endif %}"
          {% if schema.settings.pause_on_hover.value == false %}data-bs-pause="false"{% endif %} data-bs-ride="carousel"
          data-bs-interval="{{ schema.settings.slide_interval.value * 1000 }}">
         <div class="carousel-inner">
             {% if schema.blocks_count == 0 %}
-                <div class="mb__slider_slide carousel-item active"
-                     style="background-image: url('https://assets.gomonobill.com/monobill/default_slide.jpg');">
-                    <div class="slide-text text-center center-align">
-                            <div class="slide-lines">
-                                <h1 class="slide-heading text-white">{{ __('info.add_slide_header_default_text') }}</h1>
-                                <h4 class="slide-subheading text-white">{{ __('info.add_slide_default_text') }}</h4>
+                <div class="mb__slider_slide carousel-item active">
+                    <div class="mb__slide_parent d-lg-flex align-items-center">
+                        <div class="col-lg-6 slide-img"
+                             style="background-image: url('https://assets.gomonobill.com/monobill/default_slide.jpg'); background-size: cover; background-position: {{ schema.settings.image_position.value }};"></div>
+                        <div class="order-lg-first col-lg-6 slide-text text-center text-lg-start {% if slide.align_content == 'left' %}left-align{% elseif slide.align_content == 'center' %}center-align{% elseif slide.align_content == 'right' %}right-align{% endif %}">
+                            <div class="slide-text-container">
+                                <div class="p-4">
+                                    <h4 class="slide-subheading">{{ __('info.add_slide_default_text') }}</h4>
+                                    <h1 class="slide-heading">{{ __('info.add_slide_header_default_text') }}</h1>
+                                </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             {% endif %}

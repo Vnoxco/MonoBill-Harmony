@@ -160,7 +160,7 @@
               {
                 "id": "text.twig",
                 "settings": {
-                  "content": "<p>Free shipping globally on all orders.<\/p>\n<p>We accept returns on a case by case basis.<\/p>"
+                  "content": ""
                 }
               }
             ]

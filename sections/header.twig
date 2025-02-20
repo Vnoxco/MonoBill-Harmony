@@ -20,13 +20,97 @@
                 "label": "Menu",
                 "type": "menu",
                 "default": ""
+            },
+            "announcement": {
+                "label": "Announcement",
+                "type": "text"
+            },
+            "announcement_scroll_speed": {
+                "label": "Announcement scroll speed",
+                "type": "range",
+                "steps": 1,
+                "max": 500,
+                "min": 0,
+                "append": "seconds",
+                "default": "60"
             }
         }
     }
 </script>
 
+<style component_style lang="scss">
+    .marquee-container {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        white-space: nowrap;
+        transition: 250ms ease-in-out;
+        &.translucent {
+            opacity: 0.8;
+        }
+        .marquee-content {
+            display: flex;
+            gap: 20px; // Adjust spacing between items
+            width: max-content;
+        }}
+
+
+        &:hover {
+            opacity: 1;
+            .marquee-content {
+                animation-play-state: paused !important;
+            }
+        }
+
+        .marquee-content-clone {
+            display: flex;
+            gap: 20px;
+        }
+
+        .marquee-item {
+            flex: 0 0 auto;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    }
+
+    @keyframes marquee-scroll {
+        from {
+            transform: translateX(0%);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
 {% block content %}
+    <style>
+        .animate-marquee {
+            animation: marquee-scroll {{ schema.settings.announcement_scroll_speed.value }}s linear infinite !important;
+        }
+    </style>
     <header class="nav-type-1">
+        {% if schema.settings.announcement.value | length > 0 %}
+            <div class="marquee-container">
+                <div class="marquee-content animate-marquee">
+                    <div class="marquee-content-clone">
+                        {% for i in 1..20 %}
+                            {% for phrase in schema.settings.announcement.value | split(',') %}
+                                <div class="marquee-item">{{ phrase }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                    <div class="marquee-content-clone">
+                        {% for i in 1..20 %}
+                            {% for phrase in schema.settings.announcement.value | split(',') %}
+                                <div class="marquee-item">{{ phrase }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <nav class="navbar navbar-expand-lg bg-white">
             <div class="container flex-nowrap">
                 <button class="navbar-toggler collapsed" type="button" data-bs-toggle="offcanvas"

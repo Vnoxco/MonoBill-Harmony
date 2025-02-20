@@ -20,7 +20,7 @@
 <div class="container">
     <div class="row">
         <div class="offset-lg-2 col-lg-8">
-            {% if schema.settings.show_date %}<i class="bi bi-calendar3"></i> {{ page.published_at_formatted }}{% endif %}{% if schema.settings.show_date %} <span class="d-inline-block {% if schema.settings.show_date %}ms-3{% endif %}"><i class="bi bi-person"></i> {{ page.author.first_name }} {{ page.author.last_name }}</span>{% endif %}
+            {% if schema.settings.show_date.value %}<i class="bi bi-calendar3"></i> {{ page.published_at_formatted }}{% endif %}{% if schema.settings.show_author.value %} <span class="d-inline-block {% if schema.settings.show_date.value %}ms-3{% endif %}"><i class="bi bi-person"></i> {{ page.author.first_name }} {{ page.author.last_name }}</span>{% endif %}
         </div>
     </div>
 </div>
