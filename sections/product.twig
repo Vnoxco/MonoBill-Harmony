@@ -289,6 +289,7 @@
  
     {% from "macros/product_pricing.twig" import pricing %}
     {% from "macros/product_configuration.twig" import configuration %}
+    {% from "macros/optimized_image.twig" import optimized_image %}
 
     <div class="container">
         <div class="row mt-5">
@@ -304,7 +305,12 @@
                                             id="file_id_{{ image.id }}">
                                             <div class="border-0 img-fluid bg-white img-lightbox mb__zoom" data-toggle="lightbox"
                                                  data-src="{{ image.public_path }}" data-file-name="" onmousemove="mb__zoom(event)" style="background-image: url({{ image.public_path }})">
-                                                <img src="{{ image.public_path }}" class="img-fluid"> 
+                                                {{ optimized_image({
+                                                    path: image.path,
+                                                    variants: image.variants,
+                                                    alt: product.name ~ '_' ~ (loop.index0 + 1),
+                                                    max_size: 'md'
+                                                }) }}
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -321,8 +327,15 @@
                         {% if product.images | length > 0 %}
                             {% for image in product.images %}
                                 <div data-bs-target="#product_carousel" data-bs-slide-to="{{ loop.index0 }}"
-                                     class="gallery-file d-md-block border-1 img-fluid bg-white {% if (loop.index0 == 0 and product.default_variant.image == null) or (loop.index0 == 0 and product.default_variant == null) or (product.default_variant and product.default_variant.gallery_file_id == image.id) %}selected{% endif %}"
-                                     style="width:80px; height:80px; background-image: url('{{ image.public_path }}');"></div>
+                                     class="gallery-file d-md-block border-1  bg-white {% if (loop.index0 == 0 and product.default_variant.image == null) or (loop.index0 == 0 and product.default_variant == null) or (product.default_variant and product.default_variant.gallery_file_id == image.id) %}selected{% endif %}"
+                                     style="width:80px; height:80px;">
+                                    {{ optimized_image({
+                                        path: image.path,
+                                        variants: image.variants,
+                                        alt: product.name ~ '_' ~ (loop.index0 + 1),
+                                        max_size: 'sm'
+                                    }) }}
+                                </div>
                            {% endfor %}
                         {% endif %}
                     </div>

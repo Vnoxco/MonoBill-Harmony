@@ -28,6 +28,7 @@
 </script>
 
 {% block content %}
+    {% from "macros/optimized_image.twig" import optimized_image %}
     <div class="container">
         {% if schema.settings.title.value | length > 0 %}
             <h2 class="text-center">{{ __('custom.' ~ schema.settings.title.value) }}</h2>
@@ -36,11 +37,16 @@
             {% for category in schema.settings.categories.categories %}
                 <div class="{% if schema.settings.title.value | length > 0 %}mt-5{% endif%} col-md-{% if schema.settings.categories_per_row.value == 2 %}6{% elseif schema.settings.categories_per_row.value == 3 %}4{% elseif schema.settings.categories_per_row.value == 4 %}3{% endif %}">
                     <a href="{{ url(category.uri) }}" style="text-decoration: none; outline: none; border: none;">
-                        <div class="call-to-action-card card border-0"
-                             style="background-image: url('{% if category.thumbnail_path %}{{ cdn(category.thumbnail_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
-                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <div class="call-to-action-card border-0 position-relative overflow-hidden">
+                            {{ optimized_image({
+                                path: category.thumbnail_path,
+                                variants: category.image_variants,
+                                alt: category.name
+                            }) }}
+
+                            <div class="card-body text-center d-flex flex-column justify-content-center position-absolute top-0 start-0 w-100 h-100 bg-transparent  text-white">
                                 <h4 class="call-to-action-title">{{ __('custom.' ~ category.name) }}</h4>
-                                <div class="text-center">
+                                <div class="text-center mt-2">
                                     <button class="btn btn-outline-light">{{ __('buttons.shop_category') }}</button>
                                 </div>
                             </div>

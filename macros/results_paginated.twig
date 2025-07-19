@@ -9,6 +9,7 @@
                         heading: result.product_brands_name ?? '⠀',
                         title: result.products_name,
                         image_path: result.gallery_files_path,
+                        image_variants: result.image_variants,
                         badge: result.on_sale ? __('titles.sale') : null,
                         price: result.product_variants_price ?? result.products_price,
                         compare_price: result.product_variants_compare_price ?? result.compare_price,
@@ -24,6 +25,7 @@
                         subtitle: result.published_at_formatted,
                         uri: result.cms_links_uri,
                         image_path: result.gallery_files_path,
+                        image_variants: result.image_variants,
                         image_fill: true
                     }) }}
                 {% elseif result.mb_type == 'product_categories' %}
@@ -32,6 +34,7 @@
                         title: result.product_categories_name,
                         uri: result.cms_links_uri,
                         image_path: result.gallery_files_path,
+                        image_variants: result.image_variants,
                         image_fill: true
                     }) }}
                 {% elseif result.mb_type == 'cms_pages' %}

@@ -6,6 +6,11 @@
     }
 </script>
 
+{% from "macros/optimized_image.twig" import optimized_image %}
 <div class="text-center">
-    <img src="{{ page.thumbnail.public_path  }}" class="img-fluid rounded">
+    {{ optimized_image({
+        path: page.thumbnail.path,
+        variants: page.thumbnail.variants,
+        alt: schema.settings.alt
+    }) }}
 </div>

@@ -1,0 +1,46 @@
+{% macro optimized_image(data) %}
+    <picture>
+        {# Default to 'lg' if max_size not provided #}
+        {% set max_size = data.max_size ?? 'lg' %}
+
+        {# Determine which WebP sizes exist based on max_size #}
+        {% set webp_sm = data.variants.webp.sm ?? null %}
+        {% set webp_md = (max_size in ['md', 'lg']) ? (data.variants.webp.md ?? webp_sm) : webp_sm %}
+        {% set webp_lg = (max_size == 'lg') ? (data.variants.webp.lg ?? webp_md) : webp_md %}
+
+        {# Determine which fallback sizes exist based on max_size #}
+        {% set fb_sm = data.variants.fallback.sm ?? null %}
+        {% set fb_md = (max_size in ['md', 'lg']) ? (data.variants.fallback.md ?? fb_sm) : fb_sm %}
+        {% set fb_lg = (max_size == 'lg') ? (data.variants.fallback.lg ?? fb_md) : fb_md %}
+
+        {# Only output <source> for webp if variants exist #}
+        {% if webp_sm and webp_sm.path %}
+            <source type="image/webp"
+                    srcset="{{ cdn(webp_sm.path) }} 400w
+                            {% if max_size in ['md', 'lg'] %}, {{ cdn(webp_md.path) }} 1024w{% endif %}
+                            {% if max_size == 'lg' %}, {{ cdn(webp_lg.path) }} 2048w{% endif %}"
+                    sizes="(max-width: 768px) 400px
+                           {% if max_size in ['md', 'lg'] %}, (max-width: 1200px) 1024px{% endif %}
+                           {% if max_size == 'lg' %}, 2048px{% endif %}"
+            />
+        {% endif %}
+
+        {# Only output <source> for jpeg if variants exist #}
+        {% if fb_sm and fb_sm.path %}
+            <source type="image/jpeg"
+                    srcset="{{ cdn(fb_sm.path) }} 400w
+                            {% if max_size in ['md', 'lg'] %}, {{ cdn(fb_md.path) }} 1024w{% endif %}
+                            {% if max_size == 'lg' %}, {{ cdn(fb_lg.path) }} 2048w{% endif %}"
+                    sizes="(max-width: 768px) 400px
+                           {% if max_size in ['md', 'lg'] %}, (max-width: 1200px) 1024px{% endif %}
+                           {% if max_size == 'lg' %}, 2048px{% endif %}"
+            />
+        {% endif %}
+
+        <img class="img-fluid"
+             src="{{ cdn(data.path) }}"
+             alt="{{ __('custom.' ~ data.alt) }}"
+             loading="lazy"
+        />
+    </picture>
+{% endmacro %}

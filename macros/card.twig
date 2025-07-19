@@ -1,8 +1,14 @@
 {% macro card(data) %}
+    {% from "macros/optimized_image.twig" import optimized_image %}
     <a href="{{ url(data.uri) }}" class="d-block">
         <div class="mb_card left-align">
-            <div class="gallery-file border-0 img-fluid bg-white {% if data.image_fill %}cover{% endif %}"
-                 style="width:300px; height:300px; background-image: url('{% if data.image_path %}{{ cdn(data.image_path) }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
+            <div class="gallery-file border-0 bg-white {% if data.image_fill %}cover{% endif %}" style="width: auto; height: 300px">
+                {{ optimized_image({
+                    path: data.image_path,
+                    variants: data.image_variants,
+                    alt: data.title,
+                    max_size: 'sm'
+                }) }}
                 {% if data.track_inventory == true and data.available == false %}
                     <div class="out-of-stock">{{ __('forms.currently_unavailable') }}</div>
                 {% endif %}

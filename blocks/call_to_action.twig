@@ -32,10 +32,16 @@
     }
 </script>
 
+{% from "macros/optimized_image.twig" import optimized_image %}
+
 <a href="{{ url(schema.settings.url.value) }}" style="text-decoration: none; outline: none; border: none; display: block;">
-    <div class="call-to-action-card card border-0 mt-5"
-    style="background-image: url('{% if schema.settings.image.image %}{{ schema.settings.image.image.public_path }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}');">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
+    <div class="call-to-action-card card border-0 mt-5">
+        {{ optimized_image({
+            path: schema.settings.image.image.path,
+            variants: schema.settings.image.image.variants,
+            alt: schema.settings.title.value
+        }) }}
+        <div class="card-body text-center d-flex flex-column justify-content-center position-absolute top-0 start-0 w-100 h-100 bg-transparent  text-white">
             <div>
                 <h4 class="call-to-action-title">{{ __('custom.' ~ schema.settings.title.value) }}</h4>
                 {% if schema.settings.caption.value is not empty %}

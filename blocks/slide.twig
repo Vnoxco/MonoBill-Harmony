@@ -43,11 +43,15 @@
 </script>
 
 {% from "macros/button.twig" import button %}
+{% from "macros/optimized_image.twig" import optimized_image %}
 
 <div class="mb__slider_slide carousel-item {% if schema.index == 0 %}active{% endif %}">
     <div class="mb__slide_parent d-lg-flex align-items-center">
-        <div class="col-lg-6 slide-img"
-             style="background-image: url('{% if schema.settings.image.image %}{{ schema.settings.image.image.public_path }}{% else %}https://assets.gomonobill.com/monobill/default_slide.jpg{% endif %}'); background-size: cover; background-position: {{ schema.settings.image_position.value }};"></div>
+        <div class="col-lg-6 slide-img" >{{ optimized_image({
+                path: schema.settings.image.image.path ?? '/monobill/default_slide.jpg{',
+                variants: schema.settings.image.image.variants,
+                alt: item.product.name
+            }) }}</div>
         <div class="order-lg-first col-lg-6 slide-text text-center text-lg-start {% if slide.align_content == 'left' %}left-align{% elseif slide.align_content == 'center' %}center-align{% elseif slide.align_content == 'right' %}right-align{% endif %}">
             <div class="slide-text-container">
                 <div class="p-4">

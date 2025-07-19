@@ -406,7 +406,7 @@ header {
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   position: relative;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 .gallery-file i {
@@ -415,8 +415,39 @@ header {
 }
 
 .gallery-file img {
-  width: 140px;
-  vertical-align: unset;
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+
+.gallery-file.auto-size img {
+  width: auto;
+  height: auto;
+}
+
+.slide-img img {
+  object-fit: cover;
+  height: 100%;
+}
+
+.carousel-controls .gallery-file {
+  overflow: hidden;
+}
+.carousel-controls .gallery-file img {
+  width: 70px;
+  height: 70px;
+}
+
+.gallery-file.thumbnail {
+  overflow: hidden;
+}
+.gallery-file.thumbnail img {
+  width: 70px;
+  height: 70px;
+}
+
+.gallery-file.cover img {
+  object-fit: cover;
 }
 
 .gallery-file .file-name {
@@ -495,8 +526,8 @@ header {
   margin: 0;
   position: absolute;
   top: 50%;
-  left: 0;
-  right: 0;
+  left: 5px;
+  right: 5px;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   padding: 0.3rem;
@@ -1369,11 +1400,14 @@ a:hover {
 }
 
 .call-to-action-card {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
   height: 350px;
+  overflow: hidden;
+}
+.call-to-action-card img {
   border-radius: 0.25rem;
+  position: absolute;
+  object-fit: contain;
+  width: 100%;
 }
 
 .call-to-action-card .card-body {

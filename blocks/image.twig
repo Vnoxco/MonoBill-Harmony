@@ -15,4 +15,10 @@
     }
 </script>
 
-<img class="img-fluid" src="{{ schema.settings.image.image.public_path }}" alt="{{ schema.settings.alt.value }}">
+{% from "macros/optimized_image.twig" import optimized_image %}
+
+{{ optimized_image({
+    path: schema.settings.image.image.path,
+    variants: schema.settings.image.image.variants,
+    alt: schema.settings.alt
+}) }}

@@ -1,18 +1,12 @@
 {% macro savedCartItemCard(item) %}
-    {% set image_url = cdn('https://assets.gomonobill.com/img/placeholder-img.jpg') %}
+
+    {% from "macros/optimized_image.twig" import optimized_image %}
+
     {% if item.variant %}
         {% set product = item.variant %}
-        {% if product.image %}
-            {% set image_url = cdn(product.product.image.path) %}
-        {% elseif product.product.primaryImage %}
-            {% set image_url = cdn(product.product.primaryImage.path) %}
-        {% endif %}
         {% set name = product.product.name %}
     {% else %}
         {% set product = item.product %}
-        {% if product.product.primaryImage %}
-            {% set image_url = cdn(product.product.primaryImage.path) %}
-        {% endif %}
         {% set name = product.name %}
     {% endif %}
     <div class="product-card ms-auto me-auto" style="border: 1px solid #E0E0E0; padding: 1rem; border-radius: .3rem;">
@@ -23,9 +17,14 @@
             <div class="product-sale"><i class="fa fa-tag"></i> {{ __('forms.sale') }}</div>
         {% endif %}
 
-        <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
+        <div class="gallery-file auto-size border-0 bg-white" data-file-name=""
              style="cursor: auto; width:200px; height:200px; background-image: url('{{ image_url }}');background-size: contain;">
-            {# <button class="btn btn-light quick-view" data-quick-view="{{ product.id }}">{{ __('buttons.quick_view') }}</button> #}
+            {{ optimized_image({
+                path: item.variant.image.path ?? item.product.primaryImage.path ?? '/img/placeholder-img.jpg',
+                variants: item.variant ? item.variant.image.variants : item.product.primaryImage.variants,
+                alt: item.product.name,
+                max_size: 'md'
+            }) }}
         </div>
         <div class="text-start">
             <div class="name mt-2">{{ name }}</div>

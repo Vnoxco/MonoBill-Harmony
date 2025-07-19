@@ -10,6 +10,9 @@
 </script>
 
 {% block content %}
+
+    {% from "macros/optimized_image.twig" import optimized_image %}
+
     <div id="mb_cart_container" class="container">
         {% if globals.cart.cart_items | length > 0 %}
             <h3 class="mb-0 mt-5">{{ __('titles.your_cart') }}</h3>
@@ -23,8 +26,15 @@
                                         {% if item.gift_card_value %}
                                             <i class="bi bi-gift gift-card-icon"></i>
                                         {% else %}
-                                            <div class="gallery-file border-0 img-fluid bg-white" data-file-name=""
-                                                 style="width:80px; height:80px; background-image: url('{% if item.variant and item.variant.image %}{{ item.variant.image.public_path }}{% else %}{% if item.product.primaryImage %}{{ item.product.primaryImage.public_path }}{% else %}https://assets.gomonobill.com/img/placeholder-img.jpg{% endif %}{% endif %}');"></div>
+                                            <div class="gallery-file thumbnail border-0 img-fluid bg-white" data-file-name=""
+                                                 style="width:80px; height:80px;">
+                                                {{ optimized_image({
+                                                    path: item.variant.image.path ?? item.product.primaryImage.path ?? '/img/placeholder-img.jpg',
+                                                    variants: item.variant ? item.variant.image.variants : item.product.primaryImage.variants,
+                                                    alt: item.product.name,
+                                                    max_size: 'sm'
+                                                }) }}
+                                            </div>
                                         {% endif %}
                                     </div>
                                 </div>
