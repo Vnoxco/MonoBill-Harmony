@@ -31,7 +31,7 @@
                     {{ card({
                         title: __('custom.' ~ category.name),
                         uri: category.uri,
-                        image_path: category.thumbnail_path,
+                        image_path: category.thumbnail_path ?? '/img/placeholder-img.jpg',
                         image_variants: category.image_variants,
                         image_fill: true
                     }) }}

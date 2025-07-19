@@ -2,9 +2,9 @@
     {% from "macros/optimized_image.twig" import optimized_image %}
     <a href="{{ url(data.uri) }}" class="d-block">
         <div class="mb_card left-align">
-            <div class="gallery-file border-0 bg-white {% if data.image_fill %}cover{% endif %}" style="width: auto; height: 300px">
+            <div class="gallery-file border-0 bg-white {% if data.image_fill %}cover{% endif %}" style="width: auto; height: 380px">
                 {{ optimized_image({
-                    path: data.image_path,
+                    path: data.image_path ?? '/img/placeholder-img.jpg',
                     variants: data.image_variants,
                     alt: data.title,
                     max_size: 'sm'

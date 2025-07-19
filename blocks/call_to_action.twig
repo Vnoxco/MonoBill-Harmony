@@ -37,7 +37,7 @@
 <a href="{{ url(schema.settings.url.value) }}" style="text-decoration: none; outline: none; border: none; display: block;">
     <div class="call-to-action-card card border-0 mt-5">
         {{ optimized_image({
-            path: schema.settings.image.image.path,
+            path: schema.settings.image.image.path ?? '/img/placeholder-img.jpg',
             variants: schema.settings.image.image.variants,
             alt: schema.settings.title.value
         }) }}

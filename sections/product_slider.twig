@@ -31,7 +31,7 @@
                    {{ card({
                        heading: product.brand_name ?? '⠀',
                        title: product.name,
-                       image_path: product.default_variant_image_path ? product.default_variant_image_path : product.default_image_path,
+                       image_path: product.default_variant_image_path ?? product.default_image_path ?? '/img/placeholder-img.jpg',
                        image_variants: product.default_variant_image_variants ? product.default_variant_image_variants : product.default_image_variants,
                        badge: product.on_sale ? __('titles.sale') : null,
                        price: product.default_variant_price ?? product.price,

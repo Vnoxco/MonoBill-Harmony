@@ -2,7 +2,6 @@
     {% from "macros/card.twig" import card %}
     <div class="row">
         {% for result in results.data %}
-            {{ template_name }}
             <div class="col-6 col-md-4 col-lg-3 text-center mb-3 mt-3">
                 {% if result.mb_type == 'products' %}
                     {{ card({

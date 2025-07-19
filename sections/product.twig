@@ -306,7 +306,7 @@
                                             <div class="border-0 img-fluid bg-white img-lightbox mb__zoom" data-toggle="lightbox"
                                                  data-src="{{ image.public_path }}" data-file-name="" onmousemove="mb__zoom(event)" style="background-image: url({{ image.public_path }})">
                                                 {{ optimized_image({
-                                                    path: image.path,
+                                                    path: image.path ?? '/img/placeholder-img.jpg',
                                                     variants: image.variants,
                                                     alt: product.name ~ '_' ~ (loop.index0 + 1),
                                                     max_size: 'md'
@@ -330,7 +330,7 @@
                                      class="gallery-file d-md-block border-1  bg-white {% if (loop.index0 == 0 and product.default_variant.image == null) or (loop.index0 == 0 and product.default_variant == null) or (product.default_variant and product.default_variant.gallery_file_id == image.id) %}selected{% endif %}"
                                      style="width:80px; height:80px;">
                                     {{ optimized_image({
-                                        path: image.path,
+                                        path: image.path ?? '/img/placeholder-img.jpg',
                                         variants: image.variants,
                                         alt: product.name ~ '_' ~ (loop.index0 + 1),
                                         max_size: 'sm'

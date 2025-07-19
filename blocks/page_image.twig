@@ -9,7 +9,7 @@
 {% from "macros/optimized_image.twig" import optimized_image %}
 <div class="text-center">
     {{ optimized_image({
-        path: page.thumbnail.path,
+        path: page.thumbnail.path ?? '/img/placeholder-img.jpg',
         variants: page.thumbnail.variants,
         alt: schema.settings.alt
     }) }}

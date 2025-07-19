@@ -18,7 +18,7 @@
 {% from "macros/optimized_image.twig" import optimized_image %}
 
 {{ optimized_image({
-    path: schema.settings.image.image.path,
+    path: schema.settings.image.image.path ?? '/img/placeholder-img.jpg',
     variants: schema.settings.image.image.variants,
-    alt: schema.settings.alt
+    alt: schema.settings.alt.value
 }) }}
